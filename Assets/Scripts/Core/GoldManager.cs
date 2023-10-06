@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Core
+namespace ProjectClicker.Core
 {
     public class GoldManager : MonoBehaviour
     {
