@@ -32,5 +32,9 @@ namespace ProjectClicker
         {
         
         }
+
+        public void SetHealth(float health) => _health = health;
+
+        public void AddHealth(float heal) => _health += heal;
     }
 }
