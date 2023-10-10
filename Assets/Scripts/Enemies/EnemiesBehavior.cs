@@ -11,6 +11,10 @@ namespace ProjectClicker
         public float health;
         public float maxHealth;
         bool isDead;
+
+        [Header("Attack")]
+        [SerializeField] float AttackRange;
+        [SerializeField] float Damage;
         // Start is called before the first frame update
         void Start()
         {

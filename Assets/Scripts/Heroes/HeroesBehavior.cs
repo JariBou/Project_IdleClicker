@@ -13,10 +13,10 @@ namespace ProjectClicker
         [SerializeField] TeamStats teamStats;
 
         [Header("Health")]
-        public float maxHealth;
+        [SerializeField] private float maxHealth;
 
         [Header("Attack")]
-        [SerializeField] float Damage;
+        [SerializeField] float damage;
         [SerializeField] float attackRange;
         [SerializeField] float attackSpeed;
         [SerializeField] LayerMask layerToHit;
@@ -24,9 +24,16 @@ namespace ProjectClicker
 
 
         [Header("Heal")]
-        [SerializeField] float healRate;
         [SerializeField] float healStrenght;
 
+        [Header("Armor")]
+        [SerializeField] float armor;
+
+        public float MaxHealth => maxHealth;
+        public float Damage => damage;
+        public float AttackSpeed => attackSpeed;
+        public float PowerHeal => healStrenght;
+        public float Armor => armor;
         
 
 
@@ -34,7 +41,6 @@ namespace ProjectClicker
         // Start is called before the first frame update
         void Start()
         {
-            Debug.Log((int)layerToHit);
             
         }
 
@@ -53,40 +59,40 @@ namespace ProjectClicker
             {
                 case championRole.HEALER:
                     maxHealth = 150f;
-                    Damage = 10f;
+                    damage = 10f;
                     attackRange = 8f;
                     attackSpeed = 3;
                     canAttack = true;
-                    healRate = 5; // Temporaire
                     healStrenght = 100;
+                    armor = 75;
                     
                     break;
                 case championRole.TANK:
                     maxHealth = 500;
-                    Damage = 30f;
+                    damage = 30f;
                     attackRange = 2f;
                     attackSpeed = 4;
                     canAttack = true;
-                    healRate = 0; // Temporaire
                     healStrenght = 0;
+                    armor = 150;
                     break;
                 case championRole.ARCHER:
                     maxHealth = 100;
-                    Damage = 50f;
-                    attackRange = 10f;
+                    damage = 75f;
+                    attackRange = 8f;
                     attackSpeed = 1;
                     canAttack = true;
-                    healRate = 0; // Temporaire
                     healStrenght = 0;
+                    armor = 50;
                     break;
-                case championRole.REGULAR:
+                case championRole.WARRIOR:
                     maxHealth = 250;
-                    Damage = 40f;
-                    attackRange = 5f;
-                    attackSpeed = 2;
+                    damage = 75f;
+                    attackRange = 2f;
+                    attackSpeed = 3;
                     canAttack = true;
-                    healRate = 0; // Temporaire
                     healStrenght = 0;
+                    armor = 250;
                     break;
             }
         }
@@ -133,7 +139,7 @@ namespace ProjectClicker
         TANK = 1,
         HEALER = 2,
         ARCHER = 3,
-        REGULAR = 4,
+        WARRIOR = 4,
 
     }
 

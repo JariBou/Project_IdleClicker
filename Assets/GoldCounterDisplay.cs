@@ -20,7 +20,8 @@ namespace ProjectClicker
 
         private void FixedUpdate()
         {
-            _display.text = $"{_goldManager.GoldString()} [GOLD]";
+            /*_display.text = $"{_goldManager.GoldString()} [GOLD]";*/
+            _display.text = _goldManager.GoldString();
         }
     }
 }

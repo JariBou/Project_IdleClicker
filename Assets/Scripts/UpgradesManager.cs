@@ -13,11 +13,11 @@ namespace ProjectClicker
         // Start is called before the first frame update
         void Start()
         {
-            UpgradeType[] playerUpgradesArray = (UpgradeType[])Enum.GetValues(typeof(UpgradeType));
+/*            UpgradeType[] playerUpgradesArray = (UpgradeType[])Enum.GetValues(typeof(UpgradeType));
             foreach (UpgradeType upgradeType in playerUpgradesArray)
             {
                 _upgradeLevelDic.Add(upgradeType, 0);
-            }
+            }*/
         }
 
         public int GetLevelOf(UpgradeType upgradeType)
