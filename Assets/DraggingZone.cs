@@ -70,6 +70,7 @@ namespace ProjectClicker
         private void OnValidate()
         {
             _cameraSize = _camera.GetComponent<Camera>().orthographicSize;
+            _startCamPos = _camera.transform.position;
         }
 #endif
     }
