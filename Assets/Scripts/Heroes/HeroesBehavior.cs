@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using ProjectClicker.Core;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -61,7 +60,7 @@ namespace ProjectClicker
             }
         }
 
-        public void SetStat(ChampionRole role)
+        private void SetState(ChampionRole role)
         {
             switch (role)
             {
@@ -134,7 +133,7 @@ namespace ProjectClicker
             if (_previousRole != _role)
             {
                 _previousRole = _role;
-                SetStat(_role);
+                SetState(_role);
             }
         }
 

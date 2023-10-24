@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using ProjectClicker.Core;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -15,22 +13,15 @@ namespace ProjectClicker
         [Header("Team Stats")]
         [SerializeField] private float _baseMaxHealth;
         [SerializeField] private float _currentHealth;
-        [SerializeField] private float _baseArmor;
-        [SerializeField] private float _baseDamage;
-        [SerializeField] private float _baseHeal;
 
         public static event Action TeamHealthUpdate;
         private bool isDead;
 
-        [SerializeField] private float _healRate;
-
         private List<HeroesBehavior> _heroes;
 
-        
-        private float _attack;
+
         private GoldManager _goldManager;
 
-        public float MaxHealth => _baseMaxHealth;
         public float CurrentHealth => _currentHealth;
 
         private void Awake()
@@ -42,7 +33,6 @@ namespace ProjectClicker
         void Start()
         {
             _currentHealth = _baseMaxHealth;
-            _attack = _baseDamage;
             foreach(Transform t in transform)
             {
                 _heroes.Add(t.GetComponent<HeroesBehavior>());
