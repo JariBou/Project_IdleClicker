@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -14,24 +15,23 @@ namespace ProjectClicker
         void Start()
         {
             Slider = GetComponent<Slider>();
-            Slider.maxValue = _TeamStats.BaseHealth;
-            Slider.minValue = 0;
         }
 
         private void OnEnable()
         {
-            TeamStats.OnTeamDamage += UpdateTeamHealth;
+            TeamStats.TeamHealthUpdate += OnTeamHealthUpdate;
         }
+
+     
         private void OnDisable()
         {
-            TeamStats.OnTeamDamage -= UpdateTeamHealth;
+            TeamStats.TeamHealthUpdate -= OnTeamHealthUpdate;
         }
 
-        void UpdateTeamHealth()
+        private void OnTeamHealthUpdate()
         {
-            Slider.value = _TeamStats.CurrentHealth;
-            _TextMeshPro.text = _TeamStats.CurrentHealth.ToString() + "/" + _TeamStats.BaseHealth.ToString();
+            Slider.value = _TeamStats.CurrentHealth / _TeamStats.GetMaxTeamHealth();
+            _TextMeshPro.text = _TeamStats.CurrentHealth.ToString(CultureInfo.InvariantCulture) + "/" + _TeamStats.GetMaxTeamHealth().ToString(CultureInfo.InvariantCulture);
         }
-
     }
 }
