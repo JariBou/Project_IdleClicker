@@ -1,147 +1,160 @@
 using System.Collections;
-using System.Collections.Generic;
+using ProjectClicker.Core;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ProjectClicker
 {
     public class HeroesBehavior : MonoBehaviour
     {
-        [SerializeField] championRole Role;
-        private championRole PreviousRole;
+        [FormerlySerializedAs("Role")] [SerializeField] private ChampionRole _role;
+        private ChampionRole _previousRole;
+        [SerializeField] private UpgradeInfo _upgradeInfo; 
+        [SerializeField] private int _heroLevel; 
 
+        [FormerlySerializedAs("teamStats")]
         [Header("Team Manager")]
-        [SerializeField] TeamStats teamStats;
+        [SerializeField]
+        private TeamStats _teamStats;
 
+        [FormerlySerializedAs("maxHealth")]
         [Header("Health")]
-        [SerializeField] private float maxHealth;
+        [SerializeField] private float _maxHealth;
 
+        [FormerlySerializedAs("damage")]
         [Header("Attack")]
-        [SerializeField] float damage;
-        [SerializeField] float attackRange;
-        [SerializeField] float attackSpeed;
-        [SerializeField] LayerMask layerToHit;
-        bool canAttack;
+        [SerializeField]
+        private float _damage;
+        [FormerlySerializedAs("attackRange")] [SerializeField] private float _attackRange;
+        [FormerlySerializedAs("attackSpeed")] [SerializeField] private float _attackSpeed;
+        [FormerlySerializedAs("layerToHit")] [SerializeField] private LayerMask _layerToHit;
+        private bool _canAttack;
 
 
+        [FormerlySerializedAs("healStrength")]
+        [FormerlySerializedAs("healStrenght")]
         [Header("Heal")]
-        [SerializeField] float healStrenght;
+        [SerializeField]
+        private float _healStrength = 100;
 
+        [FormerlySerializedAs("armor")]
         [Header("Armor")]
-        [SerializeField] float armor;
+        [SerializeField]
+        private float _armor;
 
-        public float MaxHealth => maxHealth;
-        public float Damage => damage;
-        public float AttackSpeed => attackSpeed;
-        public float PowerHeal => healStrenght;
-        public float Armor => armor;
+
+        public float MaxHealth => _maxHealth + _heroLevel * _upgradeInfo.HealthPerLevel;
+        public float Damage => _damage + _heroLevel * _upgradeInfo.DmgPerLevel;
+        public float AttackSpeed => _attackSpeed + _heroLevel * _upgradeInfo.AtkSpeedPerLevel;
+        public float PowerHeal => _healStrength + _heroLevel * _upgradeInfo.HealStrengthPerLevel;
+        public float Armor => _armor + _heroLevel * _upgradeInfo.ArmorPerLevel;
+        
         
 
-
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            
-        }
-
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
-            if (canAttack)
+            if (_canAttack)
             {
                 StartCoroutine(Attack());
             }
         }
 
-        public void SetStat(championRole role)
+        private void SetState(ChampionRole role)
         {
             switch (role)
             {
-                case championRole.HEALER:
-                    maxHealth = 150f;
-                    damage = 10f;
-                    attackRange = 8f;
-                    attackSpeed = 3;
-                    canAttack = true;
-                    healStrenght = 100;
-                    armor = 75;
+                case ChampionRole.Healer:
+                    _maxHealth = 150f;
+                    _damage = 10f;
+                    _attackRange = 8f;
+                    _attackSpeed = 3;
+                    _canAttack = true;
+                    _healStrength = 100;
+                    _armor = 75;
                     
                     break;
-                case championRole.TANK:
-                    maxHealth = 500;
-                    damage = 30f;
-                    attackRange = 2f;
-                    attackSpeed = 4;
-                    canAttack = true;
-                    healStrenght = 0;
-                    armor = 150;
+                case ChampionRole.Tank:
+                    _maxHealth = 500;
+                    _damage = 30f;
+                    _attackRange = 2f;
+                    _attackSpeed = 4;
+                    _canAttack = true;
+                    _healStrength = 0;
+                    _armor = 150;
                     break;
-                case championRole.ARCHER:
-                    maxHealth = 100;
-                    damage = 75f;
-                    attackRange = 8f;
-                    attackSpeed = 1;
-                    canAttack = true;
-                    healStrenght = 0;
-                    armor = 50;
+                case ChampionRole.Archer:
+                    _maxHealth = 100;
+                    _damage = 75f;
+                    _attackRange = 8f;
+                    _attackSpeed = 1;
+                    _canAttack = true;
+                    _healStrength = 0;
+                    _armor = 50;
                     break;
-                case championRole.WARRIOR:
-                    maxHealth = 250;
-                    damage = 75f;
-                    attackRange = 2f;
-                    attackSpeed = 3;
-                    canAttack = true;
-                    healStrenght = 0;
-                    armor = 250;
+                case ChampionRole.Warrior:
+                    _maxHealth = 250;
+                    _damage = 75f;
+                    _attackRange = 2f;
+                    _attackSpeed = 3;
+                    _canAttack = true;
+                    _healStrength = 0;
+                    _armor = 250;
                     break;
             }
         }
 
 
-        IEnumerator Attack()
+        private IEnumerator Attack()
         {
-            Collider2D[] colliderAttack = Physics2D.OverlapCircleAll(transform.position, attackRange, layerToHit);
+            Collider2D[] colliderAttack = Physics2D.OverlapCircleAll(transform.position, _attackRange, _layerToHit);
             foreach (Collider2D collider in colliderAttack)
             {
-                canAttack = false;
+                _canAttack = false;
                 collider.GetComponent<EnemiesBehavior>().TakeDamage(Damage);
-                yield return new WaitForSeconds(attackSpeed);
-                canAttack = true;
+                yield return new WaitForSeconds(_attackSpeed);
+                _canAttack = true;
             }
         }
 
-        void Heal()
+        private void Heal()
         {
-
-            teamStats.AddHealth(healStrenght);
-
-
+            _teamStats.AddHealth(_healStrength);
         }
 
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position, attackRange);
+            Gizmos.DrawWireSphere(transform.position, _attackRange);
         }
 
         private void OnValidate()
         {
-            if (PreviousRole != Role)
+            if (_previousRole != _role)
             {
-                PreviousRole = Role;
-                SetStat(Role);
+                _previousRole = _role;
+                SetState(_role);
             }
         }
+
+        /// <summary>
+        /// Returns the health gained to heal
+        /// </summary>
+        /// <returns></returns>
+        public float Upgrade()
+        {
+            _heroLevel++;
+            return _upgradeInfo.HealthPerLevel;
+        }
+
+        public int GetUpgradeCost()
+        {
+            return (int)(_upgradeInfo.BaseCost * UpgradeCostMultiplier());
+        }
+
+        private float UpgradeCostMultiplier()
+        {
+            return 1 / 175f * _heroLevel * _heroLevel + 1;
+        }
     }
-
-    public enum championRole
-    {
-        TANK = 1,
-        HEALER = 2,
-        ARCHER = 3,
-        WARRIOR = 4,
-
-    }
-
-    
 }

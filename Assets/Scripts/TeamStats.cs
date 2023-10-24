@@ -1,68 +1,81 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using NaughtyAttributes;
+using ProjectClicker.Core;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ProjectClicker
 {
     public class TeamStats : MonoBehaviour
     {
+        [FormerlySerializedAs("_maxHealth")]
+        [FormerlySerializedAs("_baseHealth")]
         [Header("Team Stats")]
-        [SerializeField] private float _baseHealth;
+        [SerializeField] private float _baseMaxHealth;
         [SerializeField] private float _currentHealth;
-        [SerializeField] private float _baseArmor;
-        [SerializeField] private float _baseDamage;
-        [SerializeField] private float _baseHeal;
+        
+        [Foldout("Upgrades"), SerializeField] private Transform _upgradesParent;
+        [Foldout("Upgrades"), SerializeField] private GameObject _upgradePrefab;
 
-        public static Action OnTeamDamage;
+        public static event Action TeamHealthUpdate;
         private bool isDead;
 
-        [SerializeField] private float _healRate;
-        private UpgradesManager _upgradesManager;
+        [SerializeField] private List<HeroesBehavior> _heroes;
 
-        
-        private float _attack;
 
-        public float BaseHealth => _baseHealth;
+        private GoldManager _goldManager;
+
         public float CurrentHealth => _currentHealth;
 
         private void Awake()
         {
-            GetStats();
-            _upgradesManager = GameObject.FindWithTag("Managers").GetComponent<UpgradesManager>();
-            
+            _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
         }
 
         // Start is called before the first frame update
         void Start()
         {
-            _currentHealth = _baseHealth;
-            _attack = _baseDamage;
-            OnTeamDamage.Invoke();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
-
-        private void GetStats()
-        {
-            foreach(Transform t in transform)
+            _currentHealth = _baseMaxHealth;
+            for (int i = 0; i < _heroes.Count; i++)
             {
-                _baseHealth += t.GetComponent<HeroesBehavior>().MaxHealth;
-                _baseArmor += t.GetComponent<HeroesBehavior>().Armor;
-                _baseDamage += t.GetComponent<HeroesBehavior>().Damage;
-                _baseHeal += t.GetComponent<HeroesBehavior>().PowerHeal;
+                _upgradesParent.GetComponent<RectTransform>().sizeDelta = new Vector2(
+                    _upgradePrefab.GetComponent<RectTransform>().sizeDelta.x,
+                        (_upgradePrefab.GetComponent<RectTransform>().sizeDelta.y));
+                Instantiate(_upgradePrefab, _upgradesParent).GetComponent<HeroUpgradeDisplay>().Initialize(i, this);
             }
+            
+            TeamHealthUpdate?.Invoke();
+        }
+
+        public void UpgradeHeroAtIndex(int index)
+        {
+            HeroesBehavior hero = _heroes[index];
+            if (_goldManager.gold <= (ulong)hero.GetUpgradeCost())
+            {
+                return;
+            }
+            
+            _goldManager.RemoveGold(hero.GetUpgradeCost());
+            AddHealth(hero.Upgrade());
+            TeamHealthUpdate?.Invoke();
+        }
+
+        public float GetMaxTeamHealth()
+        {
+            float tempMaxHealth = _baseMaxHealth;
+            foreach (HeroesBehavior hero in _heroes)
+            {
+                tempMaxHealth += hero.MaxHealth;
+            }
+
+            return tempMaxHealth;
         }
         
         public void TakeDamage(float damage)
         {
             _currentHealth -= damage;
-            OnTeamDamage?.Invoke();
+            TeamHealthUpdate?.Invoke();
             if (_currentHealth < 0 && !isDead)
             {
                 isDead = true;
