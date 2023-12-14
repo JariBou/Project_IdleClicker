@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using ProjectClicker.Core;
 using UnityEngine;
@@ -48,8 +49,14 @@ namespace ProjectClicker
         public float AttackSpeed => _attackSpeed + _heroLevel * _upgradeInfo.AtkSpeedPerLevel;
         public float PowerHeal => _healStrength + _heroLevel * _upgradeInfo.HealStrengthPerLevel;
         public float Armor => _armor + _heroLevel * _upgradeInfo.ArmorPerLevel;
-        
-        
+
+        private Animator _animator;
+
+        private void Awake()
+        {
+            _animator = GetComponent<Animator>();
+        }
+
 
         // Update is called once per frame
         private void Update()
@@ -111,6 +118,7 @@ namespace ProjectClicker
             foreach (Collider2D collider in colliderAttack)
             {
                 _canAttack = false;
+                _animator.SetTrigger("Attack1");
                 collider.GetComponent<EnemiesBehavior>().TakeDamage(Damage);
                 yield return new WaitForSeconds(_attackSpeed);
                 _canAttack = true;
