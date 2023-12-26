@@ -1092,7 +1092,7 @@ GameObject:
   - component: {fileID: 638251915}
   m_Layer: 0
   m_Name: Monk
-  m_TagString: Untagged
+  m_TagString: Healer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1208,6 +1208,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 100
+  offset: 0
+  animator: {fileID: 0}
 --- !u!114 &638251919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2481,9 +2483,9 @@ GameObject:
   - component: {fileID: 1138516652}
   - component: {fileID: 1138516651}
   - component: {fileID: 1138516656}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Archer
-  m_TagString: Untagged
+  m_TagString: Archer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2529,7 +2531,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 6
 --- !u!70 &1138516652
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -2578,6 +2580,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 100
+  offset: 4
+  animator: {fileID: 0}
 --- !u!114 &1138516654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2764,9 +2768,9 @@ GameObject:
   - component: {fileID: 1236359694}
   - component: {fileID: 1236359699}
   - component: {fileID: 1236359700}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Warrior
-  m_TagString: Untagged
+  m_TagString: Warrior
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2812,7 +2816,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 6
 --- !u!114 &1236359696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2826,6 +2830,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 100
+  offset: 2
+  animator: {fileID: 0}
 --- !u!114 &1236359697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3197,9 +3203,9 @@ GameObject:
   - component: {fileID: 1575207788}
   - component: {fileID: 1575207787}
   - component: {fileID: 1575207793}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tank
-  m_TagString: Untagged
+  m_TagString: Tank
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3230,7 +3236,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 6
 --- !u!70 &1575207788
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -3346,6 +3352,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 100
+  offset: 2
+  animator: {fileID: 0}
 --- !u!114 &1575207792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3887,7 +3895,7 @@ GameObject:
   - component: {fileID: 1916538288}
   m_Layer: 6
   m_Name: Skeleton
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3953,7 +3961,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 6
 --- !u!212 &1916538290
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4033,8 +4041,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9af15127b43e2414ba32dab8aef3c762, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  maxHealth: 100
+  health: 1000
+  maxHealth: 1000
   AttackRange: 0
   Damage: 0
 --- !u!114 &1916538293
@@ -4348,9 +4356,9 @@ GameObject:
   - component: {fileID: 2012505211}
   - component: {fileID: 2012505210}
   - component: {fileID: 2012505215}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Healer
-  m_TagString: Untagged
+  m_TagString: Healer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4396,7 +4404,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 6
 --- !u!70 &2012505211
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -4445,6 +4453,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 100
+  offset: 4
+  animator: {fileID: 0}
 --- !u!114 &2012505213
 MonoBehaviour:
   m_ObjectHideFlags: 0

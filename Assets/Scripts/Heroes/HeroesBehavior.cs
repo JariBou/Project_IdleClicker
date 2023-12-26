@@ -65,6 +65,7 @@ namespace ProjectClicker
                     canAttack = true;
                     healStrenght = 100;
                     armor = 75;
+                    gameObject.tag = "Healer";
                     
                     break;
                 case championRole.TANK:
@@ -75,6 +76,7 @@ namespace ProjectClicker
                     canAttack = true;
                     healStrenght = 0;
                     armor = 150;
+                    gameObject.tag = "Tank";
                     break;
                 case championRole.ARCHER:
                     maxHealth = 100;
@@ -84,6 +86,7 @@ namespace ProjectClicker
                     canAttack = true;
                     healStrenght = 0;
                     armor = 50;
+                    gameObject.tag = "Archer";
                     break;
                 case championRole.WARRIOR:
                     maxHealth = 250;
@@ -93,6 +96,7 @@ namespace ProjectClicker
                     canAttack = true;
                     healStrenght = 0;
                     armor = 250;
+                    gameObject.tag = "Warrior";
                     break;
             }
         }
@@ -116,6 +120,11 @@ namespace ProjectClicker
             teamStats.AddHealth(healStrenght);
 
 
+        }
+
+        public championRole GetRole()
+        {
+            return Role;
         }
 
         private void OnDrawGizmosSelected()

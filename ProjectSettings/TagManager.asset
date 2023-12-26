@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Managers
+  - Enemy
+  - Tank
+  - Archer
+  - Healer
+  - Warrior
+  - Monk
   layers:
   - Default
   - TransparentFX
