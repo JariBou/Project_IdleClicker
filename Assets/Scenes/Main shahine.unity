@@ -1089,7 +1089,7 @@ GameObject:
   - component: {fileID: 638251918}
   - component: {fileID: 638251917}
   - component: {fileID: 638251916}
-  - component: {fileID: 638251915}
+  - component: {fileID: 638251921}
   m_Layer: 0
   m_Name: Monk
   m_TagString: Healer
@@ -1112,27 +1112,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1805394221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &638251915
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 638251913}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 27e940693f3ea7f4b88fc06900794116, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!50 &638251916
 Rigidbody2D:
   serializedVersion: 4
@@ -1209,6 +1188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 100
   offset: 0
+  canMove: 0
   animator: {fileID: 0}
 --- !u!114 &638251919
 MonoBehaviour:
@@ -1222,7 +1202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e49d2357dd08aa46a5a3acb1d9697d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _role: 2
+  _role: 0
   _upgradeInfo:
     _baseCost: 10
     _dmgPerLevel: 1
@@ -1231,16 +1211,16 @@ MonoBehaviour:
     _healthPerLevel: 10
     _healStrengthPerLevel: 2
   _heroLevel: 0
-  _teamStats: {fileID: 1805394220}
-  _maxHealth: 150
-  _damage: 10
-  _attackRange: 8
-  _attackSpeed: 3
+  _teamStats: {fileID: 0}
+  _maxHealth: 0
+  _damage: 0
+  _attackRange: 0
+  _attackSpeed: 0
   _layerToHit:
     serializedVersion: 2
-    m_Bits: 64
-  _healStrength: 100
-  _armor: 75
+    m_Bits: 0
+  _healStrength: 0
+  _armor: 0
 --- !u!212 &638251920
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1293,6 +1273,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &638251921
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638251913}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0ffc478cc3607b04792c293018a36cc7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &644455931
 GameObject:
   m_ObjectHideFlags: 0
@@ -2592,7 +2593,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 100
-  offset: 4
+  offset: 3
+  canMove: 0
   animator: {fileID: 0}
 --- !u!114 &1138516654
 MonoBehaviour:
@@ -2606,7 +2608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e49d2357dd08aa46a5a3acb1d9697d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _role: 3
+  _role: 0
   _upgradeInfo:
     _baseCost: 10
     _dmgPerLevel: 1
@@ -2615,16 +2617,16 @@ MonoBehaviour:
     _healthPerLevel: 10
     _healStrengthPerLevel: 2
   _heroLevel: 0
-  _teamStats: {fileID: 1805394220}
-  _maxHealth: 100
-  _damage: 75
-  _attackRange: 8
-  _attackSpeed: 1
+  _teamStats: {fileID: 0}
+  _maxHealth: 0
+  _damage: 0
+  _attackRange: 0
+  _attackSpeed: 0
   _layerToHit:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   _healStrength: 0
-  _armor: 50
+  _armor: 0
 --- !u!212 &1138516655
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2850,6 +2852,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 100
+  offset: 2
+  canMove: 0
+  animator: {fileID: 0}
 --- !u!114 &1236359697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2862,7 +2867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e49d2357dd08aa46a5a3acb1d9697d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _role: 4
+  _role: 0
   _upgradeInfo:
     _baseCost: 10
     _dmgPerLevel: 1
@@ -2871,16 +2876,16 @@ MonoBehaviour:
     _healthPerLevel: 10
     _healStrengthPerLevel: 2
   _heroLevel: 0
-  _teamStats: {fileID: 1805394220}
-  _maxHealth: 250
-  _damage: 75
-  _attackRange: 2
-  _attackSpeed: 3
+  _teamStats: {fileID: 0}
+  _maxHealth: 0
+  _damage: 0
+  _attackRange: 0
+  _attackSpeed: 0
   _layerToHit:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   _healStrength: 0
-  _armor: 250
+  _armor: 0
 --- !u!212 &1236359698
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3378,6 +3383,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 100
+  offset: 2
+  canMove: 0
+  animator: {fileID: 0}
 --- !u!114 &1575207792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3390,7 +3398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e49d2357dd08aa46a5a3acb1d9697d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _role: 1
+  _role: 0
   _upgradeInfo:
     _baseCost: 10
     _dmgPerLevel: 1
@@ -3399,16 +3407,16 @@ MonoBehaviour:
     _healthPerLevel: 10
     _healStrengthPerLevel: 2
   _heroLevel: 0
-  _teamStats: {fileID: 1805394220}
-  _maxHealth: 500
-  _damage: 30
-  _attackRange: 2
-  _attackSpeed: 4
+  _teamStats: {fileID: 0}
+  _maxHealth: 0
+  _damage: 0
+  _attackRange: 0
+  _attackSpeed: 0
   _layerToHit:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   _healStrength: 0
-  _armor: 150
+  _armor: 0
 --- !u!95 &1575207793
 Animator:
   serializedVersion: 5
@@ -3880,7 +3888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e3c73a187c1eab42a3fb1bc5093eca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseMaxHealth: 10
+  _baseMaxHealth: 0
   _currentHealth: 0
   _upgradesParent: {fileID: 0}
   _upgradePrefab: {fileID: 0}
@@ -4484,6 +4492,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 100
+  offset: 3
+  canMove: 0
+  animator: {fileID: 0}
 --- !u!114 &2012505213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4496,7 +4507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e49d2357dd08aa46a5a3acb1d9697d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _role: 2
+  _role: 0
   _upgradeInfo:
     _baseCost: 10
     _dmgPerLevel: 1
@@ -4505,16 +4516,16 @@ MonoBehaviour:
     _healthPerLevel: 10
     _healStrengthPerLevel: 2
   _heroLevel: 0
-  _teamStats: {fileID: 1805394220}
-  _maxHealth: 150
-  _damage: 10
-  _attackRange: 8
-  _attackSpeed: 3
+  _teamStats: {fileID: 0}
+  _maxHealth: 0
+  _damage: 0
+  _attackRange: 0
+  _attackSpeed: 0
   _layerToHit:
     serializedVersion: 2
-    m_Bits: 64
-  _healStrength: 100
-  _armor: 75
+    m_Bits: 0
+  _healStrength: 0
+  _armor: 0
 --- !u!212 &2012505214
 SpriteRenderer:
   m_ObjectHideFlags: 0

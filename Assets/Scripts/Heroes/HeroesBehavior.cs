@@ -71,46 +71,45 @@ namespace ProjectClicker
         {
             switch (role)
             {
+                case ChampionRole.HEALER:
+                    _maxHealth = 150f;
                     _damage = 10f;
-                case championRole.HEALER:
-                    maxHealth = 150f;
-                    damage = 10f;
-                    attackRange = 8f;
-                    attackSpeed = 3;
-                    canAttack = true;
-                    healStrenght = 100;
-                    armor = 75;
+                    _attackRange = 8f;
+                    _attackSpeed = 3;
+                    _canAttack = true;
+                    _healStrength = 100;
+                    _armor = 75;
                     gameObject.tag = "Healer";
                     
                     break;
-                case championRole.TANK:
-                    maxHealth = 500;
-                    damage = 30f;
-                    attackRange = 2f;
-                    attackSpeed = 4;
-                    canAttack = true;
-                    healStrenght = 0;
-                    armor = 150;
+                case ChampionRole.TANK:
+                    _maxHealth = 500;
+                    _damage = 30f;
+                    _attackRange = 2f;
+                    _attackSpeed = 4;
+                    _canAttack = true;
+                    _healStrength = 0;
+                    _armor = 150;
                     gameObject.tag = "Tank";
                     break;
-                case championRole.ARCHER:
-                    maxHealth = 100;
-                    damage = 75f;
-                    attackRange = 8f;
-                    attackSpeed = 1;
-                    canAttack = true;
-                    healStrenght = 0;
-                    armor = 50;
+                case ChampionRole.ARCHER:
+                    _maxHealth = 100;
+                    _damage = 75f;
+                    _attackRange = 8f;
+                    _attackSpeed = 1;
+                    _canAttack = true;
+                    _healStrength = 0;
+                    _armor = 50;
                     gameObject.tag = "Archer";
                     break;
-                case championRole.WARRIOR:
-                    maxHealth = 250;
-                    damage = 75f;
-                    attackRange = 2f;
-                    attackSpeed = 3;
-                    canAttack = true;
-                    healStrenght = 0;
-                    armor = 250;
+                case ChampionRole.WARRIOR:
+                    _maxHealth = 250;
+                    _damage = 75f;
+                    _attackRange = 2f;
+                    _attackSpeed = 3;
+                    _canAttack = true;
+                    _healStrength = 0;
+                    _armor = 250;
                     gameObject.tag = "Warrior";
                     break;
             }
@@ -130,14 +129,23 @@ namespace ProjectClicker
             }
         }
 
+        public enum ChampionRole
+        {
+            HEALER,
+            TANK,
+            ARCHER,
+            WARRIOR,
+
+        }
+
         private void Heal()
         {
             _teamStats.AddHealth(_healStrength);
         }
 
-        public championRole GetRole()
+        public ChampionRole GetRole()
         {
-            return Role;
+            return _role;
         }
 
         private void OnDrawGizmosSelected()

@@ -52,9 +52,6 @@ namespace ProjectClicker
                     StopMove();
                 }
             }
-            
-            
-
         }
 
         private void Move()
@@ -66,7 +63,7 @@ namespace ProjectClicker
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
 
-        private void OnDrawGizmosSelected()
+        private void OnDrawGizmos()
         {
             if (canMove) Gizmos.color = Color.blue;
             else Gizmos.color = Color.red;
