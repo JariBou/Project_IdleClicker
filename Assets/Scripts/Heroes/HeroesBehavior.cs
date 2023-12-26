@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Xml;
 using ProjectClicker.Core;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -51,10 +52,12 @@ namespace ProjectClicker
         public float Armor => _armor + _heroLevel * _upgradeInfo.ArmorPerLevel;
 
         private Animator _animator;
-
-        private void Awake()
+        private Rigidbody2D _rb;
+        [SerializeField] private float _offset;
+        private void Start()
         {
             _animator = GetComponent<Animator>();
+            _rb = GetComponent<Rigidbody2D>();
         }
 
 
@@ -80,7 +83,6 @@ namespace ProjectClicker
                     _healStrength = 100;
                     _armor = 75;
                     gameObject.tag = "Healer";
-                    
                     break;
                 case ChampionRole.TANK:
                     _maxHealth = 500;
@@ -118,10 +120,20 @@ namespace ProjectClicker
 
         private IEnumerator Attack()
         {
-            Collider2D[] colliderAttack = Physics2D.OverlapCircleAll(transform.position, _attackRange, _layerToHit);
+            Collider2D[] colliderAttack;
+            if (gameObject.tag == "Healer" || gameObject.tag == "Archer")
+            {
+                colliderAttack = Physics2D.OverlapCircleAll(new Vector2(transform.position.x + _offset, transform.position.y), _attackRange, LayerMask.GetMask("Enemy"));
+            }
+            else
+            {
+                colliderAttack = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2, 6), 0, LayerMask.GetMask("Enemy"));
+            }
+            ;
             foreach (Collider2D collider in colliderAttack)
             {
                 _canAttack = false;
+                Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
                 _animator.SetTrigger("Attack1");
                 collider.GetComponent<EnemiesBehavior>().TakeDamage(Damage);
                 yield return new WaitForSeconds(_attackSpeed);
@@ -134,8 +146,7 @@ namespace ProjectClicker
             HEALER,
             TANK,
             ARCHER,
-            WARRIOR,
-
+            WARRIOR
         }
 
         private void Heal()
@@ -151,7 +162,15 @@ namespace ProjectClicker
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position, _attackRange);
+            if (gameObject.tag == "Healer" || gameObject.tag == "Archer")
+            {
+                Gizmos.DrawWireSphere(new Vector2(transform.position.x + _offset, transform.position.y), _attackRange);
+            }
+            else
+            {
+                Gizmos.DrawWireCube(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2, 6));
+            }
+                
         }
 
         private void OnValidate()

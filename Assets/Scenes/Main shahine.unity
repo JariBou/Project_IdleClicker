@@ -1188,7 +1188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 100
   offset: 0
-  canMove: 0
+  _canMove: 0
   animator: {fileID: 0}
 --- !u!114 &638251919
 MonoBehaviour:
@@ -1221,6 +1221,7 @@ MonoBehaviour:
     m_Bits: 0
   _healStrength: 0
   _armor: 0
+  _offset: 0
 --- !u!212 &638251920
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2496,7 +2497,7 @@ GameObject:
   - component: {fileID: 1138516652}
   - component: {fileID: 1138516651}
   - component: {fileID: 1138516656}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Archer
   m_TagString: Archer
   m_Icon: {fileID: 0}
@@ -2512,7 +2513,7 @@ Transform:
   m_GameObject: {fileID: 1138516649}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.8, y: 4.1, z: 1.1297439}
+  m_LocalPosition: {x: -8.89, y: 4.31, z: 1.1297439}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2594,7 +2595,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 100
   offset: 3
-  canMove: 0
+  _canMove: 0
   animator: {fileID: 0}
 --- !u!114 &1138516654
 MonoBehaviour:
@@ -2608,7 +2609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e49d2357dd08aa46a5a3acb1d9697d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _role: 0
+  _role: 2
   _upgradeInfo:
     _baseCost: 10
     _dmgPerLevel: 1
@@ -2617,16 +2618,17 @@ MonoBehaviour:
     _healthPerLevel: 10
     _healStrengthPerLevel: 2
   _heroLevel: 0
-  _teamStats: {fileID: 0}
-  _maxHealth: 0
-  _damage: 0
-  _attackRange: 0
-  _attackSpeed: 0
+  _teamStats: {fileID: 1805394220}
+  _maxHealth: 100
+  _damage: 75
+  _attackRange: 8
+  _attackSpeed: 1
   _layerToHit:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   _healStrength: 0
-  _armor: 0
+  _armor: 50
+  _offset: 2.5
 --- !u!212 &1138516655
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2806,7 +2808,7 @@ Transform:
   m_GameObject: {fileID: 1236359692}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.05, y: 2.95, z: 1.1297439}
+  m_LocalPosition: {x: -4.05, y: 3.48, z: 1.1297439}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2853,7 +2855,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 100
   offset: 2
-  canMove: 0
+  _canMove: 0
   animator: {fileID: 0}
 --- !u!114 &1236359697
 MonoBehaviour:
@@ -2867,7 +2869,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e49d2357dd08aa46a5a3acb1d9697d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _role: 0
+  _role: 3
   _upgradeInfo:
     _baseCost: 10
     _dmgPerLevel: 1
@@ -2876,16 +2878,17 @@ MonoBehaviour:
     _healthPerLevel: 10
     _healStrengthPerLevel: 2
   _heroLevel: 0
-  _teamStats: {fileID: 0}
-  _maxHealth: 0
-  _damage: 0
-  _attackRange: 0
-  _attackSpeed: 0
+  _teamStats: {fileID: 1805394220}
+  _maxHealth: 250
+  _damage: 75
+  _attackRange: 2
+  _attackSpeed: 3
   _layerToHit:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   _healStrength: 0
-  _armor: 0
+  _armor: 250
+  _offset: 2
 --- !u!212 &1236359698
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3384,7 +3387,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 100
   offset: 2
-  canMove: 0
+  _canMove: 0
   animator: {fileID: 0}
 --- !u!114 &1575207792
 MonoBehaviour:
@@ -3398,7 +3401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e49d2357dd08aa46a5a3acb1d9697d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _role: 0
+  _role: 1
   _upgradeInfo:
     _baseCost: 10
     _dmgPerLevel: 1
@@ -3407,16 +3410,17 @@ MonoBehaviour:
     _healthPerLevel: 10
     _healStrengthPerLevel: 2
   _heroLevel: 0
-  _teamStats: {fileID: 0}
-  _maxHealth: 0
-  _damage: 0
-  _attackRange: 0
-  _attackSpeed: 0
+  _teamStats: {fileID: 1805394220}
+  _maxHealth: 500
+  _damage: 30
+  _attackRange: 2
+  _attackSpeed: 4
   _layerToHit:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   _healStrength: 0
-  _armor: 0
+  _armor: 150
+  _offset: 2
 --- !u!95 &1575207793
 Animator:
   serializedVersion: 5
@@ -4395,7 +4399,7 @@ GameObject:
   - component: {fileID: 2012505211}
   - component: {fileID: 2012505210}
   - component: {fileID: 2012505215}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Healer
   m_TagString: Healer
   m_Icon: {fileID: 0}
@@ -4411,7 +4415,7 @@ Transform:
   m_GameObject: {fileID: 2012505208}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.96, y: 0.75, z: 1.1297439}
+  m_LocalPosition: {x: -7.96, y: 0.38, z: 1.1297439}
   m_LocalScale: {x: 1.1391, y: 1.1391, z: 1.1391}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4493,8 +4497,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 100
   offset: 3
-  canMove: 0
-  animator: {fileID: 0}
+  _canMove: 0
+  animator: {fileID: 2012505215}
 --- !u!114 &2012505213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4516,16 +4520,17 @@ MonoBehaviour:
     _healthPerLevel: 10
     _healStrengthPerLevel: 2
   _heroLevel: 0
-  _teamStats: {fileID: 0}
-  _maxHealth: 0
-  _damage: 0
-  _attackRange: 0
-  _attackSpeed: 0
+  _teamStats: {fileID: 1805394220}
+  _maxHealth: 150
+  _damage: 10
+  _attackRange: 8
+  _attackSpeed: 3
   _layerToHit:
     serializedVersion: 2
-    m_Bits: 0
-  _healStrength: 0
-  _armor: 0
+    m_Bits: 64
+  _healStrength: 100
+  _armor: 75
+  _offset: 2.5
 --- !u!212 &2012505214
 SpriteRenderer:
   m_ObjectHideFlags: 0

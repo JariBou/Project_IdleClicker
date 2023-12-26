@@ -8,7 +8,7 @@ namespace ProjectClicker
         [SerializeField] float Speed = 150;
         Rigidbody2D rb;
         [SerializeField] float offset;
-        public bool canMove;
+        public bool _canMove;
         [SerializeField] Animator animator;
 
         // Start is called before the first frame update
@@ -16,6 +16,7 @@ namespace ProjectClicker
         {
             rb = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
+            /*Debug.Log("Tag " + gameObject.tag);*/
         }
 
         // Update is called once per frame
@@ -28,11 +29,11 @@ namespace ProjectClicker
                 if (colliderMovement.Length == 0)
                 {
                     Move();
-                    canMove = true;
+                    _canMove = true;
                 }
                 else
                 {
-                    canMove = false;
+                    _canMove = false;
                     StopMove();
                 }
 
@@ -44,11 +45,11 @@ namespace ProjectClicker
                 if (colliderMovement.Length == 0)
                 {
                     Move();
-                    canMove = true;
+                    _canMove = true;
                 }
                 else
                 {
-                    canMove = false;
+                    _canMove = false;
                     StopMove();
                 }
             }
@@ -65,7 +66,7 @@ namespace ProjectClicker
 
         private void OnDrawGizmos()
         {
-            if (canMove) Gizmos.color = Color.blue;
+            if (_canMove) Gizmos.color = Color.blue;
             else Gizmos.color = Color.red;
             if (gameObject.tag == "Healer" || gameObject.tag == "Archer")
             {
