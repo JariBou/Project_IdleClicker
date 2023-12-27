@@ -5,7 +5,7 @@ namespace ProjectClicker
    public class HeroesMovement : MonoBehaviour
     {
 
-        [SerializeField] float Speed = 150;
+        [SerializeField] float Speed;
         Rigidbody2D rb;
         [SerializeField] float offset;
         public bool _canMove;

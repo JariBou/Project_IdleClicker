@@ -28,8 +28,9 @@ namespace ProjectClicker
 
         private void OnTeamHealthUpdate()
         {
-            Slider.value = _TeamStats.CurrentHealth / _TeamStats.GetMaxTeamHealth();
-            _TextMeshPro.text = _TeamStats.CurrentHealth.ToString(CultureInfo.InvariantCulture) + "/" + _TeamStats.GetMaxTeamHealth().ToString(CultureInfo.InvariantCulture);
+            Slider.maxValue = _TeamStats.GetMaxTeamHealth();
+            Slider.value = _TeamStats.CurrentHealth; /*/ _TeamStats.GetMaxTeamHealth();*/
+            _TextMeshPro.text = _TeamStats.CurrentHealth.ToString(CultureInfo.InvariantCulture) + "/" + _TeamStats.GetMaxTeamHealth().ToString();
         }
     }
 }
