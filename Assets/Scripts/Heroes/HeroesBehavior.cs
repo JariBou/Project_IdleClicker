@@ -30,7 +30,7 @@ namespace ProjectClicker
         [FormerlySerializedAs("attackRange")] [SerializeField] private float _attackRange;
         [FormerlySerializedAs("attackSpeed")] [SerializeField] private float _attackSpeed;
         [FormerlySerializedAs("layerToHit")] [SerializeField] private LayerMask _layerToHit;
-        private bool _canAttack;
+        [FormerlySerializedAs("Can Attack")][SerializeField] private bool _canAttack;
 
 
         [FormerlySerializedAs("healStrength")]
@@ -58,15 +58,25 @@ namespace ProjectClicker
         {
             _animator = GetComponent<Animator>();
             _rb = GetComponent<Rigidbody2D>();
+            /*Debug.Log(gameObject.name);*/
         }
 
 
         // Update is called once per frame
         private void Update()
         {
-            if (_canAttack)
+            Collider2D[] colliderAttack;
+            if (gameObject.tag == "Healer" || gameObject.tag == "Archer")
             {
-                StartCoroutine(Attack());
+                colliderAttack = Physics2D.OverlapCircleAll(new Vector2(transform.position.x + _offset, transform.position.y), _attackRange, LayerMask.GetMask("Enemy"));
+            }
+            else
+            {
+                colliderAttack = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2, 6), 0, LayerMask.GetMask("Enemy"));
+            }
+            if (_canAttack && colliderAttack.Length != 0)
+            {
+                StartCoroutine(Attack(colliderAttack));
             }
         }
 
@@ -114,30 +124,27 @@ namespace ProjectClicker
                     _armor = 250;
                     gameObject.tag = "Warrior";
                     break;
+                default:
+                    break;
             }
         }
 
 
-        private IEnumerator Attack()
+        private IEnumerator Attack(Collider2D[] colliderAttack)
         {
-            Collider2D[] colliderAttack;
-            if (gameObject.tag == "Healer" || gameObject.tag == "Archer")
-            {
-                colliderAttack = Physics2D.OverlapCircleAll(new Vector2(transform.position.x + _offset, transform.position.y), _attackRange, LayerMask.GetMask("Enemy"));
-            }
-            else
-            {
-                colliderAttack = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2, 6), 0, LayerMask.GetMask("Enemy"));
-            }
-            ;
             foreach (Collider2D collider in colliderAttack)
             {
-                _canAttack = false;
-                Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
-                _animator.SetTrigger("Attack1");
-                collider.GetComponent<EnemiesBehavior>().TakeDamage(Damage);
-                yield return new WaitForSeconds(_attackSpeed);
-                _canAttack = true;
+                if (!collider.gameObject.GetComponent<EnemiesBehavior>().IsDead)
+                {
+                    _canAttack = false;
+                    Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
+                    _animator.SetTrigger("Attack1");
+                    yield return new WaitForSeconds(0.01f);
+                    collider.GetComponent<EnemiesBehavior>().TakeDamage(Damage);
+                    yield return new WaitForSeconds(_attackSpeed);
+                    _canAttack = true;
+                }
+
             }
         }
 

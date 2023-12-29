@@ -17,6 +17,7 @@ namespace ProjectClicker
         public float health;
         public float maxHealth;
         bool isDead;
+        public bool IsDead => isDead;
         [SerializeField] private Slider _healthBar;
 
 
@@ -33,6 +34,10 @@ namespace ProjectClicker
         [SerializeField] private float _level = 1;
         [SerializeField] private float _gold = 500f;
         [SerializeField] private GoldManager _goldManager;
+
+        [Header("Animator")]
+        private Animator _animator;
+        private Rigidbody2D _rb;
         // Start is called before the first frame update
         void Start()
         {
@@ -40,12 +45,16 @@ namespace ProjectClicker
             _healthBar.value = health;
             _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
             _offset = GetComponent<EnemiesMovement>().Offset;
+            _animator = GetComponent<Animator>();
+            _rb = GetComponent<Rigidbody2D>();
+
 /*            Debug.Log(gameObject.name);*/
         }
 
         // Update is called once per frame
         void Update()
         {
+            _animator.SetFloat("Velocity", _rb.velocity.x);
             if (_canAttack)
             {
                 Collider2D[] colliderAttack = Physics2D.OverlapCircleAll(new Vector2(transform.position.x - _offset, transform.position.y), AttackRange, LayerMask.GetMask("Champion"));
@@ -66,18 +75,32 @@ namespace ProjectClicker
         {
             health -= damage;
             _healthBar.value = health;
+            if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("TakeDamage") && !_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
+            {
+                _animator.SetTrigger("TakeDamage");
+            }
             if (health < 0 && !isDead)
             {
                 isDead = true;
-                _goldManager.AddGold((ulong)(_gold * _level));
-                Destroy(gameObject);
+                StartCoroutine(Die());
+               
             }
+        }
+
+        IEnumerator Die()
+        {
+            _animator.SetTrigger("Die");
+            _goldManager.AddGold((ulong)(_gold * _level));
+            yield return new WaitForSeconds(1f);
+            Destroy(gameObject);
         }
 
         private IEnumerator Attack()
         {
             _canAttack = false;
             Collider2D[] colliderAttack = Physics2D.OverlapCircleAll(new Vector2(transform.position.x - _offset, transform.position.y), AttackRange, LayerMask.GetMask("Champion"));
+            _animator.SetTrigger("Attack1");
+            yield return new WaitForSeconds(0.02f);
             foreach (Collider2D collider in colliderAttack)
             {
                 collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(Damage);
