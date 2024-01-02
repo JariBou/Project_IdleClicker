@@ -26,12 +26,14 @@ namespace ProjectClicker
 
 
         private GoldManager _goldManager;
+        private LevelsManager _managers;
 
         public float CurrentHealth => _currentHealth;
 
         private void Awake()
         {
             _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
+            _managers = GameObject.FindWithTag("Managers").GetComponent<LevelsManager>();
         }
 
         // Start is called before the first frame update
@@ -40,6 +42,8 @@ namespace ProjectClicker
             _baseMaxHealth = GetMaxTeamHealth();
             _currentHealth = _baseMaxHealth;
             _baseArmor = GetTeamArmor();
+            _managers.ResetTeamHealth += ResetHealth;
+
 /*          for (int i = 0; i < _heroes.Count; i++)
             {
                 _upgradesParent.GetComponent<RectTransform>().sizeDelta = new Vector2(
@@ -75,6 +79,14 @@ namespace ProjectClicker
             return tempMaxHealth;
         }
 
+        public void ResetHealth()
+        { 
+            _currentHealth = _baseMaxHealth;
+            TeamHealthUpdate?.Invoke();
+            
+        }
+            
+
         public float GetTeamArmor()
         {
             float tempArmor = 0;
@@ -101,7 +113,18 @@ namespace ProjectClicker
             }
         }
 
-        public void AddHealth(float heal) => _currentHealth += heal;
+
+        public void AddHealth(float heal)
+        {
+            _currentHealth += heal;
+            if (_currentHealth > _baseMaxHealth)
+            {
+                _currentHealth = _baseMaxHealth;
+            }
+            TeamHealthUpdate?.Invoke();
+        }
+
+       
 
     }
 }

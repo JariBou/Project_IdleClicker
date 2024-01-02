@@ -1,7 +1,11 @@
+using Codice.Client.Common.GameUI;
 using NaughtyAttributes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Graphs;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ProjectClicker
 {
@@ -13,28 +17,29 @@ namespace ProjectClicker
         [SerializeField] private int _currentLevel;
         [SerializeField] private Sprite[] _backgroundLevels;
 
-        [Header("Enemies")]
-        [SerializeField] private GameObject _skeleton;
-        [SerializeField] private GameObject _goblin;
-        [SerializeField] private GameObject _mushroom;
-        [SerializeField] private GameObject _flyingEye;
-
-        [Header("Base")]
-        [SerializeField] private GameObject _teamBase;
-        [SerializeField] private GameObject _enemyBase;
         // Start is called before the first frame update
-        void Start()
+
+        [Header("Champions Team")]
+        [SerializeField] private GameObject _championTeam;
+        [SerializeField] private List<Vector3> _championTeamSpawn = new List<Vector3>();
+
+        void Awake()
         {
-        
+            for (int i = 0; i < _championTeam.transform.childCount; i++)
+            {
+                if (_championTeam.transform.GetChild(i).gameObject.activeSelf) _championTeamSpawn.Add(_championTeam.transform.GetChild(i).transform.position);
+            }
+
+
         }
 
         // Update is called once per frame
         void Update()
         {
-        
+            
         }
         [Button]
-        private void NextLevel()
+        public void NextLevel()
         {
             _currentLevel++;
             if (_currentLevel >= _backgroundLevels.Length)
@@ -42,10 +47,12 @@ namespace ProjectClicker
                 _currentLevel = 0;
             }
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel];
+            ResetTeamHealth?.Invoke();
+            ResetTeamPosition();
         }
 
         [Button]
-        private void PreviousLevel()
+        public void PreviousLevel()
         {
             _currentLevel--;
             if (_currentLevel < 0)
@@ -53,13 +60,41 @@ namespace ProjectClicker
                 _currentLevel = _backgroundLevels.Length - 1;
             }
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel];
+            ResetTeamHealth?.Invoke();
+            ResetTeamPosition();
         }
 
-        [Button]
-        private void SpawnSkeleton()
+        private void ResetTeamPosition()
         {
-            Instantiate(_skeleton, new Vector3(0, 0, 0), Quaternion.identity);
+            int index = 0;
+            for (int i = 0; i < _championTeam.transform.childCount; i++)
+            {
+                if (_championTeam.transform.GetChild(i).gameObject.activeSelf)
+                {
+                    _championTeam.transform.GetChild(i).transform.position = _championTeamSpawn[index];
+                    index++;
+                }
+            }
         }
+
+
+
+/*        public void TakeDamage(float damage)
+        {
+            _health -= damage;
+            _enemyBaseHealthBar.value = _health;
+            if (_health <= 0)
+            {
+                Debug.Log("You Win");
+                _health = _maxHealth;
+                _enemyBaseHealthBar.value = _health;
+                NextLevel();
+                ResetTeamHealth?.Invoke();
+                _championTeam.transform.position = _championTeamSpawn.position;
+            }
+        }*/
+
+        public event Action ResetTeamHealth;
 
     }
 }
