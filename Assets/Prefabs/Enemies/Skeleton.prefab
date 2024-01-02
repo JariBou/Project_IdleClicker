@@ -354,7 +354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff2ced11c59c6c04c92a655f80c016a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 150
+  Speed: 500
   _offset: 2
 --- !u!114 &3705128636563681852
 MonoBehaviour:
@@ -369,11 +369,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 0
-  health: 1000
-  maxHealth: 1000
+  health: 500
+  maxHealth: 500
   _healthBar: {fileID: 6202891243171271161}
   AttackRange: 3
-  Damage: 300
+  Damage: 125
   AttackSpeed: 2.3809526
   _offset: 1
   _canAttack: 1

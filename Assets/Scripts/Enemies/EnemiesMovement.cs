@@ -6,7 +6,7 @@ namespace ProjectClicker
 {
     public class EnemiesMovement : MonoBehaviour
     {
-        [SerializeField] float Speed = 150;
+        [SerializeField] float Speed = 500;
         Rigidbody2D rb;
         [SerializeField] float _offset;
         bool _canMove;

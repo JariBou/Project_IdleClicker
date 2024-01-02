@@ -13,8 +13,9 @@ namespace ProjectClicker
     {
 
         [Header("Levels")]
-        [SerializeField] GameObject _level;
+        [SerializeField]GameObject _level;
         [SerializeField] private int _currentLevel;
+        public int CurrentLevel => _currentLevel;
         [SerializeField] private Sprite[] _backgroundLevels;
 
         // Start is called before the first frame update

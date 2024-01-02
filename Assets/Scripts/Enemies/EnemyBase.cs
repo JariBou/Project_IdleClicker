@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 namespace ProjectClicker
 {
@@ -22,7 +23,8 @@ namespace ProjectClicker
 
         [Header("Spawn")]
         [SerializeField] private Transform[] _spawnPoints;
-
+        [SerializeField] float spawnRate; 
+        private bool _canSpawn;
 
         [Header("LevelsManager")]
         private LevelsManager _levelsManager;
@@ -34,12 +36,16 @@ namespace ProjectClicker
             _enemyBaseHealthBar.maxValue = _maxHealth;
             _enemyBaseHealthBar.value = _maxHealth;
             _health = _maxHealth;
+            _canSpawn = true;
         }
 
         // Update is called once per frame
         void Update()
         {
-        
+            if (_canSpawn)
+            {
+                StartCoroutine(SpawnSkeleton(spawnRate));
+            }
         }
 
         public void TakeDamage(float damage)
@@ -56,9 +62,26 @@ namespace ProjectClicker
         }
 
         [Button]
-        private void SpawnSkeleton()
+        private IEnumerator SpawnSkeleton(float seconds)
         {
-            Instantiate(_skeleton, _spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Length - 1)].transform.position, Quaternion.identity);
+            _canSpawn = false;
+            for (int i = 0; i<4; i++)
+            {
+                Instantiate(_skeleton, _spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Length - 1)].transform.position, Quaternion.identity);
+                yield return new WaitForSeconds(2.2f);
+            }
+            yield return new WaitForSeconds(seconds);
+            _canSpawn = true;
+        }
+
+        private void OnNextLevel()
+        {
+
+        }
+
+        private void OnPreviousLevel()
+        {
+
         }
     }
 }

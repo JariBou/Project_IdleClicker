@@ -91,7 +91,7 @@ namespace ProjectClicker
                     _attackSpeed = 3;
                     _canAttack = true;
                     _healStrength = 100;
-                    _armor = 75;
+                    _armor = 5;
                     gameObject.tag = "Healer";
                     break;
                 case ChampionRole.TANK:
@@ -101,7 +101,7 @@ namespace ProjectClicker
                     _attackSpeed = 4;
                     _canAttack = true;
                     _healStrength = 0;
-                    _armor = 150;
+                    _armor = 75;
                     gameObject.tag = "Tank";
                     break;
                 case ChampionRole.ARCHER:
@@ -111,7 +111,7 @@ namespace ProjectClicker
                     _attackSpeed = 1;
                     _canAttack = true;
                     _healStrength = 0;
-                    _armor = 50;
+                    _armor = 10;
                     gameObject.tag = "Archer";
                     break;
                 case ChampionRole.WARRIOR:
@@ -121,7 +121,7 @@ namespace ProjectClicker
                     _attackSpeed = 3;
                     _canAttack = true;
                     _healStrength = 0;
-                    _armor = 250;
+                    _armor = 25;
                     gameObject.tag = "Warrior";
                     break;
                 default:
@@ -134,30 +134,33 @@ namespace ProjectClicker
         {
             foreach (Collider2D collider in colliderAttack)
             {
-                if (collider.tag != "EnemyBase")
+                if (_rb.velocity.x < 0.1f)
                 {
-                    if (!collider.gameObject.GetComponent<EnemiesBehavior>().IsDead)
+                    if (collider.tag != "EnemyBase")
+                    {
+                        if (!collider.gameObject.GetComponent<EnemiesBehavior>().IsDead)
+                        {
+                            _canAttack = false;
+                            Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
+                            _animator.SetTrigger("Attack1");
+                            yield return new WaitForSeconds(0.1f);
+                            collider.GetComponent<EnemiesBehavior>().TakeDamage(Damage);
+                            yield return new WaitForSeconds(_attackSpeed);
+                            _canAttack = true;
+                        }
+                    }
+                    else
                     {
                         _canAttack = false;
                         Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
                         _animator.SetTrigger("Attack1");
-                        yield return new WaitForSeconds(0.01f);
-                        collider.GetComponent<EnemiesBehavior>().TakeDamage(Damage);
+                        yield return new WaitForSeconds(0.1f);
+                        collider.GetComponent<EnemyBase>().TakeDamage(Damage);
                         yield return new WaitForSeconds(_attackSpeed);
                         _canAttack = true;
                     }
+
                 }
-                else
-                {
-                    _canAttack = false;
-                    Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
-                    _animator.SetTrigger("Attack1");
-                    yield return new WaitForSeconds(0.01f);
-                    collider.GetComponent<EnemyBase>().TakeDamage(Damage);
-                    yield return new WaitForSeconds(_attackSpeed);
-                    _canAttack = true;
-                }
-                
 
             }
         }
