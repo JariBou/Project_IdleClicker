@@ -50,17 +50,33 @@ namespace ProjectClicker.Core
 
         public string GoldString()
         {
-            ulong goldMoney = gold;
+            if (gold < 1000) return gold.ToString();
+            decimal goldMoney = gold;
             string[] suffixes = { "", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s"}; 
 
             int suffixIndex = 0;
-            while (goldMoney >= 1000UL && suffixIndex < suffixes.Length - 1)
+            while (goldMoney >= 1000 && suffixIndex < suffixes.Length - 1)
             {
-                goldMoney /= 1000UL;
+                goldMoney /= 1000;
                 suffixIndex++;
             }
             return goldMoney.ToString("F2") + suffixes[suffixIndex];
 
+        }
+        public string NumberToString(decimal goldMoney)
+        {
+            if (goldMoney < 1000) return goldMoney.ToString();
+            string[] suffixes = { "", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s" };
+
+            int suffixIndex = 0;
+            while (goldMoney >= 1000 && suffixIndex < suffixes.Length - 1)
+            {
+                goldMoney /= 1000;
+                suffixIndex++;
+            }
+            string formattedMoney = goldMoney.ToString("F2");
+
+            return formattedMoney + suffixes[suffixIndex];
         }
     }
 }

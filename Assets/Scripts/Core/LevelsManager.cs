@@ -56,7 +56,7 @@ namespace ProjectClicker
             _currentLevel--;
             if (_currentLevel < 0)
             {
-                _currentLevel = _backgroundLevels.Length - 1;
+                _currentLevel = 0;
             }
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel];
             ResetTeamHealth?.Invoke();

@@ -106,11 +106,10 @@ namespace ProjectClicker
             yield return new WaitForSeconds(0.02f);
             foreach (Collider2D collider in colliderAttack)
             {
-                if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
-                {
-                    collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(Damage);
-                    /*Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);*/
-                }
+                
+                collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(Damage);
+                Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);
+                
                 break; //chaque ennemi attaque 1 seul champion
             }
             yield return new WaitForSeconds(AttackSpeed);
@@ -127,7 +126,7 @@ namespace ProjectClicker
                     maxHealth = 1000 * _level;
                     health = maxHealth;
                     AttackRange = 3;
-                    Damage = 300 * _level;
+                    Damage = 190 * _level;
                     AttackSpeed = 2.5f / (_level*1.05f);
                     _gold = 500 * _level;
                     break;
@@ -136,7 +135,7 @@ namespace ProjectClicker
                     maxHealth = 500 * _level;
                     health = maxHealth;
                     AttackRange = 7.5f;
-                    Damage = 200 * _level;
+                    Damage = 150 * _level;
                     AttackSpeed = 1.5f / (_level * 1.05f);
                     _gold = 1000 * _level;
                     break;
@@ -145,7 +144,7 @@ namespace ProjectClicker
                     maxHealth = 5000 * _level;
                     health = maxHealth;
                     AttackRange = 5;
-                    Damage = 500 * _level;
+                    Damage = 450 * _level;
                     AttackSpeed = 1/(_level * 1.05f);
                     _gold = 10000 * _level;
                     break;

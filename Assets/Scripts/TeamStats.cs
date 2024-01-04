@@ -108,6 +108,7 @@ namespace ProjectClicker
         
         public void TakeDamage(float damage)
         {
+            Debug.Log("Damage taken: " + damage + ", Base Armor: " + _baseArmor);
             float Damage = damage - _baseArmor;
             if (Damage > 0)
             {

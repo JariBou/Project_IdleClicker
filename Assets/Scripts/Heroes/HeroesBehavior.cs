@@ -135,17 +135,20 @@ namespace ProjectClicker
         {
             foreach (Collider2D collider in colliderAttack)
             {
-                if (_rb.velocity.x < 0.1f)
+                if (_rb.velocity.x < 0.01f)
                 {
                     if (collider.tag != "EnemyBase")
                     {
                         if (!collider.gameObject.GetComponent<EnemiesBehavior>().IsDead)
                         {
                             _canAttack = false;
-                            Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
+                           
                             _animator.SetTrigger("Attack1");
-                            yield return new WaitForSeconds(0.01f);
+                            yield return new WaitForSeconds(0.1f);
+                            
+                            Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
                             collider.GetComponent<EnemiesBehavior>().TakeDamage(Damage);
+                            
                             yield return new WaitForSeconds(_attackSpeed);
                             _canAttack = true;
                         }
@@ -153,13 +156,12 @@ namespace ProjectClicker
                     else if (colliderAttack.Length == 1)
                     {
                         _canAttack = false;
-                        Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
                         _animator.SetTrigger("Attack1");
-                        yield return new WaitForSeconds(0.01f);
+                        yield return new WaitForSeconds(0.1f);
+                        Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
                         collider.GetComponent<EnemyBase>().TakeDamage(Damage);
                         yield return new WaitForSeconds(_attackSpeed);
                         _canAttack = true;
-
                     }
 
                 }

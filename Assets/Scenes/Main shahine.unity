@@ -3291,7 +3291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d5f5ca81569e704cbee4f3f0e1715b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 250
+  _maxHealth: 500
   _enemyBaseHealthBar: {fileID: 1570757814}
   _skeleton: {fileID: 3510506642445121682, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
   _goblin: {fileID: 0}

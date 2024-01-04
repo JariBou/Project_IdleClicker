@@ -55,24 +55,25 @@ namespace ProjectClicker
             _heroName.text = _heroesLibrary[HeroIndex]._heroName;
             championStats = GameObject.FindWithTag("Team").transform?.GetChild(index).GetComponent<HeroesBehavior>();
             if (championStats == null) return;
-            _damageAmount.text = championStats.Damage.ToString();
-            _healthAmount.text = championStats.MaxHealth.ToString();
-            if (championRole == "Healer") _armorOrHealAmount.text = championStats.PowerHeal.ToString();
-            else _armorOrHealAmount.text = championStats.Armor.ToString();
-            _heroLevel.text = "Lvl " + championStats.HeroLevel.ToString();
+            if (_goldManager == null) _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
+            _damageAmount.text = _goldManager.NumberToString((decimal)championStats.Damage);
+            _healthAmount.text = _goldManager.NumberToString((decimal)championStats.MaxHealth);
+            if (championRole == "Healer") _armorOrHealAmount.text = _goldManager.NumberToString((decimal)championStats.PowerHeal);
+            else _armorOrHealAmount.text = _goldManager.NumberToString((decimal)championStats.Armor);
+            _heroLevel.text = "Lvl " + _goldManager.NumberToString((decimal)championStats.HeroLevel); ;
             _upgradeCostInt = 1240;
-            _upgradeCost.text = _upgradeCostInt.ToString();
-            
+            _upgradeCost.text = _goldManager.NumberToString((decimal)_upgradeCostInt);
+
         }
 
         private void UpdateUpgradePanel()
         {
-            _damageAmount.text = championStats.Damage.ToString();
-            _healthAmount.text = championStats.MaxHealth.ToString();
-            if (ChampionRole == "Healer") _armorOrHealAmount.text = championStats.PowerHeal.ToString();
-            else _armorOrHealAmount.text = championStats.Armor.ToString();
+            _damageAmount.text = _goldManager.NumberToString((decimal)championStats.Damage);
+            _healthAmount.text = _goldManager.NumberToString((decimal)championStats.MaxHealth);
+            if (ChampionRole == "Healer") _armorOrHealAmount.text = _goldManager.NumberToString((decimal)championStats.PowerHeal);
+            else _armorOrHealAmount.text = _goldManager.NumberToString((decimal)championStats.Armor);
             _heroLevel.text = "Lvl " + championStats.HeroLevel.ToString();
-            _upgradeCost.text = _upgradeCostInt.ToString();
+            _upgradeCost.text = _goldManager.NumberToString((decimal)_upgradeCostInt);
 
         }
 
@@ -83,7 +84,8 @@ namespace ProjectClicker
             else
             {
                  _goldManager.RemoveGold((ulong)_upgradeCostInt);
-                _upgradeCostInt += 1240 * championStats.HeroLevel;
+                if (championStats.HeroLevel >= 1) _upgradeCostInt += 1240 * championStats.HeroLevel;
+                else _upgradeCostInt += 1240;
                 championStats.Upgrade();
                 UpdateUpgradePanel();
             }

@@ -56,12 +56,7 @@ namespace ProjectClicker
             _enemyBaseHealthBar.value = _health;
             if (_health <= 0)
             {
-                _levelsManager.NextLevel();
-                _levelText.text = "Level : " + _levelsManager.CurrentLevel;
-                _maxHealth += 1000 * _levelsManager.CurrentLevel;
-                _health = _maxHealth;
-                _enemyBaseHealthBar.value = _health;
-                _spawnRate -= 0.1f;
+                StartCoroutine(Die());
             }
         }
         private IEnumerator SpawnSkeleton(float seconds)
@@ -74,6 +69,18 @@ namespace ProjectClicker
             }
             yield return new WaitForSeconds(seconds);
             _canSpawn = true;
+        }
+
+        private IEnumerator Die()
+        {
+            yield return new WaitForSeconds(1.5f);
+            _levelsManager.NextLevel();
+            _levelText.text = "Level : " + _levelsManager.CurrentLevel;
+            if (_levelsManager.CurrentLevel >= 1) _maxHealth += 1000 * _levelsManager.CurrentLevel * 2;
+            else _maxHealth += 2500;
+            _health = _maxHealth;
+            _enemyBaseHealthBar.value = _health;
+            if (_spawnRate > 3f) _spawnRate -= 0.1f;
         }
 
         private void OnNextLevel()
