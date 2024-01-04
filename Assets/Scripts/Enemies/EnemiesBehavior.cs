@@ -31,7 +31,7 @@ namespace ProjectClicker
 
 
         [Header("Stats & Gold")]
-        [SerializeField] private float _level = 1;
+        [SerializeField] private float _level = 0;
         [SerializeField] private float _gold = 500f;
         [SerializeField] private GoldManager _goldManager;
 
@@ -41,8 +41,10 @@ namespace ProjectClicker
         // Start is called before the first frame update
         void Start()
         {
+            _level = GameObject.FindWithTag("Managers").GetComponent<LevelsManager>().CurrentLevel;
+            SetStats(enemyType);
             _healthBar.maxValue = maxHealth;
-            _healthBar.value = health;
+            _healthBar.value = health; 
             _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
             _offset = GetComponent<EnemiesMovement>().Offset;
             _animator = GetComponent<Animator>();
@@ -90,7 +92,8 @@ namespace ProjectClicker
         IEnumerator Die()
         {
             _animator.SetTrigger("Die");
-            _goldManager.AddGold((ulong)(_gold * _level));
+            if (_level > 0) _goldManager.AddGold((ulong)(_gold * _level));
+            else _goldManager.AddGold((ulong)(_gold));
             yield return new WaitForSeconds(1f);
             Destroy(gameObject);
         }
@@ -103,9 +106,12 @@ namespace ProjectClicker
             yield return new WaitForSeconds(0.02f);
             foreach (Collider2D collider in colliderAttack)
             {
-                collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(Damage);
-                Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);
-                break;
+                if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
+                {
+                    collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(Damage);
+                    /*Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);*/
+                }
+                break; //chaque ennemi attaque 1 seul champion
             }
             yield return new WaitForSeconds(AttackSpeed);
             _canAttack = true;
@@ -113,6 +119,7 @@ namespace ProjectClicker
 
         private void SetStats(EnemyType state)
         {
+            if ( _level == 0) _level = 1;
             switch (state)
             {
                 case EnemyType.Melee:

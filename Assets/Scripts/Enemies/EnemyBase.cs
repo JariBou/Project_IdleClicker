@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.VFX;
+using TMPro;
 
 namespace ProjectClicker
 {
@@ -23,16 +23,18 @@ namespace ProjectClicker
 
         [Header("Spawn")]
         [SerializeField] private Transform[] _spawnPoints;
-        [SerializeField] float spawnRate; 
+        [SerializeField] private float _spawnRate; 
         private bool _canSpawn;
 
         [Header("LevelsManager")]
         private LevelsManager _levelsManager;
+        [SerializeField] private TextMeshProUGUI _levelText;
 
         // Start is called before the first frame update
         void Start()
         {
             _levelsManager = GameObject.FindWithTag("Managers").GetComponent<LevelsManager>();
+
             _enemyBaseHealthBar.maxValue = _maxHealth;
             _enemyBaseHealthBar.value = _maxHealth;
             _health = _maxHealth;
@@ -44,7 +46,7 @@ namespace ProjectClicker
         {
             if (_canSpawn)
             {
-                StartCoroutine(SpawnSkeleton(spawnRate));
+                StartCoroutine(SpawnSkeleton(_spawnRate));
             }
         }
 
@@ -54,14 +56,14 @@ namespace ProjectClicker
             _enemyBaseHealthBar.value = _health;
             if (_health <= 0)
             {
-                Debug.Log("You Win");
+                _levelsManager.NextLevel();
+                _levelText.text = "Level : " + _levelsManager.CurrentLevel;
+                _maxHealth += 1000 * _levelsManager.CurrentLevel;
                 _health = _maxHealth;
                 _enemyBaseHealthBar.value = _health;
-                _levelsManager.NextLevel();
+                _spawnRate -= 0.1f;
             }
         }
-
-        [Button]
         private IEnumerator SpawnSkeleton(float seconds)
         {
             _canSpawn = false;

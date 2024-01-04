@@ -12,6 +12,7 @@ TagManager:
   - Warrior
   - Monk
   - EnemyBase
+  - Team
   layers:
   - Default
   - TransparentFX

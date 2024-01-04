@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using ProjectClicker.Core;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -55,7 +56,7 @@ namespace ProjectClicker
             TeamHealthUpdate?.Invoke();
         }
 
-        public void UpgradeHeroAtIndex(int index)
+/*        public void UpgradeHeroAtIndex(int index)
         {
             HeroesBehavior hero = _heroes[index];
             if (_goldManager.gold <= (ulong)hero.GetUpgradeCost())
@@ -67,7 +68,7 @@ namespace ProjectClicker
             AddHealth(hero.Upgrade());
             TeamHealthUpdate?.Invoke();
         }
-
+*/
         public float GetMaxTeamHealth()
         {
             float tempMaxHealth = 0;
@@ -77,6 +78,13 @@ namespace ProjectClicker
             }
 
             return tempMaxHealth;
+        }
+
+        public void UpdateStats()
+        {
+            _baseMaxHealth = GetMaxTeamHealth();
+            _baseArmor = GetTeamArmor();
+            TeamHealthUpdate?.Invoke();
         }
 
         public void ResetHealth()
@@ -110,6 +118,8 @@ namespace ProjectClicker
             {
                 isDead = true;
                 Debug.Log("Dead");
+                _managers.PreviousLevel();
+                ResetHealth();
             }
         }
 

@@ -13,6 +13,7 @@ namespace ProjectClicker
         private ChampionRole _previousRole;
         [SerializeField] private UpgradeInfo _upgradeInfo; 
         [SerializeField] private int _heroLevel; 
+        public int HeroLevel => _heroLevel;
 
         [FormerlySerializedAs("teamStats")]
         [Header("Team Manager")]
@@ -143,21 +144,22 @@ namespace ProjectClicker
                             _canAttack = false;
                             Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
                             _animator.SetTrigger("Attack1");
-                            yield return new WaitForSeconds(0.1f);
+                            yield return new WaitForSeconds(0.01f);
                             collider.GetComponent<EnemiesBehavior>().TakeDamage(Damage);
                             yield return new WaitForSeconds(_attackSpeed);
                             _canAttack = true;
                         }
                     }
-                    else
+                    else if (colliderAttack.Length == 1)
                     {
                         _canAttack = false;
                         Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
                         _animator.SetTrigger("Attack1");
-                        yield return new WaitForSeconds(0.1f);
+                        yield return new WaitForSeconds(0.01f);
                         collider.GetComponent<EnemyBase>().TakeDamage(Damage);
                         yield return new WaitForSeconds(_attackSpeed);
                         _canAttack = true;
+
                     }
 
                 }
@@ -210,11 +212,18 @@ namespace ProjectClicker
         /// Returns the health gained to heal
         /// </summary>
         /// <returns></returns>
-        public float Upgrade()
+        public void Upgrade()
         {
             _heroLevel++;
-            return _upgradeInfo.HealthPerLevel;
+            _damage += _upgradeInfo.DmgPerLevel * _heroLevel;
+            _maxHealth += _upgradeInfo.HealthPerLevel * _heroLevel;
+            _armor += _upgradeInfo.ArmorPerLevel * _heroLevel;
+            _healStrength += _upgradeInfo.HealStrengthPerLevel * _heroLevel;
+            _attackSpeed -= _upgradeInfo.AtkSpeedPerLevel * _heroLevel;
+            _teamStats.UpdateStats();
         }
+
+        
 
         public int GetUpgradeCost()
         {

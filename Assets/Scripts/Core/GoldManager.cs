@@ -48,15 +48,19 @@ namespace ProjectClicker.Core
             gold -= amount;
         }
 
-        public String GoldString()
+        public string GoldString()
         {
-            int pow = gold.ToString().Length-1;
-            String goldString = gold.ToString();
-            if (pow < 4)
+            ulong goldMoney = gold;
+            string[] suffixes = { "", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s"}; 
+
+            int suffixIndex = 0;
+            while (goldMoney >= 1000UL && suffixIndex < suffixes.Length - 1)
             {
-                return goldString;
+                goldMoney /= 1000UL;
+                suffixIndex++;
             }
-            return $"{goldString[0]},{goldString.Substring(1, 2)}e{pow}";
+            return goldMoney.ToString("F2") + suffixes[suffixIndex];
+
         }
     }
 }
