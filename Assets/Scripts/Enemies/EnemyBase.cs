@@ -14,6 +14,7 @@ namespace ProjectClicker
         public float MaxHealth => _maxHealth;
         private float _health;
         [SerializeField] private Slider _enemyBaseHealthBar;
+        private bool _isDead;
 
         [Header("Enemies")]
         [SerializeField] private GameObject _skeleton;
@@ -54,8 +55,9 @@ namespace ProjectClicker
         {
             _health -= damage;
             _enemyBaseHealthBar.value = _health;
-            if (_health <= 0)
+            if (_health <= 0 && !_isDead)
             {
+                _isDead = true;
                 StartCoroutine(Die());
             }
         }
@@ -81,6 +83,8 @@ namespace ProjectClicker
             _health = _maxHealth;
             _enemyBaseHealthBar.value = _health;
             if (_spawnRate > 3f) _spawnRate -= 0.1f;
+            _canSpawn = true;
+            _isDead = false;
         }
 
         private void OnNextLevel()
