@@ -373,7 +373,7 @@ MonoBehaviour:
   maxHealth: 500
   _healthBar: {fileID: 6202891243171271161}
   AttackRange: 3
-  Damage: 200
+  Damage: 275
   AttackSpeed: 2.3809526
   _offset: 1
   _canAttack: 1

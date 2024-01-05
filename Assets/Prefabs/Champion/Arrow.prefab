@@ -190,9 +190,8 @@ MonoBehaviour:
   BeamSizeY: 0.6
   BeamOffSet: {fileID: 1884389796208304002}
   _rigidbody2D: {fileID: 2513977129033254902}
-  Speed: 10
+  Speed: 15
   Damage: 10
-  LifeTime: 2
   _arrowType: 1
 --- !u!1 &6844126869501497278
 GameObject:

@@ -84,7 +84,7 @@ namespace ProjectClicker
             else
             {
                  _goldManager.RemoveGold((ulong)_upgradeCostInt);
-                if (championStats.HeroLevel >= 1) _upgradeCostInt += 1240 * championStats.HeroLevel;
+                if (championStats.HeroLevel >= 1) _upgradeCostInt += 1240 * championStats.HeroLevel * 2;
                 else _upgradeCostInt += 1240;
                 championStats.Upgrade();
                 UpdateUpgradePanel();

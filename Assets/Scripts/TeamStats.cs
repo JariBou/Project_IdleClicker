@@ -30,6 +30,7 @@ namespace ProjectClicker
         private LevelsManager _managers;
 
         public float CurrentHealth => _currentHealth;
+        public float BaseMaxHealth => _baseMaxHealth;
 
         private void Awake()
         {

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Xml;
 using ProjectClicker.Core;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -39,6 +40,7 @@ namespace ProjectClicker
         [Header("Heal")]
         [SerializeField]
         private float _healStrength = 100;
+        private bool _canHeal = true;
 
         [FormerlySerializedAs("armor")]
         [Header("Armor")]
@@ -49,6 +51,8 @@ namespace ProjectClicker
         [SerializeField] private Transform _arrowSpawnPoint;
         [SerializeField] private GameObject _arrowPrefab;
         private int _attckCount = 0;
+
+ 
 
 
         public float MaxHealth => _maxHealth + _heroLevel * _upgradeInfo.HealthPerLevel;
@@ -82,10 +86,27 @@ namespace ProjectClicker
             {
                 colliderAttack = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2, 6), 0, LayerMask.GetMask("Enemy"));
             }
-            if (_canAttack && colliderAttack.Length != 0)
+            if (_teamStats.CurrentHealth < _teamStats.BaseMaxHealth/2 && _canHeal && _role == ChampionRole.HEALER)
             {
-                StartCoroutine(Attack(colliderAttack));
+                _canHeal = false;
+                _animator.SetTrigger("Heal");
+                StartCoroutine(Heal());
             }
+            if (_role == ChampionRole.HEALER)
+            {
+                if (_canAttack && colliderAttack.Length != 0 && _teamStats.CurrentHealth > _teamStats.BaseMaxHealth / 2)
+                {
+                    StartCoroutine(Attack(colliderAttack));
+                }
+            }
+            else
+            {
+                if (_canAttack && colliderAttack.Length != 0)
+                {
+                    StartCoroutine(Attack(colliderAttack));
+                }
+            }
+            
         }
 
         private void SetState(ChampionRole role)
@@ -116,7 +137,7 @@ namespace ProjectClicker
                     _maxHealth = 100;
                     _damage = 75f;
                     _attackRange = 8f;
-                    _attackSpeed = 1;
+                    _attackSpeed = 2;
                     _canAttack = true;
                     _healStrength = 0;
                     _armor = 10;
@@ -142,13 +163,69 @@ namespace ProjectClicker
         {
             foreach (Collider2D collider in colliderAttack)
             {
+                if (collider == null) continue;
                 if (_rb.velocity.x < 0.01f)
                 {
-                    if (collider.tag != "EnemyBase")
+                    if (collider?.tag != "EnemyBase")
                     {
                         if (!collider.gameObject.GetComponent<EnemiesBehavior>().IsDead)
                         {
                             if (_role == ChampionRole.ARCHER)
+                            {
+                                if (_attckCount == 0)
+                                {
+                                    _canAttack = false;
+
+                                    _animator.SetTrigger("Attack1");
+                                    yield return new WaitForSeconds(0.1f);
+                                    Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
+                                    collider?.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage);
+                                    yield return new WaitForSeconds(_attackSpeed + 0.5f);
+                                    
+                                    if (_heroLevel >= 10) _attckCount++;
+                                    /*_attckCount++;*/
+                                    _canAttack = true;
+                                }
+                                else if (_attckCount == 1)
+                                {
+                                    _canAttack = false;
+                                    _animator.SetTrigger("Attack2");
+                                    yield return new WaitForSeconds(1.358f);
+                                    GameObject arrow = Instantiate(_arrowPrefab, _arrowSpawnPoint.position, Quaternion.identity);
+                                    arrow.GetComponent<Arrow>()._arrowType = (ArrowType)UnityEngine.Random.Range(0, 2);
+                                    yield return new WaitForSeconds(_attackSpeed + 0.5f);
+                                    if (_heroLevel >= 15) _attckCount++;
+                                    else _attckCount = 0;
+                                    /*_attckCount++;*/
+                                    _canAttack = true;
+                                }
+                                else if (_attckCount == 2)
+                                {
+                                    _canAttack = false;
+                                    _animator.SetTrigger("Attack3");
+                                    yield return new WaitForSeconds(1f);
+                                    GameObject arrow = Instantiate(_arrowPrefab, new Vector2(collider.transform.position.x, collider.transform.position.y - 2), Quaternion.identity);
+                                    arrow.GetComponent<Arrow>()._arrowType = ArrowType.Shower;
+                                    yield return new WaitForSeconds(_attackSpeed + 0.5f);
+                                    _canAttack = true;
+                                    if (_heroLevel >= 25) _attckCount++;
+                                    else _attckCount = 0;
+                                    /*_attckCount++;*/
+                                }
+                                else 
+                                {
+                                    _canAttack = false;
+                                    _animator.SetTrigger("Attack2");
+                                    yield return new WaitForSeconds(1f);
+                                    GameObject arrow = Instantiate(_arrowPrefab, new Vector2(_arrowSpawnPoint.position.x + 5f, _arrowSpawnPoint.position.y), Quaternion.identity);
+                                    arrow.GetComponent<Arrow>()._arrowType = ArrowType.Beam;
+                                    yield return new WaitForSeconds(_attackSpeed + 0.5f);
+                                    _canAttack = true;
+                                    _attckCount = 0;
+                                }
+
+                            }
+                            else
                             {
                                 if (_attckCount <= 1)
                                 {
@@ -158,11 +235,12 @@ namespace ProjectClicker
                                     yield return new WaitForSeconds(0.1f);
 
                                     Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
-                                    collider.GetComponent<EnemiesBehavior>().TakeDamage(Damage);
+                                    collider?.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage);
 
                                     yield return new WaitForSeconds(_attackSpeed);
                                     _canAttack = true;
-                                    _attckCount++;
+                                    if (_heroLevel >= 10) _attckCount++;
+                                    /*_attckCount++;*/
                                 }
                                 else if (_attckCount == 2)
                                 {
@@ -170,32 +248,24 @@ namespace ProjectClicker
 
                                     _animator.SetTrigger("Attack2");
                                     yield return new WaitForSeconds(1f);
-                                    GameObject arrow = Instantiate(_arrowPrefab, _arrowSpawnPoint.position, Quaternion.identity);
-                                    arrow.GetComponent<Arrow>()._arrowType = (ArrowType)UnityEngine.Random.Range(0, 2);
+                                    collider?.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage*2);
                                     yield return new WaitForSeconds(_attackSpeed);
                                     _canAttack = true;
-                                    _attckCount++;
+                                    if (_heroLevel >= 25) _attckCount++;
+                                    else _attckCount = 0;
+                                    /*_attckCount++;*/
                                 }
                                 else
                                 {
+                                    _canAttack = false;
+                                    _animator.SetTrigger("Attack3");
+                                    yield return new WaitForSeconds(1f);
+                                    collider?.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage*3);
+                                    yield return new WaitForSeconds(_attackSpeed);
+                                    _canAttack = true;
                                     _attckCount = 0;
                                 }
-
                             }
-                            else
-                            {
-                                _canAttack = false;
-
-                                _animator.SetTrigger("Attack1");
-                                yield return new WaitForSeconds(0.1f);
-
-                                Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
-                                collider.GetComponent<EnemiesBehavior>().TakeDamage(Damage);
-
-                                yield return new WaitForSeconds(_attackSpeed);
-                                _canAttack = true;
-                            }
-
                         }
                     }
                     else if (colliderAttack.Length == 1)
@@ -204,7 +274,7 @@ namespace ProjectClicker
                         _animator.SetTrigger("Attack1");
                         yield return new WaitForSeconds(0.1f);
                         Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
-                        collider.GetComponent<EnemyBase>().TakeDamage(Damage);
+                        collider?.GetComponent<EnemyBase>()?.TakeDamage(Damage);
                         yield return new WaitForSeconds(_attackSpeed);
                         _canAttack = true;
                     }
@@ -222,9 +292,11 @@ namespace ProjectClicker
             WARRIOR
         }
 
-        private void Heal()
+        private IEnumerator Heal()
         {
             _teamStats.AddHealth(_healStrength);
+            yield return new WaitForSeconds(_attackSpeed);
+            _canHeal = true;
         }
 
         public ChampionRole GetRole()
@@ -266,7 +338,7 @@ namespace ProjectClicker
             _maxHealth += _upgradeInfo.HealthPerLevel * _heroLevel;
             _armor += _upgradeInfo.ArmorPerLevel * _heroLevel;
             _healStrength += _upgradeInfo.HealStrengthPerLevel * _heroLevel;
-            _attackSpeed -= _upgradeInfo.AtkSpeedPerLevel * _heroLevel;
+            if (_attackSpeed > _upgradeInfo.MinAtkSpeed)  _attackSpeed -= _upgradeInfo.AtkSpeedPerLevel * _heroLevel;
             _teamStats.UpdateStats();
         }
 

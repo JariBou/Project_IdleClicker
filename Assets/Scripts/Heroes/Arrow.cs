@@ -31,7 +31,6 @@ namespace ProjectClicker
         [Header("Arrow Stats")]
         public float Speed = 10f;
         public float Damage = 10f;
-        public float LifeTime = 2f;
 
         public ArrowType _arrowType;
 
@@ -71,34 +70,35 @@ namespace ProjectClicker
                             _rigidbody2D.velocity *= 0;
                             _rigidbody2D.velocity = collider.gameObject.GetComponent<Rigidbody2D>().velocity;
                             _animator.SetTrigger("NormalHit");
-                            Destroy(gameObject, 1.2f);
+                            Destroy(gameObject, 2f);
                         }
                         else if (_arrowType == ArrowType.Entangle)
                         {
                             _rigidbody2D.velocity *= 0;
                             _rigidbody2D.velocity = collider.gameObject.GetComponent<Rigidbody2D>().velocity;
                             _animator.SetTrigger("EntangleHit");
-                            Destroy(gameObject, 1.2f);
+                            Destroy(gameObject, 2f);
                         }
                         else if (_arrowType == ArrowType.Poison)
                         {
                             _rigidbody2D.velocity *= 0;
                             _rigidbody2D.velocity = collider.gameObject.GetComponent<Rigidbody2D>().velocity;
                             _animator.SetTrigger("PoisonHit");
-                            Destroy(gameObject, 1.2f);
+                            Destroy(gameObject, 2f);
                         }
                         break;
                     }
+                    Destroy(gameObject, 8f);
                 }
                 else if (_arrowType == ArrowType.Shower)
                 {
-                    Collider2D[] colliderHit = Physics2D.OverlapBoxAll(BoxOffSet.transform.position, new Vector2(BoxSizeX, BoxSizeY), LayerMask.GetMask("Enemy"));
+                    Collider2D[] colliderHit = Physics2D.OverlapBoxAll(BoxOffSet.transform.position, new Vector2(BoxSizeX, BoxSizeY),0, LayerMask.GetMask("Enemy"));
                     _animator.SetTrigger("Shower");
                     Debug.Log("Hit with " + Damage + " damage");
                     foreach (var collider in colliderHit)
                     {
-                        collider?.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage * 1.5f); //C'est une pluie de flèches donc on augmente les dégats
-                        collider?.gameObject.GetComponent<EnemyBase>().TakeDamage(Damage * 1.5f);
+                        collider?.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage * 3f); //C'est une pluie de flèches donc on augmente les dégats
+                        collider?.gameObject.GetComponent<EnemyBase>()?.TakeDamage(Damage * 3f);
                         
                     }
                     _hasHit = true;
@@ -107,13 +107,13 @@ namespace ProjectClicker
                 }
                 else
                 {
-                    Collider2D[] colliderHit = Physics2D.OverlapBoxAll(BeamOffSet.transform.position, new Vector2(BeamSizeX, BeamSizeY), LayerMask.GetMask("Enemy"));
+                    Collider2D[] colliderHit = Physics2D.OverlapBoxAll(BeamOffSet.transform.position, new Vector2(BeamSizeX, BeamSizeY), 0,LayerMask.GetMask("Enemy"));
                     _animator.SetTrigger("Beam");
                     Debug.Log("Hit with " + Damage + " damage");
                     foreach (var collider in colliderHit)
                     {
-                        collider?.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage * 1.2f); //Même logigue que pour la pluie de flèches
-                        collider?.gameObject.GetComponent<EnemyBase>().TakeDamage(Damage * 1.2f); 
+                        collider?.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage * 3f); //Même logigue que pour la pluie de flèches
+                        collider?.gameObject.GetComponent<EnemyBase>()?.TakeDamage(Damage * 3f); 
                     }
                     _hasHit = true;
                     Destroy(gameObject, 2f);
@@ -122,10 +122,6 @@ namespace ProjectClicker
             
         }
 
-        public void SetArrowType(ArrowType type)
-        {
-            _arrowType = type;
-        }
 
         private void OnDrawGizmos()
         {
