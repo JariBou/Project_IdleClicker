@@ -1,3 +1,6 @@
+using JetBrains.Annotations;
+using System.Data;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -28,6 +31,7 @@ namespace ProjectClicker
         [SerializeField] private Vector2 _teamFollower;
         [SerializeField] private GameObject _leaderTeam1;
         [SerializeField] private GameObject _leaderTeam2;
+        [SerializeField] private float moveSpeed = 0.5f;
         // Start is called before the first frame update
         void Start()
         {
@@ -41,17 +45,16 @@ namespace ProjectClicker
         void Update()
         {
             _teamFollower.x = ((_leaderTeam1.transform.position.x + _leaderTeam2.transform.position.x) / 2) + 1f;
+            if (!_dragging && Mathf.Abs(Mathf.Round(_camera.position.x) - Mathf.Round(_teamFollower.x)) > 0.5f)
+            {
+                _camera.position = Vector3.Lerp(_camera.position, new Vector3(_teamFollower.x, _startCamPos.y, _camera.position.z), 2.5f * Time.deltaTime);
+            }
         }
 
         public void OnPointerMove(PointerEventData eventData)
         {
-            if (!_dragging && Mathf.Abs(_camera.transform.position.x - _teamFollower.x) > 2f)
-            {
-                _camera.transform.position = Vector3.Lerp(_camera.transform.position, new Vector3(_teamFollower.x, _startCamPos.y, _startCamPos.z), 2f);
-                return;
 
-            }
-            
+            if (!_dragging) return;
             Vector2 displacement = eventData.delta*-1;
             float xClamped = Mathf.Clamp(_camera.transform.position.x + displacement.x * _dragSpeed,
                 _startCamPos.x-_maxWidthDrag, _startCamPos.x+_maxWidthDrag);
