@@ -22,6 +22,10 @@ namespace ProjectClicker
         [SerializeField] private GameObject _championTeam;
         [SerializeField] private List<Vector3> _championTeamSpawn = new List<Vector3>();
 
+
+
+        public Action ChangeLevel;
+
         void Awake()
         {
             for (int i = 0; i < _championTeam.transform.childCount; i++)
@@ -47,6 +51,7 @@ namespace ProjectClicker
             }
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel];
             ResetTeamHealth?.Invoke();
+            ChangeLevel?.Invoke();
             ResetTeamPosition();
         }
 
@@ -60,6 +65,7 @@ namespace ProjectClicker
             }
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel];
             ResetTeamHealth?.Invoke();
+            ChangeLevel?.Invoke();
             ResetTeamPosition();
         }
 

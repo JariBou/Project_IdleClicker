@@ -15,6 +15,7 @@ namespace ProjectClicker
         [SerializeField] private UpgradeInfo _upgradeInfo; 
         [SerializeField] private int _heroLevel; 
         public int HeroLevel => _heroLevel;
+        private LevelsManager _levelsManager;
 
         [FormerlySerializedAs("teamStats")]
         [Header("Team Manager")]
@@ -71,6 +72,9 @@ namespace ProjectClicker
             _animator = GetComponent<Animator>();
             _rb = GetComponent<Rigidbody2D>();
             /*Debug.Log(gameObject.name);*/
+            _levelsManager = GameObject.FindWithTag("Managers").GetComponent<LevelsManager>();  
+            _levelsManager.ChangeLevel += OnChangingLevel;
+            
         }
 
 
@@ -318,6 +322,11 @@ namespace ProjectClicker
                 
         }
 
+        public void OnChangingLevel()
+        {
+            _animator.SetTrigger("ChangingLevel");
+        }
+
         private void OnValidate()
         {
             if (_previousRole != _role)
@@ -352,6 +361,11 @@ namespace ProjectClicker
         private float UpgradeCostMultiplier()
         {
             return 1 / 175f * _heroLevel * _heroLevel + 1;
+        }
+
+        private void OnDestroy() // Peut être inutile vu qu'on ne détruit pas les héros mais au cas où on les détruit un jour
+        {
+            _levelsManager.ChangeLevel -= OnChangingLevel;
         }
     }
 }

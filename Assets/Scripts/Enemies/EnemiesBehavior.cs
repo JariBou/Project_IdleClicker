@@ -31,6 +31,7 @@ namespace ProjectClicker
 
 
         [Header("Stats & Gold")]
+        private EnemyBase _enemyBase;
         [SerializeField] private float _level = 0;
         [SerializeField] private float _gold = 500f;
         [SerializeField] private GoldManager _goldManager;
@@ -41,7 +42,8 @@ namespace ProjectClicker
         // Start is called before the first frame update
         void Start()
         {
-            _level = GameObject.FindWithTag("Managers").GetComponent<LevelsManager>().CurrentLevel;
+            _enemyBase = GameObject.FindWithTag("EnemyBase").GetComponent<EnemyBase>();
+            _level = GameObject.FindGameObjectWithTag("Managers").GetComponent<LevelsManager>().CurrentLevel;
             SetStats(enemyType);
             _healthBar.maxValue = maxHealth;
             _healthBar.value = health; 
@@ -95,6 +97,7 @@ namespace ProjectClicker
             if (_level > 0) _goldManager.AddGold((ulong)(_gold * _level));
             else _goldManager.AddGold((ulong)(_gold));
             yield return new WaitForSeconds(1f);
+            _enemyBase.RemoveEnemy(gameObject);
             Destroy(gameObject);
         }
 

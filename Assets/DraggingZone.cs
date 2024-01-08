@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -18,27 +19,38 @@ namespace ProjectClicker
         private float _cameraSize;
 
         private Vector3 _startCamPos;
-        private float xStartPos;
+/*        private float xStartPos;
         private float yStartPos;
-        private float zStartPos;
+        private float zStartPos;*/
+
+        [Header("Team")]
+        private Transform _teamTransform;
+        [SerializeField] private Vector2 _teamFollower;
+        [SerializeField] private GameObject _leaderTeam1;
+        [SerializeField] private GameObject _leaderTeam2;
         // Start is called before the first frame update
         void Start()
         {
-            xStartPos = _camera.transform.position.x;
+/*            xStartPos = _camera.transform.position.x;
             yStartPos = _camera.transform.position.y;
-            zStartPos = _camera.transform.position.z;
+            zStartPos = _camera.transform.position.z;*/
             _startCamPos = _camera.transform.position;
         }
 
         // Update is called once per frame
         void Update()
         {
-        
+            _teamFollower.x = ((_leaderTeam1.transform.position.x + _leaderTeam2.transform.position.x) / 2) + 1f;
         }
 
         public void OnPointerMove(PointerEventData eventData)
         {
-            if (!_dragging) return;
+            if (!_dragging && Mathf.Abs(_camera.transform.position.x - _teamFollower.x) > 2f)
+            {
+                _camera.transform.position = Vector3.Lerp(_camera.transform.position, new Vector3(_teamFollower.x, _startCamPos.y, _startCamPos.z), 2f);
+                return;
+
+            }
             
             Vector2 displacement = eventData.delta*-1;
             float xClamped = Mathf.Clamp(_camera.transform.position.x + displacement.x * _dragSpeed,
@@ -57,11 +69,14 @@ namespace ProjectClicker
             _dragging = false;
         }
 
-        #if  UNITY_EDITOR
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(_startCamPos, new Vector3(2*(_cameraSize + _maxWidthDrag), _cameraSize*2, 0));
+            Gizmos.DrawWireCube(_camera.position, new Vector3(2*(_cameraSize + _maxWidthDrag), _cameraSize*2));
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(new Vector2(_teamFollower.x, _teamFollower.y), new Vector3(2*(_cameraSize - _maxWidthDrag), _cameraSize*2, 0));
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(new Vector2(_teamFollower.x, _teamFollower.y), 0.5f);
         }
 
         private void OnValidate()
@@ -69,6 +84,5 @@ namespace ProjectClicker
             _cameraSize = _camera.GetComponent<Camera>().orthographicSize;
             _startCamPos = _camera.transform.position;
         }
-#endif
     }
 }

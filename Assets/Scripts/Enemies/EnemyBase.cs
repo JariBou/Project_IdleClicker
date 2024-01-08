@@ -31,15 +31,19 @@ namespace ProjectClicker
         private LevelsManager _levelsManager;
         [SerializeField] private TextMeshProUGUI _levelText;
 
+
+        [Header("Enemie)")]
+        [SerializeField] private List<GameObject> _enemies = new List<GameObject>();
+
         // Start is called before the first frame update
         void Start()
         {
             _levelsManager = GameObject.FindWithTag("Managers").GetComponent<LevelsManager>();
-
             _enemyBaseHealthBar.maxValue = _maxHealth;
             _enemyBaseHealthBar.value = _maxHealth;
             _health = _maxHealth;
             _canSpawn = true;
+            _levelsManager.ChangeLevel += ClearEnemies;
         }
 
         // Update is called once per frame
@@ -66,7 +70,8 @@ namespace ProjectClicker
             _canSpawn = false;
             for (int i = 0; i<4; i++)
             {
-                Instantiate(_skeleton, _spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Length - 1)].transform.position, Quaternion.identity);
+                GameObject skeleton = Instantiate(_skeleton, _spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Length - 1)].transform.position, Quaternion.identity);
+                _enemies.Add(skeleton);
                 yield return new WaitForSeconds(2.2f);
             }
             yield return new WaitForSeconds(seconds);
@@ -85,6 +90,20 @@ namespace ProjectClicker
             if (_spawnRate > 3f) _spawnRate -= 0.1f;
             _canSpawn = true;
             _isDead = false;
+        }
+
+        private void ClearEnemies()
+        {
+            for (int i = 0; i < _enemies.Count; i++)
+            {
+                Destroy(_enemies[i]);
+                _enemies.Remove(_enemies[i]);
+            }
+        }
+
+        public void RemoveEnemy(GameObject skeleton)
+        {
+            _enemies.Remove(skeleton);
         }
 
         private void OnNextLevel()

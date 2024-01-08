@@ -32,6 +32,7 @@ namespace ProjectClicker
         public float CurrentHealth => _currentHealth;
         public float BaseMaxHealth => _baseMaxHealth;
 
+
         private void Awake()
         {
             _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
@@ -88,11 +89,10 @@ namespace ProjectClicker
             TeamHealthUpdate?.Invoke();
         }
 
-        public void ResetHealth()
+        public void ResetHealth()  // fonction appelé uniquement par le LevelManager au changement de niveau
         { 
             _currentHealth = _baseMaxHealth;
             TeamHealthUpdate?.Invoke();
-            
         }
             
 
