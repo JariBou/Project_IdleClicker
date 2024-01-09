@@ -2,19 +2,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using ProjectClicker.Core;
+using UnityEngine.Serialization;
 
 namespace ProjectClicker
 {
     public class HealthBar : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI _TextMeshPro;
-        [SerializeField] private TeamStats _TeamStats;
-        private Slider Slider;
+        [FormerlySerializedAs("_TextMeshPro")] [SerializeField] private TextMeshProUGUI _textMeshPro;
+        [FormerlySerializedAs("_TeamStats")] [SerializeField] private TeamStats _teamStats;
+        private Slider _slider;
         private GoldManager _goldManager;
 
-        void Start()
+        private void Start()
         {
-            Slider = GetComponent<Slider>();
+            _slider = GetComponent<Slider>();
             _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
         }
 
@@ -30,9 +31,9 @@ namespace ProjectClicker
 
         private void OnTeamHealthUpdate()
         {
-            Slider.maxValue = _TeamStats.GetMaxTeamHealth();
-            Slider.value = _TeamStats.CurrentHealth; /*/ _TeamStats.GetMaxTeamHealth();*/
-            _TextMeshPro.text = _goldManager.NumberToString((decimal)_TeamStats.CurrentHealth) + "/" + _goldManager.NumberToString((decimal)_TeamStats.GetMaxTeamHealth());
+            _slider.maxValue = _teamStats.GetMaxTeamHealth();
+            _slider.value = _teamStats.CurrentHealth; /*/ _TeamStats.GetMaxTeamHealth();*/
+            _textMeshPro.text = _goldManager.NumberToString((decimal)_teamStats.CurrentHealth) + "/" + _goldManager.NumberToString((decimal)_teamStats.GetMaxTeamHealth());
         }
     }
 }

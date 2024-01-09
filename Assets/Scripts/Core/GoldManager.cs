@@ -1,4 +1,4 @@
-using System;
+using System.Globalization;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ namespace ProjectClicker.Core
 {
     public class GoldManager : MonoBehaviour
     {
-        public ulong gold { get; private set; } = 0;
+        public ulong Gold { get; private set; } = 0;
         
         #if UNITY_EDITOR
         [SerializeField] private ulong _goldToAdd;
@@ -20,38 +20,38 @@ namespace ProjectClicker.Core
 
         public void AddGold(int amount)
         {
-            gold += (ulong)amount;
+            Gold += (ulong)amount;
         }
 
         public void AddGold(long amount)
         {
-            gold += (ulong)amount;
+            Gold += (ulong)amount;
         }
         
         public void AddGold(ulong amount)
         {
-            gold += amount;
+            Gold += amount;
         }
         
         public void RemoveGold(int amount)
         {
-            gold -= (ulong)amount;
+            Gold -= (ulong)amount;
         }
 
         public void RemoveGold(long amount)
         {
-            gold -= (ulong)amount;
+            Gold -= (ulong)amount;
         }
         
         public void RemoveGold(ulong amount)
         {
-            gold -= amount;
+            Gold -= amount;
         }
 
         public string GoldString()
         {
-            if (gold < 1000) return gold.ToString();
-            decimal goldMoney = gold;
+            if (Gold < 1000) return Gold.ToString();
+            decimal goldMoney = Gold;
             string[] suffixes = { "", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s"}; 
 
             int suffixIndex = 0;
@@ -65,7 +65,7 @@ namespace ProjectClicker.Core
         }
         public string NumberToString(decimal goldMoney)
         {
-            if (goldMoney <= 1000) return goldMoney.ToString();
+            if (goldMoney <= 1000) return goldMoney.ToString(CultureInfo.InvariantCulture);
             string[] suffixes = { "", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s" };
 
             int suffixIndex = 0;

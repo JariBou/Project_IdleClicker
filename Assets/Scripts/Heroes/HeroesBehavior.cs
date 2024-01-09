@@ -1,50 +1,42 @@
 using System.Collections;
 using ProjectClicker.Core;
+using ProjectClicker.Enemies;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace ProjectClicker
+namespace ProjectClicker.Heroes
 {
     public class HeroesBehavior : MonoBehaviour
     {
-        [FormerlySerializedAs("Role")] [SerializeField] private ChampionRole _role;
+        [SerializeField] private ChampionRole _role;
         private ChampionRole _previousRole;
         [SerializeField] private UpgradeInfo _upgradeInfo; 
         [SerializeField] private int _heroLevel; 
         public int HeroLevel => _heroLevel;
         private LevelsManager _levelsManager;
 
-        [FormerlySerializedAs("teamStats")]
+        public HeroUpgradeDisplay LinkedDisplay { get; set; }
+        
         [Header("Team Manager")]
         [SerializeField]
         private TeamStats _teamStats;
-
-        [FormerlySerializedAs("_maxHealth")]
-        [FormerlySerializedAs("maxHealth")]
+        
         [Header("Health")]
         [SerializeField] private float _baseMaxHealth;
-
-        [FormerlySerializedAs("_damage")]
-        [FormerlySerializedAs("damage")]
+        
         [Header("Attack")]
         [SerializeField]
         private float _baseDamage;
-        [FormerlySerializedAs("attackRange")] [SerializeField] private float _attackRange;
-        [FormerlySerializedAs("_attackSpeed")] [FormerlySerializedAs("attackSpeed")] [SerializeField] private float _baseAttackSpeed;
-        [FormerlySerializedAs("layerToHit")] [SerializeField] private LayerMask _layerToHit;
-        [FormerlySerializedAs("Can Attack")][SerializeField] private bool _canAttack;
+        [SerializeField] private float _attackRange;
+        [SerializeField] private float _baseAttackSpeed;
+        [SerializeField] private LayerMask _layerToHit;
+        [SerializeField] private bool _canAttack;
 
 
-        [FormerlySerializedAs("_healStrength")]
-        [FormerlySerializedAs("healStrength")]
-        [FormerlySerializedAs("healStrenght")]
         [Header("Heal")]
         [SerializeField]
         private float _baseHealStrength = 100;
         private bool _canHeal = true;
 
-        [FormerlySerializedAs("_armor")]
-        [FormerlySerializedAs("armor")]
         [Header("Armor")]
         [SerializeField]
         private float _baseArmor;
@@ -77,8 +69,7 @@ namespace ProjectClicker
             _rb = GetComponent<Rigidbody2D>();
             /*Debug.Log(gameObject.name);*/
             _levelsManager = GameObject.FindWithTag("Managers").GetComponent<LevelsManager>();  
-            _levelsManager.ChangeLevel += OnChangingLevel;
-            
+            LevelsManager.OnChangeLevel += OnChangingLevel;
         }
 
 
@@ -88,19 +79,23 @@ namespace ProjectClicker
             Collider2D[] colliderAttack;
             if (gameObject.CompareTag("Healer") || gameObject.CompareTag("Archer"))
             {
-                colliderAttack = Physics2D.OverlapCircleAll(new Vector2(transform.position.x + _offset, transform.position.y), _attackRange, LayerMask.GetMask("Enemy"));
+                colliderAttack = Physics2D.OverlapCircleAll(
+                    new Vector2(transform.position.x + _offset, transform.position.y), _attackRange,
+                    LayerMask.GetMask("Enemy"));
             }
             else
             {
-                colliderAttack = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2, 6), 0, LayerMask.GetMask("Enemy"));
+                colliderAttack =
+                    Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y),
+                        new Vector2(2, 6), 0, LayerMask.GetMask("Enemy"));
             }
-            if (_teamStats.CurrentHealth < _teamStats.MaxHealth/2 && _canHeal && _role == ChampionRole.HEALER)
+            if (_teamStats.CurrentHealth < _teamStats.MaxHealth/2 && _canHeal && _role == ChampionRole.Healer)
             {
                 _canHeal = false;
                 _animator.SetTrigger("Heal");
                 StartCoroutine(Heal());
             }
-            if (_role == ChampionRole.HEALER)
+            if (_role == ChampionRole.Healer)
             {
                 if (_canAttack && colliderAttack.Length != 0 && _teamStats.CurrentHealth > _teamStats.MaxHealth / 2)
                 {
@@ -121,7 +116,7 @@ namespace ProjectClicker
         {
             switch (role)
             {
-                case ChampionRole.HEALER:
+                case ChampionRole.Healer:
                     _baseMaxHealth = 150f;
                     _baseDamage = 10f;
                     _attackRange = 8f;
@@ -131,7 +126,7 @@ namespace ProjectClicker
                     _baseArmor = 5;
                     gameObject.tag = "Healer";
                     break;
-                case ChampionRole.TANK:
+                case ChampionRole.Tank:
                     _baseMaxHealth = 500;
                     _baseDamage = 30f;
                     _attackRange = 2f;
@@ -141,7 +136,7 @@ namespace ProjectClicker
                     _baseArmor = 75;
                     gameObject.tag = "Tank";
                     break;
-                case ChampionRole.ARCHER:
+                case ChampionRole.Archer:
                     _baseMaxHealth = 100;
                     _baseDamage = 75f;
                     _attackRange = 8f;
@@ -151,7 +146,7 @@ namespace ProjectClicker
                     _baseArmor = 10;
                     gameObject.tag = "Archer";
                     break;
-                case ChampionRole.WARRIOR:
+                case ChampionRole.Warrior:
                     _baseMaxHealth = 250;
                     _baseDamage = 75f;
                     _attackRange = 2f;
@@ -176,7 +171,7 @@ namespace ProjectClicker
                     {
                         if (!collider.gameObject.GetComponent<EnemiesBehavior>().IsDead)
                         {
-                            if (_role == ChampionRole.ARCHER)
+                            if (_role == ChampionRole.Archer)
                             {
                                 if (_attckCount == 0)
                                 {
@@ -198,7 +193,7 @@ namespace ProjectClicker
                                     _animator.SetTrigger("Attack2");
                                     yield return new WaitForSeconds(1.358f);
                                     GameObject arrow = Instantiate(_arrowPrefab, _arrowSpawnPoint.position, Quaternion.identity);
-                                    arrow.GetComponent<Arrow>()._arrowType = (ArrowType)UnityEngine.Random.Range(0, 2);
+                                    arrow.GetComponent<Arrow>()._arrowType = (ArrowType)Random.Range(0, 2);
                                     yield return new WaitForSeconds(_baseAttackSpeed + 0.5f);
                                     if (_heroLevel >= 15) _attckCount++;
                                     else _attckCount = 0;
@@ -241,7 +236,7 @@ namespace ProjectClicker
                                     yield return new WaitForSeconds(0.1f);
 
                                     Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
-                                    collider?.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage);
+                                    collider.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage);
 
                                     yield return new WaitForSeconds(_baseAttackSpeed);
                                     _canAttack = true;
@@ -254,7 +249,7 @@ namespace ProjectClicker
 
                                     _animator.SetTrigger("Attack2");
                                     yield return new WaitForSeconds(1f);
-                                    collider?.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage*2);
+                                    collider.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage*2);
                                     yield return new WaitForSeconds(_baseAttackSpeed);
                                     _canAttack = true;
                                     if (_heroLevel >= 25) _attckCount++;
@@ -266,7 +261,7 @@ namespace ProjectClicker
                                     _canAttack = false;
                                     _animator.SetTrigger("Attack3");
                                     yield return new WaitForSeconds(1f);
-                                    collider?.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage*3);
+                                    collider.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage*3);
                                     yield return new WaitForSeconds(_baseAttackSpeed);
                                     _canAttack = true;
                                     _attckCount = 0;
@@ -280,7 +275,7 @@ namespace ProjectClicker
                         _animator.SetTrigger("Attack1");
                         yield return new WaitForSeconds(0.1f);
                         Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
-                        collider?.GetComponent<EnemyBase>()?.TakeDamage(Damage);
+                        collider.GetComponent<EnemyBase>()?.TakeDamage(Damage);
                         yield return new WaitForSeconds(_baseAttackSpeed);
                         _canAttack = true;
                     }
@@ -288,14 +283,6 @@ namespace ProjectClicker
                 }
 
             }
-        }
-
-        public enum ChampionRole
-        {
-            HEALER,
-            TANK,
-            ARCHER,
-            WARRIOR
         }
 
         private IEnumerator Heal()
@@ -367,7 +354,7 @@ namespace ProjectClicker
 
         private void OnDestroy() // Peut être inutile vu qu'on ne détruit pas les héros mais au cas où on les détruit un jour
         {
-            _levelsManager.ChangeLevel -= OnChangingLevel;
+            LevelsManager.OnChangeLevel -= OnChangingLevel;
         }
 
         public void ResetLevel()

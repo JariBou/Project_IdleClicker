@@ -1,31 +1,32 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace ProjectClicker
+namespace ProjectClicker.Heroes
 {
    public class HeroesMovement : MonoBehaviour
     {
 
-        [SerializeField] float Speed;
-        Rigidbody2D rb;
-        [SerializeField] float offset;
+        [FormerlySerializedAs("Speed")] [SerializeField] private float _speed;
+        private Rigidbody2D _rb;
+        [FormerlySerializedAs("offset")] [SerializeField] private float _offset;
         public bool _canMove;
-        [SerializeField] Animator animator;
+        [FormerlySerializedAs("animator")] [SerializeField] private Animator _animator;
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
-            rb = GetComponent<Rigidbody2D>();
-            animator = GetComponent<Animator>();
+            _rb = GetComponent<Rigidbody2D>();
+            _animator = GetComponent<Animator>();
             /*Debug.Log("Tag " + gameObject.tag);*/
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
-            animator.SetFloat("Velocity", rb.velocity.x);
-            if (gameObject.tag == "Healer" || gameObject.tag == "Archer")
+            _animator.SetFloat("Velocity", _rb.velocity.x);
+            if (gameObject.CompareTag("Healer") || gameObject.CompareTag("Archer"))
             {
-                Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + offset, transform.position.y), new Vector2(4,6),0, LayerMask.GetMask("Champion"));
+                Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(4,6),0, LayerMask.GetMask("Champion"));
                 if (colliderMovement.Length == 0)
                 {
                     Move();
@@ -39,9 +40,9 @@ namespace ProjectClicker
 
                 
             }
-            else if (gameObject.tag == "Tank" || gameObject.tag == "Warrior")
+            else if (gameObject.CompareTag("Tank") || gameObject.CompareTag("Warrior"))
             {
-                Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + offset, transform.position.y), new Vector2(2,6),0, LayerMask.GetMask("Enemy"));
+                Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2,6),0, LayerMask.GetMask("Enemy"));
                 if (colliderMovement.Length == 0)
                 {
                     Move();
@@ -57,24 +58,24 @@ namespace ProjectClicker
 
         private void Move()
         {
-            rb.velocity = new Vector2(Speed*Time.deltaTime, rb.velocity.y);
+            _rb.velocity = new Vector2(_speed*Time.deltaTime, _rb.velocity.y);
         }
         private void StopMove()
         {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            _rb.velocity = new Vector2(0, _rb.velocity.y);
         }
 
         private void OnDrawGizmos()
         {
             if (_canMove) Gizmos.color = Color.blue;
             else Gizmos.color = Color.red;
-            if (gameObject.tag == "Healer" || gameObject.tag == "Archer")
+            if (gameObject.CompareTag("Healer") || gameObject.CompareTag("Archer"))
             {
-                Gizmos.DrawWireCube(new Vector2(transform.position.x + offset, transform.position.y), new Vector2(4, 6));
+                Gizmos.DrawWireCube(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(4, 6));
             }
-            else if (gameObject.tag == "Tank" || gameObject.tag == "Warrior")
+            else if (gameObject.CompareTag("Tank") || gameObject.CompareTag("Warrior"))
             {
-                Gizmos.DrawWireCube(new Vector2(transform.position.x + offset, transform.position.y), new Vector2(2, 6));
+                Gizmos.DrawWireCube(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2, 6));
             }
 
 

@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using ProjectClicker.Core;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-namespace ProjectClicker
+namespace ProjectClicker.Enemies
 {
     public class EnemyBase : MonoBehaviour
     {
@@ -37,12 +38,12 @@ namespace ProjectClicker
         [SerializeField] private List<GameObject> _enemies = new List<GameObject>();
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             _levelsManager = GameObject.FindWithTag("Managers").GetComponent<LevelsManager>();
             ResetBase();
-            _levelsManager.ChangeLevel += ClearEnemies;
-            LevelsManager.OnResetGame += Prestige;
+            LevelsManager.OnChangeLevel += ClearEnemies;
+            LevelsManager.OnPrestige += Prestige;
         }
 
         private void Prestige()
@@ -53,11 +54,12 @@ namespace ProjectClicker
 
         private void OnDisable()
         {
-            _levelsManager.ChangeLevel -= ClearEnemies;
+            LevelsManager.OnChangeLevel -= ClearEnemies;
+            LevelsManager.OnPrestige -= Prestige;
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             if (_canSpawn)
             {
@@ -82,7 +84,7 @@ namespace ProjectClicker
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    GameObject skeleton = Instantiate(_skeleton, _spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Length - 1)].transform.position, Quaternion.identity);
+                    GameObject skeleton = Instantiate(_skeleton, _spawnPoints[Random.Range(0, _spawnPoints.Length - 1)].transform.position, Quaternion.identity);
                     _enemies.Add(skeleton);
                     yield return new WaitForSeconds(2.2f);
                 }
@@ -129,14 +131,5 @@ namespace ProjectClicker
             _enemies.Remove(skeleton);
         }
 
-        private void OnNextLevel()
-        {
-
-        }
-
-        private void OnPreviousLevel()
-        {
-
-        }
     }
 }

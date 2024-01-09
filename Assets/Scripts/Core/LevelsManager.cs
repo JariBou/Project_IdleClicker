@@ -1,11 +1,9 @@
-using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.UI;
 
-
-namespace ProjectClicker
+namespace ProjectClicker.Core
 {
     public class LevelsManager : MonoBehaviour
     {
@@ -23,8 +21,9 @@ namespace ProjectClicker
         [SerializeField] private List<Vector3> _championTeamSpawn = new List<Vector3>();
 
 
-
-        public Action ChangeLevel;
+        public event Action ResetTeamHealth;
+        public static event Action OnChangeLevel;
+        public static event Action OnPrestige;
 
         void Awake()
         {
@@ -36,11 +35,6 @@ namespace ProjectClicker
 
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            
-        }
         [Button]
         public void NextLevel()
         {
@@ -51,7 +45,7 @@ namespace ProjectClicker
             }
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
             ResetTeamHealth?.Invoke();
-            ChangeLevel?.Invoke();
+            OnChangeLevel?.Invoke();
             ResetTeamPosition();
         }
 
@@ -65,7 +59,7 @@ namespace ProjectClicker
             }
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
             ResetTeamHealth?.Invoke();
-            ChangeLevel?.Invoke();
+            OnChangeLevel?.Invoke();
             ResetTeamPosition();
         }
 
@@ -74,8 +68,8 @@ namespace ProjectClicker
         {
             _currentLevel = 0;
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
-            OnResetGame?.Invoke();
-            ChangeLevel?.Invoke();
+            OnPrestige?.Invoke();
+            OnChangeLevel?.Invoke();
             ResetTeamPosition();
         }
 
@@ -109,8 +103,6 @@ namespace ProjectClicker
             }
         }*/
 
-        public event Action ResetTeamHealth;
-        public static event Action OnResetGame;
 
     }
 }

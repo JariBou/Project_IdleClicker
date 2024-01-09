@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ProjectClicker.Core;
+using ProjectClicker.Heroes;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -18,7 +19,7 @@ namespace ProjectClicker
         [Foldout("Upgrades"), SerializeField] private GameObject _upgradePrefab;*/
 
         public static event Action TeamHealthUpdate;
-        private bool isDead;
+        private bool _isDead;
 
         [SerializeField] private List<HeroesBehavior> _heroes;
 
@@ -37,13 +38,13 @@ namespace ProjectClicker
         }
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             _maxHealth = GetMaxTeamHealth();
             _currentHealth = _maxHealth;
             _armor = GetTeamArmor();
             _managers.ResetTeamHealth += ResetHealth;
-            LevelsManager.OnResetGame += Prestige;
+            LevelsManager.OnPrestige += Prestige;
 
 /*          for (int i = 0; i < _heroes.Count; i++)
             {
@@ -59,7 +60,7 @@ namespace ProjectClicker
         private void OnDisable()
         {
             _managers.ResetTeamHealth -= ResetHealth;
-            LevelsManager.OnResetGame -= Prestige;
+            LevelsManager.OnPrestige -= Prestige;
         }
 
         private void Prestige()
@@ -71,10 +72,12 @@ namespace ProjectClicker
                 tempMaxHealth += hero.BaseMaxHealth;
                 tempArmor += hero.BaseArmor;
                 hero.ResetLevel();
+                hero.LinkedDisplay.UpdateUpgradePanel();
             }
 
             _maxHealth = tempMaxHealth;
-            _armor = _armor;
+            _armor = tempArmor;
+            
             TeamHealthUpdate?.Invoke();
         }
 
@@ -130,15 +133,15 @@ namespace ProjectClicker
         public void TakeDamage(float damage)
         {
             Debug.Log("Damage taken: " + damage + ", Base Armor: " + _armor);
-            float Damage = damage - _armor;
-            if (Damage > 0)
+            float dmg = damage - _armor;
+            if (dmg > 0)
             {
-                _currentHealth -= Damage;
+                _currentHealth -= dmg;
             }
             TeamHealthUpdate?.Invoke();
-            if (_currentHealth < 0 && !isDead)
+            if (_currentHealth < 0 && !_isDead)
             {
-                isDead = true;
+                _isDead = true;
                 Debug.Log("Dead");
                 _managers.PreviousLevel();
                 ResetHealth();

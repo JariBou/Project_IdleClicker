@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ProjectClicker
+namespace ProjectClicker.UI
 {
     public class ChampionUpgradeUI : MonoBehaviour
     {
@@ -10,7 +10,7 @@ namespace ProjectClicker
         [SerializeField] private GameObject _team;
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             foreach (Transform child in transform)
             {
