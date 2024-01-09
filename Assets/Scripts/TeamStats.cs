@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using NaughtyAttributes;
 using ProjectClicker.Core;
-using Unity.VisualScripting;
+using ProjectClicker.Heroes;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -10,18 +9,17 @@ namespace ProjectClicker
 {
     public class TeamStats : MonoBehaviour
     {
-        [FormerlySerializedAs("_maxHealth")]
-        [FormerlySerializedAs("_baseHealth")]
+        [FormerlySerializedAs("_baseMaxHealth")]
         [Header("Team Stats")]
-        [SerializeField] private float _baseMaxHealth;
+        [SerializeField] private float _maxHealth;
         [SerializeField] private float _currentHealth;
-        [SerializeField] private float _baseArmor;
+        [FormerlySerializedAs("_baseArmor")] [SerializeField] private float _armor;
         
 /*        [Foldout("Upgrades"), SerializeField] private Transform _upgradesParent;
         [Foldout("Upgrades"), SerializeField] private GameObject _upgradePrefab;*/
 
         public static event Action TeamHealthUpdate;
-        private bool isDead;
+        private bool _isDead;
 
         [SerializeField] private List<HeroesBehavior> _heroes;
 
@@ -30,7 +28,7 @@ namespace ProjectClicker
         private LevelsManager _managers;
 
         public float CurrentHealth => _currentHealth;
-        public float BaseMaxHealth => _baseMaxHealth;
+        public float MaxHealth => _maxHealth;
 
 
         private void Awake()
@@ -40,12 +38,13 @@ namespace ProjectClicker
         }
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
-            _baseMaxHealth = GetMaxTeamHealth();
-            _currentHealth = _baseMaxHealth;
-            _baseArmor = GetTeamArmor();
+            _maxHealth = GetMaxTeamHealth();
+            _currentHealth = _maxHealth;
+            _armor = GetTeamArmor();
             _managers.ResetTeamHealth += ResetHealth;
+            LevelsManager.OnPrestige += Prestige;
 
 /*          for (int i = 0; i < _heroes.Count; i++)
             {
@@ -58,7 +57,31 @@ namespace ProjectClicker
             TeamHealthUpdate?.Invoke();
         }
 
-/*        public void UpgradeHeroAtIndex(int index)
+        private void OnDisable()
+        {
+            _managers.ResetTeamHealth -= ResetHealth;
+            LevelsManager.OnPrestige -= Prestige;
+        }
+
+        private void Prestige()
+        {
+            float tempMaxHealth = 0;
+            float tempArmor = 0;
+            foreach (HeroesBehavior hero in _heroes)
+            {
+                tempMaxHealth += hero.BaseMaxHealth;
+                tempArmor += hero.BaseArmor;
+                hero.ResetLevel();
+                hero.LinkedDisplay.UpdateUpgradePanel();
+            }
+
+            _maxHealth = tempMaxHealth;
+            _armor = tempArmor;
+            
+            TeamHealthUpdate?.Invoke();
+        }
+
+        /*        public void UpgradeHeroAtIndex(int index)
         {
             HeroesBehavior hero = _heroes[index];
             if (_goldManager.gold <= (ulong)hero.GetUpgradeCost())
@@ -84,14 +107,14 @@ namespace ProjectClicker
 
         public void UpdateStats()
         {
-            _baseMaxHealth = GetMaxTeamHealth();
-            _baseArmor = GetTeamArmor();
+            _maxHealth = GetMaxTeamHealth();
+            _armor = GetTeamArmor();
             TeamHealthUpdate?.Invoke();
         }
 
-        public void ResetHealth()  // fonction appelé uniquement par le LevelManager au changement de niveau
+        public void ResetHealth()  // fonction appelï¿½ uniquement par le LevelManager au changement de niveau
         { 
-            _currentHealth = _baseMaxHealth;
+            _currentHealth = MaxHealth;
             TeamHealthUpdate?.Invoke();
         }
             
@@ -109,16 +132,16 @@ namespace ProjectClicker
         
         public void TakeDamage(float damage)
         {
-            Debug.Log("Damage taken: " + damage + ", Base Armor: " + _baseArmor);
-            float Damage = damage - _baseArmor;
-            if (Damage > 0)
+            Debug.Log("Damage taken: " + damage + ", Base Armor: " + _armor);
+            float dmg = damage - _armor;
+            if (dmg > 0)
             {
-                _currentHealth -= Damage;
+                _currentHealth -= dmg;
             }
             TeamHealthUpdate?.Invoke();
-            if (_currentHealth < 0 && !isDead)
+            if (_currentHealth < 0 && !_isDead)
             {
-                isDead = true;
+                _isDead = true;
                 Debug.Log("Dead");
                 _managers.PreviousLevel();
                 ResetHealth();
@@ -129,9 +152,9 @@ namespace ProjectClicker
         public void AddHealth(float heal)
         {
             _currentHealth += heal;
-            if (_currentHealth > _baseMaxHealth)
+            if (_currentHealth > _maxHealth)
             {
-                _currentHealth = _baseMaxHealth;
+                _currentHealth = _maxHealth;
             }
             TeamHealthUpdate?.Invoke();
         }

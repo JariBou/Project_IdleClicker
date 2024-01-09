@@ -10,7 +10,7 @@ namespace ProjectClicker
         private Dictionary<UpgradeType, int> _upgradeLevelDic;
         
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
 /*            UpgradeType[] playerUpgradesArray = (UpgradeType[])Enum.GetValues(typeof(UpgradeType));
             foreach (UpgradeType upgradeType in playerUpgradesArray)

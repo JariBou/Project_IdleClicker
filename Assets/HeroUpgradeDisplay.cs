@@ -1,13 +1,9 @@
 using ProjectClicker.Core;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using ProjectClicker.Heroes;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
-using static ProjectClicker.HeroesBehavior;
 
 namespace ProjectClicker
 {
@@ -31,64 +27,82 @@ namespace ProjectClicker
         [SerializeField] private Hero[] _heroesLibrary;
 
         [Header("Hero Stats")]
-        private int HeroIndex;
-        private HeroesBehavior championStats;
+        private int _heroIndex;
+        private HeroesBehavior _championStats;
         /*        private TeamStats _teamStats;*/
 
 
         [Header("Buy Upgrade")]
         private GoldManager _goldManager;
-        private String ChampionRole;
+        private String _championRole;
 
 
         public void Initialize(int index, string championRole)
         {
-            ChampionRole = championRole;
+            _championRole = championRole;
             Debug.Log("Initializing the " + championRole + " panel");
-            HeroIndex = GetHeroIndex(championRole);
-            if (HeroIndex == -1)
+            _heroIndex = GetHeroIndex(championRole);
+            if (_heroIndex == -1)
             {
                 Debug.LogError("Hero not found");
                 return;
             }
-            _heroIcon.sprite = _heroesLibrary[HeroIndex]._heroIcon;
-            _heroName.text = _heroesLibrary[HeroIndex]._heroName;
-            championStats = GameObject.FindWithTag("Team").transform?.GetChild(index).GetComponent<HeroesBehavior>();
-            if (championStats == null) return;
-            if (_goldManager == null) _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
-            _damageAmount.text = _goldManager.NumberToString((decimal)championStats.Damage);
-            _healthAmount.text = _goldManager.NumberToString((decimal)championStats.MaxHealth);
-            if (championRole == "Healer") _armorOrHealAmount.text = _goldManager.NumberToString((decimal)championStats.PowerHeal);
-            else _armorOrHealAmount.text = _goldManager.NumberToString((decimal)championStats.Armor);
-            _heroLevel.text = "Lvl " + _goldManager.NumberToString((decimal)championStats.HeroLevel); ;
+            _heroIcon.sprite = _heroesLibrary[_heroIndex]._heroIcon;
+            _heroName.text = _heroesLibrary[_heroIndex]._heroName;
+            _championStats = GameObject.FindWithTag("Team").transform.GetChild(index).GetComponent<HeroesBehavior>();
+            if (_championStats == null) return;
+            if (_goldManager == null)
+            {
+                _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
+            }
+            
+            _damageAmount.text = _goldManager.NumberToString((decimal)_championStats.Damage);
+            _healthAmount.text = _goldManager.NumberToString((decimal)_championStats.MaxHealth);
+            
+            _armorOrHealAmount.text = championRole == "Healer" ? _goldManager.NumberToString((decimal)_championStats.PowerHeal) 
+                : _goldManager.NumberToString((decimal)_championStats.Armor);
+            
+            _heroLevel.text = "Lvl " + _goldManager.NumberToString(_championStats.HeroLevel); ;
             _upgradeCostInt = 1240;
-            _upgradeCost.text = _goldManager.NumberToString((decimal)_upgradeCostInt);
+            _upgradeCost.text = _goldManager.NumberToString(_upgradeCostInt);
+
+            _championStats.LinkedDisplay = this;
 
         }
 
-        private void UpdateUpgradePanel()
+        private void OnEnable()
         {
-            _damageAmount.text = _goldManager.NumberToString((decimal)championStats.Damage);
-            _healthAmount.text = _goldManager.NumberToString((decimal)championStats.MaxHealth);
-            if (ChampionRole == "Healer") _armorOrHealAmount.text = _goldManager.NumberToString((decimal)championStats.PowerHeal);
-            else _armorOrHealAmount.text = _goldManager.NumberToString((decimal)championStats.Armor);
-            _heroLevel.text = "Lvl " + championStats.HeroLevel.ToString();
-            _upgradeCost.text = _goldManager.NumberToString((decimal)_upgradeCostInt);
+            LevelsManager.OnPrestige += UpdateUpgradePanel;
+        }
+        
+        private void OnDisable()
+        {
+            LevelsManager.OnPrestige -= UpdateUpgradePanel;
+        }
+
+        public void UpdateUpgradePanel()
+        {
+            _damageAmount.text = _goldManager.NumberToString((decimal)_championStats.Damage);
+            _healthAmount.text = _goldManager.NumberToString((decimal)_championStats.MaxHealth);
+            
+            _armorOrHealAmount.text = _championRole == "Healer" ? _goldManager.NumberToString((decimal)_championStats.PowerHeal) 
+                : _goldManager.NumberToString((decimal)_championStats.Armor);
+            
+            _heroLevel.text = "Lvl " + _championStats.HeroLevel;
+            _upgradeCost.text = _goldManager.NumberToString(_upgradeCostInt);
 
         }
 
         public void BuyUpgrade()
         {
             if (_goldManager == null) _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
-            if (_goldManager.gold < (ulong)_upgradeCostInt) return;
-            else
-            {
-                 _goldManager.RemoveGold((ulong)_upgradeCostInt);
-                if (championStats.HeroLevel >= 1) _upgradeCostInt += 1240 * championStats.HeroLevel * 2;
-                else _upgradeCostInt += 1240;
-                championStats.Upgrade();
-                UpdateUpgradePanel();
-            }
+            if (_goldManager.Gold < (ulong)_upgradeCostInt) return;
+            
+            _goldManager.RemoveGold((ulong)_upgradeCostInt);
+            if (_championStats.HeroLevel >= 1) _upgradeCostInt += 1240 * _championStats.HeroLevel * 2;
+            else _upgradeCostInt += 1240;
+            _championStats.Upgrade();
+            UpdateUpgradePanel();
         }
 
         private int GetHeroIndex(string championRole)

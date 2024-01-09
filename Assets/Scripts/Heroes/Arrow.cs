@@ -1,36 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.Collections.LowLevel.Unsafe;
-using Unity.Notifications.Android;
-using UnityEditor;
+using ProjectClicker.Core;
+using ProjectClicker.Enemies;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 
-namespace ProjectClicker
+namespace ProjectClicker.Heroes
 {
     public class Arrow : MonoBehaviour
     {
+        [FormerlySerializedAs("CircleRadius")]
         [Header("Circle Collider")]
-        [SerializeField] private float CircleRadius = 0.5f;
-        [SerializeField] private GameObject CircleOffSet;
+        [SerializeField] private float _circleRadius = 0.5f;
+        [FormerlySerializedAs("CircleOffSet")] [SerializeField] private GameObject _circleOffSet;
 
+        [FormerlySerializedAs("BoxSizeX")]
         [Header("Box Collider")]
-        [SerializeField] private float BoxSizeX = 0.5f;
-        [SerializeField] private float BoxSizeY = 0.5f;
-        [SerializeField] private GameObject BoxOffSet;
+        [SerializeField] private float _boxSizeX = 0.5f;
+        [FormerlySerializedAs("BoxSizeY")] [SerializeField] private float _boxSizeY = 0.5f;
+        [FormerlySerializedAs("BoxOffSet")] [SerializeField] private GameObject _boxOffSet;
 
+        [FormerlySerializedAs("BeamSizeX")]
         [Header("Beam Collider")]
-        [SerializeField] private float BeamSizeX = 0.5f;
-        [SerializeField] private float BeamSizeY = 0.5f;
-        [SerializeField] private GameObject BeamOffSet;
+        [SerializeField] private float _beamSizeX = 0.5f;
+        [FormerlySerializedAs("BeamSizeY")] [SerializeField] private float _beamSizeY = 0.5f;
+        [FormerlySerializedAs("BeamOffSet")] [SerializeField] private GameObject _beamOffSet;
 
         [Header("Rigibody")]
         [SerializeField] private Rigidbody2D _rigidbody2D;
 
-        [Header("Arrow Stats")]
-        public float Speed = 10f;
-        public float Damage = 10f;
+        [FormerlySerializedAs("Speed")] [Header("Arrow Stats")]
+        public float _speed = 10f;
+        [FormerlySerializedAs("Damage")] public float _damage = 10f;
 
         public ArrowType _arrowType;
 
@@ -39,34 +38,34 @@ namespace ProjectClicker
         private bool _hasHit;
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             _hasHit = false;
-            Damage = GameObject.FindWithTag("Archer").GetComponent<HeroesBehavior>().Damage;
+            _damage = GameObject.FindWithTag("Archer").GetComponent<HeroesBehavior>().Damage;
             _rigidbody2D = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
             if (_arrowType == ArrowType.Normal || _arrowType == ArrowType.Entangle || _arrowType == ArrowType.Poison)
             {
-                _rigidbody2D.velocity = transform.right * Speed;
+                _rigidbody2D.velocity = transform.right * _speed;
             }
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             if (!_hasHit)
             {
                 if (_arrowType == ArrowType.Normal || _arrowType == ArrowType.Entangle || _arrowType == ArrowType.Poison)
                 {
-                    Collider2D[] colliderHit = Physics2D.OverlapCircleAll(CircleOffSet.transform.position, CircleRadius, LayerMask.GetMask("Enemy"));
-                    foreach (var collider in colliderHit)
+                    Collider2D[] colliderHit = Physics2D.OverlapCircleAll(_circleOffSet.transform.position, _circleRadius, LayerMask.GetMask("Enemy"));
+                    foreach (var col in colliderHit)
                     {
-                        collider.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage);
-                        collider.gameObject.GetComponent<EnemyBase>()?.TakeDamage(Damage);
+                        col.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(_damage);
+                        col.gameObject.GetComponent<EnemyBase>()?.TakeDamage(_damage);
                         _hasHit = true;
-                        Debug.Log("Hit with " + Damage + " damage");
+                        Debug.Log("Hit with " + _damage + " damage");
                         _rigidbody2D.velocity *= 0;
-                        _rigidbody2D.velocity = collider.gameObject.GetComponent<Rigidbody2D>().velocity;
+                        _rigidbody2D.velocity = col.gameObject.GetComponent<Rigidbody2D>().velocity;
                         if (_arrowType == ArrowType.Normal)
                         {
                             _animator.SetTrigger("NormalHit");
@@ -86,13 +85,13 @@ namespace ProjectClicker
                 }
                 else if (_arrowType == ArrowType.Shower)
                 {
-                    Collider2D[] colliderHit = Physics2D.OverlapBoxAll(BoxOffSet.transform.position, new Vector2(BoxSizeX, BoxSizeY),0, LayerMask.GetMask("Enemy"));
+                    Collider2D[] colliderHit = Physics2D.OverlapBoxAll(_boxOffSet.transform.position, new Vector2(_boxSizeX, _boxSizeY),0, LayerMask.GetMask("Enemy"));
                     _animator.SetTrigger("Shower");
-                    Debug.Log("Hit with " + Damage + " damage");
-                    foreach (var collider in colliderHit)
+                    Debug.Log("Hit with " + _damage + " damage");
+                    foreach (var col in colliderHit)
                     {
-                        collider?.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage * 3f); //C'est une pluie de flèches donc on augmente les dégats
-                        collider?.gameObject.GetComponent<EnemyBase>()?.TakeDamage(Damage * 3f);
+                        col.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(_damage * 3f); //C'est une pluie de flï¿½ches donc on augmente les dï¿½gats
+                        col.gameObject.GetComponent<EnemyBase>()?.TakeDamage(_damage * 3f);
                         
                     }
                     _hasHit = true;
@@ -101,13 +100,13 @@ namespace ProjectClicker
                 }
                 else
                 {
-                    Collider2D[] colliderHit = Physics2D.OverlapBoxAll(BeamOffSet.transform.position, new Vector2(BeamSizeX, BeamSizeY), 0,LayerMask.GetMask("Enemy"));
+                    Collider2D[] colliderHit = Physics2D.OverlapBoxAll(_beamOffSet.transform.position, new Vector2(_beamSizeX, _beamSizeY), 0,LayerMask.GetMask("Enemy"));
                     _animator.SetTrigger("Beam");
-                    Debug.Log("Hit with " + Damage + " damage");
-                    foreach (var collider in colliderHit)
+                    Debug.Log("Hit with " + _damage + " damage");
+                    foreach (var col in colliderHit)
                     {
-                        collider?.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage * 3f); //Même logigue que pour la pluie de flèches
-                        collider?.gameObject.GetComponent<EnemyBase>()?.TakeDamage(Damage * 3f); 
+                        col.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(_damage * 3f); //Mï¿½me logigue que pour la pluie de flï¿½ches
+                        col.gameObject.GetComponent<EnemyBase>()?.TakeDamage(_damage * 3f); 
                     }
                     _hasHit = true;
                     Destroy(gameObject, 2f);
@@ -120,21 +119,13 @@ namespace ProjectClicker
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(CircleOffSet.transform.position, CircleRadius);
-            Gizmos.DrawWireCube(BoxOffSet.transform.position, new Vector2(BoxSizeX, BoxSizeY));
-            Gizmos.DrawWireCube(BeamOffSet.transform.position, new Vector2(BeamSizeX, BeamSizeY));
+            Gizmos.DrawWireSphere(_circleOffSet.transform.position, _circleRadius);
+            Gizmos.DrawWireCube(_boxOffSet.transform.position, new Vector2(_boxSizeX, _boxSizeY));
+            Gizmos.DrawWireCube(_beamOffSet.transform.position, new Vector2(_beamSizeX, _beamSizeY));
         }
 
 
     }
 
 
-    public enum ArrowType
-    {
-        Normal = 0,
-        Entangle = 1,
-        Poison = 2,
-        Shower = 3,
-        Beam = 4
-    }
 }

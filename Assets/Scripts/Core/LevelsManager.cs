@@ -1,17 +1,15 @@
-using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.UI;
 
-
-namespace ProjectClicker
+namespace ProjectClicker.Core
 {
     public class LevelsManager : MonoBehaviour
     {
 
         [Header("Levels")]
-        [SerializeField]GameObject _level;
+        [SerializeField] GameObject _level;
         [SerializeField] private int _currentLevel;
         public int CurrentLevel => _currentLevel;
         [SerializeField] private Sprite[] _backgroundLevels;
@@ -23,8 +21,9 @@ namespace ProjectClicker
         [SerializeField] private List<Vector3> _championTeamSpawn = new List<Vector3>();
 
 
-
-        public Action ChangeLevel;
+        public event Action ResetTeamHealth;
+        public static event Action OnChangeLevel;
+        public static event Action OnPrestige;
 
         void Awake()
         {
@@ -36,11 +35,6 @@ namespace ProjectClicker
 
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            
-        }
         [Button]
         public void NextLevel()
         {
@@ -49,9 +43,9 @@ namespace ProjectClicker
             {
                 _currentLevel = 0;
             }
-            _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel];
+            _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
             ResetTeamHealth?.Invoke();
-            ChangeLevel?.Invoke();
+            OnChangeLevel?.Invoke();
             ResetTeamPosition();
         }
 
@@ -63,9 +57,19 @@ namespace ProjectClicker
             {
                 _currentLevel = 0;
             }
-            _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel];
+            _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
             ResetTeamHealth?.Invoke();
-            ChangeLevel?.Invoke();
+            OnChangeLevel?.Invoke();
+            ResetTeamPosition();
+        }
+
+        [Button]
+        public void PrestigeGame()
+        {
+            _currentLevel = 0;
+            _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
+            OnPrestige?.Invoke();
+            OnChangeLevel?.Invoke();
             ResetTeamPosition();
         }
 
@@ -99,7 +103,6 @@ namespace ProjectClicker
             }
         }*/
 
-        public event Action ResetTeamHealth;
 
     }
 }

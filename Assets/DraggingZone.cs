@@ -1,9 +1,6 @@
-using JetBrains.Annotations;
-using System.Data;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 namespace ProjectClicker
 {
@@ -31,9 +28,9 @@ namespace ProjectClicker
         [SerializeField] private Vector2 _teamFollower;
         [SerializeField] private GameObject _leaderTeam1;
         [SerializeField] private GameObject _leaderTeam2;
-        [SerializeField] private float moveSpeed = 0.5f;
+        [FormerlySerializedAs("moveSpeed")] [SerializeField] private float _moveSpeed = 0.5f;
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
 /*            xStartPos = _camera.transform.position.x;
             yStartPos = _camera.transform.position.y;
@@ -42,10 +39,9 @@ namespace ProjectClicker
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
-            _teamFollower.x = ((_leaderTeam1.transform.position.x + _leaderTeam2.transform.position.x) / 2) + 1f;
-            float width = 2 * (_cameraSize - _maxWidthDrag);
+            _teamFollower.x = (_leaderTeam1.transform.position.x + _leaderTeam2.transform.position.x) / 2 + 1f;
             if (!_dragging && Mathf.Abs(_camera.position.x - _teamFollower.x) > 0.02f)
             {
                 float xClamped = Mathf.Clamp(_teamFollower.x, _startCamPos.x - _maxWidthDrag, _startCamPos.x + _maxWidthDrag);
