@@ -95,6 +95,7 @@ namespace ProjectClicker
             if (_spawnRate > 3f) _spawnRate -= 0.1f;
             _canSpawn = true;
             _isDead = false;
+            _healthBarGeeenBar.SetActive(true);
         }
 
         private void ClearEnemies()
