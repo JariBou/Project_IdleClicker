@@ -14,6 +14,7 @@ namespace ProjectClicker
         public float MaxHealth => _maxHealth;
         private float _health;
         [SerializeField] private Slider _enemyBaseHealthBar;
+        [SerializeField] private GameObject _healthBarGeeenBar;
         private bool _isDead;
 
         [Header("Enemies")]
@@ -68,18 +69,22 @@ namespace ProjectClicker
         private IEnumerator SpawnSkeleton(float seconds)
         {
             _canSpawn = false;
-            for (int i = 0; i<4; i++)
+            if (_enemies.Count < 8)
             {
-                GameObject skeleton = Instantiate(_skeleton, _spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Length - 1)].transform.position, Quaternion.identity);
-                _enemies.Add(skeleton);
-                yield return new WaitForSeconds(2.2f);
+                for (int i = 0; i < 4; i++)
+                {
+                    GameObject skeleton = Instantiate(_skeleton, _spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Length - 1)].transform.position, Quaternion.identity);
+                    _enemies.Add(skeleton);
+                    yield return new WaitForSeconds(2.2f);
+                }
+                yield return new WaitForSeconds(seconds);
             }
-            yield return new WaitForSeconds(seconds);
             _canSpawn = true;
         }
 
         private IEnumerator Die()
         {
+            _healthBarGeeenBar.SetActive(false);
             yield return new WaitForSeconds(1.5f);
             _levelsManager.NextLevel();
             _levelText.text = "Level : " + _levelsManager.CurrentLevel;

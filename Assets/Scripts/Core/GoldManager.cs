@@ -65,7 +65,7 @@ namespace ProjectClicker.Core
         }
         public string NumberToString(decimal goldMoney)
         {
-            if (goldMoney < 1000) return goldMoney.ToString();
+            if (goldMoney <= 1000) return goldMoney.ToString();
             string[] suffixes = { "", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s" };
 
             int suffixIndex = 0;

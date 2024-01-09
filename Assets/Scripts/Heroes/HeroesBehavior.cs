@@ -343,11 +343,11 @@ namespace ProjectClicker
         public void Upgrade()
         {
             _heroLevel++;
-            _damage += _upgradeInfo.DmgPerLevel * _heroLevel;
+/*            _damage += _upgradeInfo.DmgPerLevel * _heroLevel;
             _maxHealth += _upgradeInfo.HealthPerLevel * _heroLevel;
             _armor += _upgradeInfo.ArmorPerLevel * _heroLevel;
             _healStrength += _upgradeInfo.HealStrengthPerLevel * _heroLevel;
-            if (_attackSpeed > _upgradeInfo.MinAtkSpeed)  _attackSpeed -= _upgradeInfo.AtkSpeedPerLevel * _heroLevel;
+            if (_attackSpeed > _upgradeInfo.MinAtkSpeed)  _attackSpeed -= _upgradeInfo.AtkSpeedPerLevel * _heroLevel;*/
             _teamStats.UpdateStats();
         }
 

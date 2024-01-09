@@ -9,6 +9,7 @@ namespace ProjectClicker
     {
 
         [SerializeField] private GameObject _upgradePanelPrefab;
+        [SerializeField] private GameObject _upgradePanelPrefabHealer;
         [SerializeField] private GameObject _team;
 
         // Start is called before the first frame update
@@ -30,7 +31,9 @@ namespace ProjectClicker
         public void AddChampionPanel(int index)
         {
             string championRole = _team.transform.GetChild(index).gameObject.tag;
-            var panel = Instantiate(_upgradePanelPrefab, Vector3.zero, Quaternion.identity);
+            GameObject panel;
+            if (championRole == "Healer") panel = Instantiate(_upgradePanelPrefabHealer, Vector3.zero, Quaternion.identity);         
+            else panel = Instantiate(_upgradePanelPrefab, Vector3.zero, Quaternion.identity);
             panel.transform.SetParent(transform);
             panel.GetComponent<HeroUpgradeDisplay>().Initialize(index, championRole);
         }

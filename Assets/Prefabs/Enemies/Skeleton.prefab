@@ -369,11 +369,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 0
-  health: 500
-  maxHealth: 500
+  health: 350
+  maxHealth: 350
   _healthBar: {fileID: 6202891243171271161}
+  _healthBarGeeenBar: {fileID: 1799581440874154031}
   AttackRange: 3
-  Damage: 275
+  Damage: 200
   AttackSpeed: 2.3809526
   _offset: 1
   _canAttack: 1
@@ -548,7 +549,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.315
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

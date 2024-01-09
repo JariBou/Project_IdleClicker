@@ -45,9 +45,11 @@ namespace ProjectClicker
         void Update()
         {
             _teamFollower.x = ((_leaderTeam1.transform.position.x + _leaderTeam2.transform.position.x) / 2) + 1f;
-            if (!_dragging && Mathf.Abs(Mathf.Round(_camera.position.x) - Mathf.Round(_teamFollower.x)) > 0.5f)
+            float width = 2 * (_cameraSize - _maxWidthDrag);
+            if (!_dragging && Mathf.Abs(_camera.position.x - _teamFollower.x) > 0.02f)
             {
-                _camera.position = Vector3.Lerp(_camera.position, new Vector3(_teamFollower.x, _startCamPos.y, _camera.position.z), 2.5f * Time.deltaTime);
+                float xClamped = Mathf.Clamp(_teamFollower.x, _startCamPos.x - _maxWidthDrag, _startCamPos.x + _maxWidthDrag);
+                _camera.position = Vector3.Lerp(_camera.position, new Vector3(xClamped, _startCamPos.y, _camera.position.z), 2.5f * Time.deltaTime);
             }
         }
 
@@ -56,7 +58,7 @@ namespace ProjectClicker
 
             if (!_dragging) return;
             Vector2 displacement = eventData.delta*-1;
-            float xClamped = Mathf.Clamp(_camera.transform.position.x + displacement.x * _dragSpeed,
+            float xClamped = Mathf.Clamp(_camera.position.x + displacement.x * _dragSpeed,
                 _startCamPos.x-_maxWidthDrag, _startCamPos.x+_maxWidthDrag);
             Vector3 newPos = new Vector3(xClamped, _startCamPos.y, _startCamPos.z);
             _camera.transform.position = newPos;
@@ -75,7 +77,7 @@ namespace ProjectClicker
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(_camera.position, new Vector3(2*(_cameraSize + _maxWidthDrag), _cameraSize*2));
+            Gizmos.DrawWireCube(_camera.position, new Vector3(2*(_cameraSize + _maxWidthDrag), _cameraSize*2,0));
             Gizmos.color = Color.red;
             Gizmos.DrawWireCube(new Vector2(_teamFollower.x, _teamFollower.y), new Vector3(2*(_cameraSize - _maxWidthDrag), _cameraSize*2, 0));
             Gizmos.color = Color.green;

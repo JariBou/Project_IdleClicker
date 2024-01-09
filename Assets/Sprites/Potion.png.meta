@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f51f3fad14301d9448c48145f9aa7b99
+guid: 3f66573d5bc016943972f941de3b5b27
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,12 +43,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -121,91 +121,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: AdobeStock_514681739_0
-      rect:
-        serializedVersion: 2
-        x: 1589
-        y: 2918
-        width: 544
-        height: 542
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7be91782e35ad1748b056910a54a2862
-      internalID: -1605517201
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AdobeStock_514681739_1
-      rect:
-        serializedVersion: 2
-        x: 962
-        y: 2909
-        width: 409
-        height: 551
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 55b4216d4dae322409157c704cca9b44
-      internalID: 622665561
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AdobeStock_514681739_2
-      rect:
-        serializedVersion: 2
-        x: 1543
-        y: 2161
-        width: 589
-        height: 540
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 15e291a8cd6e95b4e9e523e3decc3007
-      internalID: 731611994
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AdobeStock_514681739_3
-      rect:
-        serializedVersion: 2
-        x: 1053
-        y: 1416
-        width: 315
-        height: 545
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e1a4c8a27b83b91498aa40b169f7a208
-      internalID: -1752021134
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -216,11 +132,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      AdobeStock_514681739_0: -1605517201
-      AdobeStock_514681739_1: 622665561
-      AdobeStock_514681739_2: 731611994
-      AdobeStock_514681739_3: -1752021134
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

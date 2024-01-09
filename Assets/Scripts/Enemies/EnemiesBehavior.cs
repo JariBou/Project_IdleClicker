@@ -19,6 +19,7 @@ namespace ProjectClicker
         bool isDead;
         public bool IsDead => isDead;
         [SerializeField] private Slider _healthBar;
+        [SerializeField] private GameObject _healthBarGeeenBar;
 
 
         [Header("Attack")]
@@ -39,6 +40,7 @@ namespace ProjectClicker
         [Header("Animator")]
         private Animator _animator;
         private Rigidbody2D _rb;
+        private int _atkCount = 0;
         // Start is called before the first frame update
         void Start()
         {
@@ -93,6 +95,7 @@ namespace ProjectClicker
 
         IEnumerator Die()
         {
+            _healthBarGeeenBar.SetActive(false);
             _animator.SetTrigger("Die");
             if (_level > 0) _goldManager.AddGold((ulong)(_gold * _level));
             else _goldManager.AddGold((ulong)(_gold));
@@ -105,16 +108,49 @@ namespace ProjectClicker
         {
             _canAttack = false;
             Collider2D[] colliderAttack = Physics2D.OverlapCircleAll(new Vector2(transform.position.x - _offset, transform.position.y), AttackRange, LayerMask.GetMask("Champion"));
-            _animator.SetTrigger("Attack1");
-            yield return new WaitForSeconds(0.02f);
-            foreach (Collider2D collider in colliderAttack)
+            if (_atkCount == 0)
             {
-                
-                collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(Damage);
-                Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);
-                
-                break; //chaque ennemi attaque 1 seul champion
+                _animator.SetTrigger("Attack1");
+                yield return new WaitForSeconds(0.5f);
+                foreach (Collider2D collider in colliderAttack)
+                {
+
+                    collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(Damage);
+                    Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);
+
+                    break; //chaque ennemi attaque 1 seul champion
+                }
+                _atkCount++;
             }
+            else if (_atkCount == 1)
+            {
+                _animator.SetTrigger("Attack2");
+                yield return new WaitForSeconds(0.5f);
+                foreach (Collider2D collider in colliderAttack)
+                {
+
+                    collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(Mathf.Round(Damage * 1.15f));
+                    Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);
+
+                    break; //chaque ennemi attaque 1 seul champion
+                }
+                _atkCount++;
+            }
+            else if (_atkCount == 2)
+            {
+                _animator.SetTrigger("Attack3");
+                yield return new WaitForSeconds(0.5f);
+                foreach (Collider2D collider in colliderAttack)
+                {
+
+                    collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(Mathf.Round(Damage * 1.35f));
+                    Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);
+
+                    break; //chaque ennemi attaque 1 seul champion
+                }
+                _atkCount = 0;
+            }
+
             yield return new WaitForSeconds(AttackSpeed);
             _canAttack = true;
         }   
@@ -126,7 +162,7 @@ namespace ProjectClicker
             {
                 case EnemyType.Melee:
                     _canAttack = true;
-                    maxHealth = 1000 * _level;
+                    maxHealth = 500 * _level;
                     health = maxHealth;
                     AttackRange = 3;
                     Damage = 190 * _level;
