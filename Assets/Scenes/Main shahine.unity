@@ -767,6 +767,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &512306370 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7359378281995062903, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+  m_PrefabInstance: {fileID: 5867079015476790632}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &517288429
 GameObject:
   m_ObjectHideFlags: 0
@@ -1753,6 +1758,7 @@ RectTransform:
   - {fileID: 6947845164182429951}
   - {fileID: 2133763062}
   - {fileID: 1227282339}
+  - {fileID: 512306370}
   m_Father: {fileID: 233446453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4598,7 +4604,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6334689336460894864, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4393591583969618293, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
@@ -4682,25 +4688,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2368951269457146077, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.17
+    - target: {fileID: 53217973160539061, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _role
+      value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 2578129452212574132, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
-      propertyPath: m_Name
-      value: Team
-      objectReference: {fileID: 0}
-    - target: {fileID: 2825630291898934350, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.67
-      objectReference: {fileID: 0}
-    - target: {fileID: 5635703980381919775, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 4.61
-      objectReference: {fileID: 0}
-    - target: {fileID: 7359378281995062903, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1908.76
+    - target: {fileID: 53217973160539061, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _baseArmor
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 53217973160539061, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
       propertyPath: _baseDamage
@@ -4713,6 +4707,78 @@ PrefabInstance:
     - target: {fileID: 53217973160539061, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
       propertyPath: _baseAttackSpeed
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368951269457146077, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2578129452212574132, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: m_Name
+      value: Team
+      objectReference: {fileID: 0}
+    - target: {fileID: 2825630291898934350, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 2887522970170214693, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: m_TagString
+      value: Warrior
+      objectReference: {fileID: 0}
+    - target: {fileID: 3064250030388171700, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: m_TagString
+      value: Archer
+      objectReference: {fileID: 0}
+    - target: {fileID: 4632054849747345524, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _role
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4632054849747345524, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _baseArmor
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4632054849747345524, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _attackRange
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4632054849747345524, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _baseMaxHealth
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 4632054849747345524, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _baseAttackSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5635703980381919775, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 6435203728069320225, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _role
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6435203728069320225, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _baseArmor
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6435203728069320225, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _baseDamage
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 6435203728069320225, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _baseMaxHealth
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6435203728069320225, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _baseAttackSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6435203728069320225, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _baseHealStrength
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359378281995062903, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1908.76
       objectReference: {fileID: 0}
     - target: {fileID: 7359378281995062903, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
       propertyPath: m_LocalRotation.x
