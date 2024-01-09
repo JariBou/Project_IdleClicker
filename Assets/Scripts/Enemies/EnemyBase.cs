@@ -1,4 +1,3 @@
-using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +9,8 @@ namespace ProjectClicker
     public class EnemyBase : MonoBehaviour
     {
 
-        [SerializeField] private float _maxHealth;
+        [SerializeField] private float _baseMaxHealth = 500;
+        private float _maxHealth;
         public float MaxHealth => _maxHealth;
         private float _health;
         [SerializeField] private Slider _enemyBaseHealthBar;
@@ -40,11 +40,20 @@ namespace ProjectClicker
         void Start()
         {
             _levelsManager = GameObject.FindWithTag("Managers").GetComponent<LevelsManager>();
-            _enemyBaseHealthBar.maxValue = _maxHealth;
-            _enemyBaseHealthBar.value = _maxHealth;
-            _health = _maxHealth;
-            _canSpawn = true;
+            ResetBase();
             _levelsManager.ChangeLevel += ClearEnemies;
+            LevelsManager.OnResetGame += Prestige;
+        }
+
+        private void Prestige()
+        {
+            ClearEnemies();
+            ResetBase();
+        }
+
+        private void OnDisable()
+        {
+            _levelsManager.ChangeLevel -= ClearEnemies;
         }
 
         // Update is called once per frame
@@ -95,6 +104,15 @@ namespace ProjectClicker
             if (_spawnRate > 3f) _spawnRate -= 0.1f;
             _canSpawn = true;
             _isDead = false;
+        }
+
+        public void ResetBase()
+        {
+            _maxHealth = _baseMaxHealth;
+            _enemyBaseHealthBar.maxValue = _maxHealth;
+            _enemyBaseHealthBar.value = _maxHealth;
+            _health = _maxHealth;
+            _canSpawn = true;
         }
 
         private void ClearEnemies()

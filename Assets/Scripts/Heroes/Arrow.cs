@@ -1,11 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.Collections.LowLevel.Unsafe;
-using Unity.Notifications.Android;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace ProjectClicker
 {
@@ -97,7 +90,7 @@ namespace ProjectClicker
                     Debug.Log("Hit with " + Damage + " damage");
                     foreach (var collider in colliderHit)
                     {
-                        collider?.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage * 3f); //C'est une pluie de flèches donc on augmente les dégats
+                        collider?.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage * 3f); //C'est une pluie de flï¿½ches donc on augmente les dï¿½gats
                         collider?.gameObject.GetComponent<EnemyBase>()?.TakeDamage(Damage * 3f);
                         
                     }
@@ -112,7 +105,7 @@ namespace ProjectClicker
                     Debug.Log("Hit with " + Damage + " damage");
                     foreach (var collider in colliderHit)
                     {
-                        collider?.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage * 3f); //Même logigue que pour la pluie de flèches
+                        collider?.gameObject.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage * 3f); //Mï¿½me logigue que pour la pluie de flï¿½ches
                         collider?.gameObject.GetComponent<EnemyBase>()?.TakeDamage(Damage * 3f); 
                     }
                     _hasHit = true;

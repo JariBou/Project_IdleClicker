@@ -11,7 +11,7 @@ namespace ProjectClicker
     {
 
         [Header("Levels")]
-        [SerializeField]GameObject _level;
+        [SerializeField] GameObject _level;
         [SerializeField] private int _currentLevel;
         public int CurrentLevel => _currentLevel;
         [SerializeField] private Sprite[] _backgroundLevels;
@@ -49,7 +49,7 @@ namespace ProjectClicker
             {
                 _currentLevel = 0;
             }
-            _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel];
+            _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
             ResetTeamHealth?.Invoke();
             ChangeLevel?.Invoke();
             ResetTeamPosition();
@@ -63,8 +63,18 @@ namespace ProjectClicker
             {
                 _currentLevel = 0;
             }
-            _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel];
+            _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
             ResetTeamHealth?.Invoke();
+            ChangeLevel?.Invoke();
+            ResetTeamPosition();
+        }
+
+        [Button]
+        public void PrestigeGame()
+        {
+            _currentLevel = 0;
+            _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
+            OnResetGame?.Invoke();
             ChangeLevel?.Invoke();
             ResetTeamPosition();
         }
@@ -100,6 +110,7 @@ namespace ProjectClicker
         }*/
 
         public event Action ResetTeamHealth;
+        public static event Action OnResetGame;
 
     }
 }
