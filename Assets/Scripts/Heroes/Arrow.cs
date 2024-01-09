@@ -65,27 +65,21 @@ namespace ProjectClicker
                         collider.gameObject.GetComponent<EnemyBase>()?.TakeDamage(Damage);
                         _hasHit = true;
                         Debug.Log("Hit with " + Damage + " damage");
+                        _rigidbody2D.velocity *= 0;
+                        _rigidbody2D.velocity = collider.gameObject.GetComponent<Rigidbody2D>().velocity;
                         if (_arrowType == ArrowType.Normal)
                         {
-                            _rigidbody2D.velocity *= 0;
-                            _rigidbody2D.velocity = collider.gameObject.GetComponent<Rigidbody2D>().velocity;
                             _animator.SetTrigger("NormalHit");
-                            Destroy(gameObject, 2f);
                         }
                         else if (_arrowType == ArrowType.Entangle)
                         {
-                            _rigidbody2D.velocity *= 0;
-                            _rigidbody2D.velocity = collider.gameObject.GetComponent<Rigidbody2D>().velocity;
                             _animator.SetTrigger("EntangleHit");
-                            Destroy(gameObject, 2f);
                         }
                         else if (_arrowType == ArrowType.Poison)
                         {
-                            _rigidbody2D.velocity *= 0;
-                            _rigidbody2D.velocity = collider.gameObject.GetComponent<Rigidbody2D>().velocity;
                             _animator.SetTrigger("PoisonHit");
-                            Destroy(gameObject, 2f);
                         }
+                        Destroy(gameObject, 2f);
                         break;
                     }
                     Destroy(gameObject, 8f);
