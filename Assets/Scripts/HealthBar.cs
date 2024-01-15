@@ -13,7 +13,7 @@ namespace ProjectClicker
         private Slider _slider;
         private GoldManager _goldManager;
 
-        private void Start()
+        private void Awake()
         {
             _slider = GetComponent<Slider>();
             _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();

@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Linq;
+using NaughtyAttributes;
 using ProjectClicker.Core;
 using ProjectClicker.Enemies;
 using UnityEngine;
@@ -42,7 +44,9 @@ namespace ProjectClicker.Heroes
         private float _baseArmor;
 
         [Header("Arrow")]
+        [ShowIf("_role", ChampionRole.Archer)]
         [SerializeField] private Transform _arrowSpawnPoint;
+        [ShowIf("_role", ChampionRole.Archer)]
         [SerializeField] private GameObject _arrowPrefab;
         private int _attckCount = 0;
 
@@ -60,6 +64,7 @@ namespace ProjectClicker.Heroes
 
         private Animator _animator;
         private Rigidbody2D _rb;
+        private Collider2D[] colliderAttack;
 
         [Header("Attack Offset")]
         [SerializeField] private float _offset;
@@ -76,7 +81,7 @@ namespace ProjectClicker.Heroes
         // Update is called once per frame
         private void Update()
         {
-            Collider2D[] colliderAttack;
+            
             if (gameObject.CompareTag("Healer") || gameObject.CompareTag("Archer"))
             {
                 colliderAttack = Physics2D.OverlapCircleAll(
@@ -89,6 +94,9 @@ namespace ProjectClicker.Heroes
                     Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y),
                         new Vector2(2, 6), 0, LayerMask.GetMask("Enemy"));
             }
+
+
+
             if (_teamStats.CurrentHealth < _teamStats.MaxHealth/2 && _canHeal && _role == ChampionRole.Healer)
             {
                 _canHeal = false;
@@ -162,9 +170,9 @@ namespace ProjectClicker.Heroes
 
         private IEnumerator Attack(Collider2D[] colliderAttack)
         {
-            foreach (Collider2D collider in colliderAttack)
+            foreach (Collider2D collider in colliderAttack.Where(i => i != null))
             {
-                if (collider == null) continue;
+/*                if (collider == null) continue;*/
                 if (_rb.velocity.x < 0.01f)
                 {
                     if (!collider.CompareTag("EnemyBase"))

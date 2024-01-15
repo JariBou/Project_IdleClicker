@@ -44,6 +44,7 @@ namespace ProjectClicker
             _currentHealth = _maxHealth;
             _armor = GetTeamArmor();
             _managers.ResetTeamHealth += ResetHealth;
+            TeamHealthUpdate?.Invoke();
             LevelsManager.OnPrestige += Prestige;
 
 /*          for (int i = 0; i < _heroes.Count; i++)
@@ -54,7 +55,7 @@ namespace ProjectClicker
                 Instantiate(_upgradePrefab, _upgradesParent).GetComponent<HeroUpgradeDisplay>().Initialize(i, this);
             }*/
 
-            TeamHealthUpdate?.Invoke();
+           
         }
 
         private void OnDisable()
@@ -145,6 +146,7 @@ namespace ProjectClicker
                 Debug.Log("Dead");
                 _managers.PreviousLevel();
                 ResetHealth();
+                _isDead = false;
             }
         }
 
