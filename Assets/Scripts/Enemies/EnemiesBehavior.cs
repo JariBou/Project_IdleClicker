@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using NaughtyAttributes;
 using ProjectClicker.Core;
@@ -49,16 +50,10 @@ namespace ProjectClicker.Enemies
         private int _atkCount;
 
         [Header("Ranged")]
-        [ShowIf("_enemyType", EnemyType.Ranged)]
         [SerializeField] private GameObject _projectileSpawnPoint;
-        [ShowIf("_enemyType", EnemyType.Ranged)]
         [SerializeField] private GameObject _projectilePrefab;
         [SerializeField] private bool _isFlying;
 
-        [Header("Wich attack is ranged ?")]
-        [SerializeField] private bool _isAttack1Ranged;
-        [SerializeField] private bool _isAttack2Ranged;
-        [SerializeField] private bool _isAttack3Ranged;
 
         // Start is called before the first frame update
         private void Start()
@@ -86,7 +81,7 @@ namespace ProjectClicker.Enemies
                 if (colliderAttack.Length > 0)
                 {
                     _isNearChampion = true;
-                    StartCoroutine(Attack());
+                    Attack();
                 }
                 else if (colliderAttack.Length == 0)
                 {
@@ -134,7 +129,6 @@ namespace ProjectClicker.Enemies
                         Destroy(gameObject);
                     }
                 }
-
             }
             else
             {
@@ -150,113 +144,51 @@ namespace ProjectClicker.Enemies
 
         }
 
-        private IEnumerator Attack()
+        private void Attack()
+        {
+            _canAttack = false;
+            if (_rb.velocity.x > -0.01f)
+            {
+                if (_atkCount == 0) _animator.SetTrigger("Attack1");
+                else if (_atkCount == 1) _animator.SetTrigger("Attack2");
+                else if (_atkCount == 2) _animator.SetTrigger("Attack3");
+            }
+        }   
+
+        public void AttackMelee()
         {
             _canAttack = false;
             Collider2D[] colliderAttack = Physics2D.OverlapCircleAll(new Vector2(transform.position.x - _offset, transform.position.y), _attackRange, LayerMask.GetMask("Champion"));
-            if (_enemyType == EnemyType.Melee || (_enemyType == EnemyType.Ranged && _atkCount == 0 && !_isAttack1Ranged) || (_enemyType == EnemyType.Ranged && _atkCount == 1 && !_isAttack2Ranged) || (_enemyType == EnemyType.Ranged && _atkCount == 2 && !_isAttack3Ranged))
+            foreach (Collider2D collider in colliderAttack.Where(i => i.gameObject != null))
             {
-                if (_atkCount == 0)
-                {
-                    _animator.SetTrigger("Attack1");
-                    yield return new WaitForSeconds(0.5f);
-                    foreach (Collider2D collider in colliderAttack)
-                    {
-
-                        collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(_damage);
-                        /*Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);*/
-
-                        break; //chaque ennemi attaque 1 seul champion
-                    }
-                    _atkCount++;
-                }
-                else if (_atkCount == 1)
-                {
-                    _animator.SetTrigger("Attack2");
-                    yield return new WaitForSeconds(0.5f);
-                    foreach (Collider2D collider in colliderAttack)
-                    {
-
-                        collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(Mathf.Round(_damage * 1.15f));
-                        /*Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);*/
-
-                        break; //chaque ennemi attaque 1 seul champion
-                    }
-                    _atkCount++;
-                }
-                else if (_atkCount == 2)
-                {
-                    _animator.SetTrigger("Attack3");
-                    yield return new WaitForSeconds(0.5f);
-                    foreach (Collider2D collider in colliderAttack)
-                    {
-                        collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(Mathf.Round(_damage * 1.35f));
-                        /*Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);*/
-                        break; //chaque ennemi attaque 1 seul champion
-                    }
-                    _atkCount = 0;
-                }
-                yield return new WaitForSeconds(_attackSpeed);
-                _canAttack = true;
+                collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(_damage);
+                break; //chaque ennemi attaque 1 seul champion
             }
-            else if (_enemyType == EnemyType.Ranged)
-            {
-                if (_atkCount == 0 && _isAttack1Ranged)
-                {
-                    _animator.SetTrigger("Attack1");
-                    yield return new WaitForSeconds(0.5f);
-                    /*foreach (Collider2D collider in colliderAttack)
-                    {
-
-                        Projectile projectile = Instantiate(_projectilePrefab, _projectileSpawnPoint.transform.position, Quaternion.identity).GetComponent<Projectile>();
-                        projectile.Initialize(this);
-                        *//*Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);*//*
-                        break; //chaque ennemi attaque 1 seul champion
-                    }*/
-                    yield return new WaitForSeconds(_attackSpeed);
-                    _atkCount++;
-                   
-                }
-                if (_atkCount == 1 && _isAttack2Ranged)
-                {
-                    _animator.SetTrigger("Attack2");
-                    yield return new WaitForSeconds(0.5f);
-/*                    foreach (Collider2D collider in colliderAttack)
-                    {
-
-                        Projectile projectile = Instantiate(_projectilePrefab, _projectileSpawnPoint.transform.position, Quaternion.identity).GetComponent<Projectile>();
-                        projectile.Initialize(this);*/
-                        /*Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);*//*
-                        break; //chaque ennemi attaque 1 seul champion
-                    }*/
-                    yield return new WaitForSeconds(_attackSpeed);
-                    _atkCount++;
-                }
-                else if (_atkCount == 2 && _isAttack3Ranged)
-                {
-                    _animator.SetTrigger("Attack3");
-                    yield return new WaitForSeconds(0.5f);
-                    /*foreach (Collider2D collider in colliderAttack)
-                    {
-
-                        Projectile projectile = Instantiate(_projectilePrefab, _projectileSpawnPoint.transform.position, Quaternion.identity).GetComponent<Projectile>();
-                        projectile.Initialize(this);
-                        *//*Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);*//*
-                        break; //chaque ennemi attaque 1 seul champion
-                    }*/
-                    yield return new WaitForSeconds(_attackSpeed);
-                    _atkCount = 0;
-                }
-                _canAttack = true;
-            }
-            
-        }   
-
+            _atkCount++;
+            if (_atkCount > 2) _atkCount = 0;
+        }
         public void AttackRange() // je dois l'appeller dans l'animator
         {
+            _canAttack = false;
             Projectile projectile = Instantiate(_projectilePrefab, _projectileSpawnPoint.transform.position, Quaternion.identity).GetComponent<Projectile>();
             projectile.Initialize(this);
+            _atkCount++;
+            if (_atkCount > 2) _atkCount = 0;
         }
+        public void Coroutine()
+        {
+            StartCoroutine(AttackCooldown());
+        }
+
+        public IEnumerator AttackCooldown()
+        {
+            if (_canAttack) yield break;
+            yield return new WaitForSeconds(_attackSpeed);
+            _canAttack = true;
+        }
+
+
+
 
         private void SetStats(EnemyType state)
         {
@@ -317,8 +249,6 @@ namespace ProjectClicker.Enemies
             Gizmos.DrawWireSphere(new Vector2(transform.position.x - _offset, transform.position.y), _attackRange);
         }
     }
-
-
 
     public enum EnemyType
     {

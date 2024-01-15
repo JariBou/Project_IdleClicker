@@ -3,6 +3,7 @@ using System.Linq;
 using NaughtyAttributes;
 using ProjectClicker.Core;
 using ProjectClicker.Enemies;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 namespace ProjectClicker.Heroes
@@ -107,14 +108,14 @@ namespace ProjectClicker.Heroes
             {
                 if (_canAttack && colliderAttack.Length != 0 && _teamStats.CurrentHealth > _teamStats.MaxHealth / 2)
                 {
-                    StartCoroutine(Attack(colliderAttack));
+                    Attack(colliderAttack);
                 }
             }
             else
             {
                 if (_canAttack && colliderAttack.Length != 0)
                 {
-                    StartCoroutine(Attack(colliderAttack));
+                    Attack(colliderAttack);
                 }
             }
             
@@ -168,129 +169,79 @@ namespace ProjectClicker.Heroes
         }
 
 
-        private IEnumerator Attack(Collider2D[] colliderAttack)
+        private void Attack(Collider2D[] colliderAttack)
         {
+            _canAttack = false;
             foreach (Collider2D collider in colliderAttack.Where(i => i != null))
             {
 /*                if (collider == null) continue;*/
-                if (_rb.velocity.x < 0.01f)
+                if (_rb.velocity.x < 0.01f && !collider.CompareTag("EnemyBase"))
                 {
-                    if (!collider.CompareTag("EnemyBase"))
-                    {
-                        if (!collider.gameObject.GetComponent<EnemiesBehavior>().IsDead)
-                        {
-                            if (_role == ChampionRole.Archer)
-                            {
-                                if (_attckCount == 0)
-                                {
-                                    _canAttack = false;
-
-                                    _animator.SetTrigger("Attack1");
-                                    yield return new WaitForSeconds(0.1f);
-                                    Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
-                                    collider.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage);
-                                    yield return new WaitForSeconds(_baseAttackSpeed + 0.5f);
-                                    
-                                    if (_heroLevel >= 10) _attckCount++;
-                                    /*_attckCount++;*/
-                                    _canAttack = true;
-                                }
-                                else if (_attckCount == 1)
-                                {
-                                    _canAttack = false;
-                                    _animator.SetTrigger("Attack2");
-                                    yield return new WaitForSeconds(1.358f);
-                                    GameObject arrow = Instantiate(_arrowPrefab, _arrowSpawnPoint.position, Quaternion.identity);
-                                    arrow.GetComponent<Arrow>()._arrowType = (ArrowType)Random.Range(0, 2);
-                                    yield return new WaitForSeconds(_baseAttackSpeed + 0.5f);
-                                    if (_heroLevel >= 15) _attckCount++;
-                                    else _attckCount = 0;
-                                    /*_attckCount++;*/
-                                    _canAttack = true;
-                                }
-                                else if (_attckCount == 2)
-                                {
-                                    _canAttack = false;
-                                    _animator.SetTrigger("Attack3");
-                                    yield return new WaitForSeconds(1f);
-                                    GameObject arrow = Instantiate(_arrowPrefab, new Vector2(collider.transform.position.x, collider.transform.position.y - 2), Quaternion.identity);
-                                    arrow.GetComponent<Arrow>()._arrowType = ArrowType.Shower;
-                                    yield return new WaitForSeconds(_baseAttackSpeed + 0.5f);
-                                    _canAttack = true;
-                                    if (_heroLevel >= 25) _attckCount++;
-                                    else _attckCount = 0;
-                                    /*_attckCount++;*/
-                                }
-                                else 
-                                {
-                                    _canAttack = false;
-                                    _animator.SetTrigger("Attack2");
-                                    yield return new WaitForSeconds(1f);
-                                    GameObject arrow = Instantiate(_arrowPrefab, new Vector2(_arrowSpawnPoint.position.x + 5f, _arrowSpawnPoint.position.y), Quaternion.identity);
-                                    arrow.GetComponent<Arrow>()._arrowType = ArrowType.Beam;
-                                    yield return new WaitForSeconds(_baseAttackSpeed + 0.5f);
-                                    _canAttack = true;
-                                    _attckCount = 0;
-                                }
-
-                            }
-                            else
-                            {
-                                if (_attckCount <= 1)
-                                {
-                                    _canAttack = false;
-
-                                    _animator.SetTrigger("Attack1");
-                                    yield return new WaitForSeconds(0.1f);
-
-                                    Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
-                                    collider.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage);
-
-                                    yield return new WaitForSeconds(_baseAttackSpeed);
-                                    _canAttack = true;
-                                    if (_heroLevel >= 10) _attckCount++;
-                                    /*_attckCount++;*/
-                                }
-                                else if (_attckCount == 2)
-                                {
-                                    _canAttack = false;
-
-                                    _animator.SetTrigger("Attack2");
-                                    yield return new WaitForSeconds(1f);
-                                    collider.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage*2);
-                                    yield return new WaitForSeconds(_baseAttackSpeed);
-                                    _canAttack = true;
-                                    if (_heroLevel >= 25) _attckCount++;
-                                    else _attckCount = 0;
-                                    /*_attckCount++;*/
-                                }
-                                else
-                                {
-                                    _canAttack = false;
-                                    _animator.SetTrigger("Attack3");
-                                    yield return new WaitForSeconds(1f);
-                                    collider.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage*3);
-                                    yield return new WaitForSeconds(_baseAttackSpeed);
-                                    _canAttack = true;
-                                    _attckCount = 0;
-                                }
-                            }
-                        }
-                    }
-                    else if (colliderAttack.Length == 1)
-                    {
-                        _canAttack = false;
-                        _animator.SetTrigger("Attack1");
-                        yield return new WaitForSeconds(0.1f);
-                        Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
-                        collider.GetComponent<EnemyBase>()?.TakeDamage(Damage);
-                        yield return new WaitForSeconds(_baseAttackSpeed);
-                        _canAttack = true;
-                    }
-
+                    if (_attckCount == 0) _animator.SetTrigger("Attack1");
+                    else if (_attckCount == 1 || _attckCount == 3) _animator.SetTrigger("Attack2");
+                    else if (_attckCount == 2) _animator.SetTrigger("Attack3");
                 }
-
+                else
+                {
+                    _animator.SetTrigger("Attack1");
+                }
             }
+        }
+        public void AttackMelee()
+        {
+            _canAttack = false;
+            foreach (Collider2D collider in colliderAttack.Where(i => i != null))
+            {
+                Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
+                if (collider.CompareTag("EnemyBase"))
+                {
+                    if (_attckCount > 0) collider.GetComponent<EnemyBase>()?.TakeDamage(Damage * _attckCount);
+                    else collider.GetComponent<EnemyBase>()?.TakeDamage(Damage);
+                    _attckCount = 0;
+                    return;
+                }
+                else
+                {
+                    collider.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage);
+                    break;
+                }
+            }
+            /*if ((_attckCount == 0 && _heroLevel >= 12) || (_attckCount == 1 && _heroLevel >= 25))*/ _attckCount++;
+            if (_attckCount > 2  || (_attckCount > 1 && /*_heroLevel >= 12 &&*/ _heroLevel < 25)) _attckCount = 0;
+        }
+
+        public void AttackRange() // je dois l'appeller dans l'animator
+        {
+            _canAttack = false;
+            Arrow projectile;
+            if (_attckCount == 1)
+            {
+                projectile = Instantiate(_arrowPrefab, _arrowSpawnPoint.transform.position, Quaternion.identity).GetComponent<Arrow>();
+                projectile._arrowType = (ArrowType)Random.Range(0, 2);
+            }
+            else if (_attckCount == 2)
+            {
+                projectile = Instantiate(_arrowPrefab, new Vector2(colliderAttack[0].transform.position.x, colliderAttack[0].transform.position.y -1), Quaternion.identity).GetComponent<Arrow>();
+                projectile._arrowType = (ArrowType)3;
+            }
+            else if (_attckCount == 3)
+            {
+                projectile = Instantiate(_arrowPrefab, new Vector2(_arrowSpawnPoint.transform.position.x + 5, _arrowPrefab.transform.position.y), Quaternion.identity).GetComponent<Arrow>();
+                projectile._arrowType = (ArrowType)4;
+            }
+            /*if ((_attckCount == 1 && _heroLevel >= 12 && _heroLevel < 18) || (_attckCount == 2 && _heroLevel >= 18  && _heroLevel > 25) || (_attckCount == 3 && _heroLevel >= 25))*/ _attckCount++;
+            if (_attckCount > 3 || (_attckCount > 1 && _heroLevel < 18) || (_attckCount > 2 && _heroLevel < 25)) _attckCount = 0;
+        }
+
+        public void Coroutine()
+        {
+            StartCoroutine(AttackCooldown());
+        }
+        public IEnumerator AttackCooldown()
+        {
+/*            if (_canAttack) yield break;*/
+            yield return new WaitForSeconds(_baseAttackSpeed);
+            _canAttack = true;
         }
 
         private IEnumerator Heal()

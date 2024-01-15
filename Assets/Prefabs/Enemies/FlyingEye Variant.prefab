@@ -104,6 +104,10 @@ PrefabInstance:
       value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 3705128636563681852, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
+      propertyPath: _isFlying
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3705128636563681852, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
       propertyPath: _enemyType
       value: 1
       objectReference: {fileID: 0}

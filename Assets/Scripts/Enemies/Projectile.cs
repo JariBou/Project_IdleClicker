@@ -57,7 +57,6 @@ namespace ProjectClicker
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-
             if (_isEnemyProjectile)
             {
                 if (other.gameObject.transform.parent.gameObject.CompareTag("Team"))
