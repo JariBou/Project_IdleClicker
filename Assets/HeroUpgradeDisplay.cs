@@ -34,12 +34,15 @@ namespace ProjectClicker
 
         [Header("Buy Upgrade")]
         private GoldManager _goldManager;
+        private PrestigeManager _prestigeManager;
         private String _championRole;
+        [SerializeField] private UpgradeResource _upgradeResource;
 
 
-        public void Initialize(int index, string championRole)
+        public void Initialize(int index, string championRole, UpgradeResource upgradeResource)
         {
             _championRole = championRole;
+            _upgradeResource = upgradeResource;
             Debug.Log("Initializing the " + championRole + " panel");
             _heroIndex = GetHeroIndex(championRole);
             if (_heroIndex == -1)
@@ -56,17 +59,29 @@ namespace ProjectClicker
                 _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
             }
             
-            _damageAmount.text = _goldManager.NumberToString((decimal)_championStats.Damage);
-            _healthAmount.text = _goldManager.NumberToString((decimal)_championStats.MaxHealth);
+            _damageAmount.text = Utils.NumberToString((decimal)_championStats.Damage);
+            _healthAmount.text = Utils.NumberToString((decimal)_championStats.MaxHealth);
             
-            _armorOrHealAmount.text = championRole == "Healer" ? _goldManager.NumberToString((decimal)_championStats.PowerHeal) 
-                : _goldManager.NumberToString((decimal)_championStats.Armor);
-            
-            _heroLevel.text = "Lvl " + _goldManager.NumberToString(_championStats.HeroLevel); ;
-            _upgradeCostInt = 1240;
-            _upgradeCost.text = _goldManager.NumberToString(_upgradeCostInt);
+            _armorOrHealAmount.text = championRole == "Healer" ? Utils.NumberToString((decimal)_championStats.PowerHeal) 
+                : Utils.NumberToString((decimal)_championStats.Armor);
 
-            _championStats.LinkedDisplay = this;
+            switch (_upgradeResource)
+            {
+                case UpgradeResource.GoldUpgrade:
+                    _heroLevel.text = "Lvl " + Utils.NumberToString(_championStats.HeroLevel); ;
+                    _upgradeCostInt = 1240;
+                    break;
+                case UpgradeResource.PrestigeUpgrade:
+                    _heroLevel.text = "Lvl " + Utils.NumberToString(_championStats.PrestigeLevel); ;
+                    _upgradeCostInt = 4;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
+            _upgradeCost.text = Utils.NumberToString(_upgradeCostInt);
+
+            _championStats.LinkedDisplays.Add(this);
 
         }
 
@@ -82,27 +97,41 @@ namespace ProjectClicker
 
         public void UpdateUpgradePanel()
         {
-            _damageAmount.text = _goldManager.NumberToString((decimal)_championStats.Damage);
-            _healthAmount.text = _goldManager.NumberToString((decimal)_championStats.MaxHealth);
-            
-            _armorOrHealAmount.text = _championRole == "Healer" ? _goldManager.NumberToString((decimal)_championStats.PowerHeal) 
-                : _goldManager.NumberToString((decimal)_championStats.Armor);
-            
-            _heroLevel.text = "Lvl " + _championStats.HeroLevel;
-            _upgradeCost.text = _goldManager.NumberToString(_upgradeCostInt);
+            _damageAmount.text = Utils.NumberToString((decimal)_championStats.Damage);
+            _healthAmount.text = Utils.NumberToString((decimal)_championStats.MaxHealth);
 
+            _armorOrHealAmount.text = _championRole == "Healer"
+                ? Utils.NumberToString((decimal)_championStats.PowerHeal)
+                : Utils.NumberToString((decimal)_championStats.Armor);
+
+            _heroLevel.text = "Lvl " + _championStats.PrestigeLevel;
+            _upgradeCost.text = Utils.NumberToString(_upgradeCostInt);
         }
 
         public void BuyUpgrade()
         {
-            if (_goldManager == null) _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
-            if (_goldManager.Gold < (ulong)_upgradeCostInt) return;
+            if (_upgradeResource == UpgradeResource.GoldUpgrade)
+            {
+                if (_goldManager == null) _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
+                if (_goldManager.Gold < (ulong)_upgradeCostInt) return;
+                
+                _goldManager.RemoveGold((ulong)_upgradeCostInt);
+                if (_championStats.HeroLevel >= 1) _upgradeCostInt += 1240 * _championStats.HeroLevel * 2;
+                else _upgradeCostInt += 1240;
+                _championStats.Upgrade();
+                UpdateUpgradePanel();
+            }
+            else
+            {
+                if (_prestigeManager == null) _prestigeManager = GameObject.FindWithTag("Managers").GetComponent<PrestigeManager>();
+                if (_prestigeManager.Medals < (uint)_upgradeCostInt) return;
+                
+                _prestigeManager.RemoveMedals(_upgradeCostInt);
+                _upgradeCostInt = 4 + (int)(2.5f * (_championStats.PrestigeLevel * (_championStats.PrestigeLevel + 1)) / 2);
+                _championStats.PrestigeUpgrade();
+                UpdateUpgradePanel();
+            }
             
-            _goldManager.RemoveGold((ulong)_upgradeCostInt);
-            if (_championStats.HeroLevel >= 1) _upgradeCostInt += 1240 * _championStats.HeroLevel * 2;
-            else _upgradeCostInt += 1240;
-            _championStats.Upgrade();
-            UpdateUpgradePanel();
         }
 
         private int GetHeroIndex(string championRole)

@@ -33,7 +33,7 @@ namespace ProjectClicker
         {
             _slider.maxValue = _teamStats.GetMaxTeamHealth();
             _slider.value = _teamStats.CurrentHealth; /*/ _TeamStats.GetMaxTeamHealth();*/
-            _textMeshPro.text = _goldManager.NumberToString((decimal)_teamStats.CurrentHealth) + "/" + _goldManager.NumberToString((decimal)_teamStats.GetMaxTeamHealth());
+            _textMeshPro.text = Utils.NumberToString((decimal)_teamStats.CurrentHealth) + "/" + Utils.NumberToString((decimal)_teamStats.GetMaxTeamHealth());
         }
     }
 }

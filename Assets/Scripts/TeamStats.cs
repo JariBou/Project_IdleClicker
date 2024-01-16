@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ProjectClicker.Core;
 using ProjectClicker.Heroes;
 using UnityEngine;
@@ -29,6 +30,8 @@ namespace ProjectClicker
 
         public float CurrentHealth => _currentHealth;
         public float MaxHealth => _maxHealth;
+
+        public List<HeroesBehavior> Heroes => _heroes;
 
 
         private void Awake()
@@ -68,12 +71,15 @@ namespace ProjectClicker
         {
             float tempMaxHealth = 0;
             float tempArmor = 0;
-            foreach (HeroesBehavior hero in _heroes)
+            foreach (HeroesBehavior hero in Heroes)
             {
                 tempMaxHealth += hero.BaseMaxHealth;
                 tempArmor += hero.BaseArmor;
                 hero.ResetLevel();
-                hero.LinkedDisplay.UpdateUpgradePanel();
+                foreach (HeroUpgradeDisplay display in hero.LinkedDisplays)
+                {
+                    display.UpdateUpgradePanel();
+                }
             }
 
             _maxHealth = tempMaxHealth;
@@ -98,7 +104,7 @@ namespace ProjectClicker
         public float GetMaxTeamHealth()
         {
             float tempMaxHealth = 0;
-            foreach (HeroesBehavior hero in _heroes)
+            foreach (HeroesBehavior hero in Heroes)
             {
                 tempMaxHealth += hero.MaxHealth;
             }
@@ -123,7 +129,7 @@ namespace ProjectClicker
         public float GetTeamArmor()
         {
             float tempArmor = 0;
-            foreach (HeroesBehavior hero in _heroes)
+            foreach (HeroesBehavior hero in Heroes)
             {
                 tempArmor += hero.Armor;
             }
@@ -161,7 +167,26 @@ namespace ProjectClicker
             TeamHealthUpdate?.Invoke();
         }
 
-       
+        public HeroesBehavior GetHeroByRole(ChampionRole role)
+        {
+            foreach (HeroesBehavior hero in _heroes.Where(hero => hero.GetRole() == role))
+            {
+                return hero;
+            }
 
+            throw new Exception();
+        }
+
+
+        public float GetAverageTeamLevel()
+        {
+            int levels = 0;
+            foreach (HeroesBehavior hero in Heroes)
+            {
+                levels += hero.HeroLevel;
+            }
+
+            return (float)levels / Heroes.Count;
+        }
     }
 }
