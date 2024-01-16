@@ -6,6 +6,7 @@ namespace ProjectClicker
     public class TabsManager : MonoBehaviour
     {
         [SerializeField] private List<GameObject> _tabs;
+        [SerializeField] private List<GameObject> _counters;
 
         private void Awake()
         {
@@ -14,11 +15,13 @@ namespace ProjectClicker
 
         public void SetActiveTab(int index)
         {
-            foreach (GameObject tab in _tabs)
+            for (int i = 0; i < _tabs.Count; i++)
             {
-                tab.SetActive(false);
+                _tabs[i].SetActive(false);
+                _counters[i].SetActive(false);
             }
             _tabs[index].SetActive(true);
+            _counters[index].SetActive(true);
         }
     }
 }

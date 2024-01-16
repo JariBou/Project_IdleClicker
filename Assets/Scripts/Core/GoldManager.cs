@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using NaughtyAttributes;
 using UnityEngine;
@@ -8,6 +9,8 @@ namespace ProjectClicker.Core
     {
         public ulong Gold { get; private set; } = 0;
         
+        public static GoldManager Instance { get; private set; }
+        
         #if UNITY_EDITOR
         [SerializeField] private ulong _goldToAdd;
         [Button]
@@ -16,6 +19,11 @@ namespace ProjectClicker.Core
             AddGold(_goldToAdd);
         }
         #endif
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
 
         public void AddGold(int amount)
@@ -63,20 +71,11 @@ namespace ProjectClicker.Core
             return goldMoney.ToString("F2") + suffixes[suffixIndex];
 
         }
-        public string NumberToString(decimal goldMoney)
+       
+
+        public void SetGold(ulong saveDataGold)
         {
-            if (goldMoney <= 1000) return goldMoney.ToString(CultureInfo.InvariantCulture);
-            string[] suffixes = { "", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s" };
-
-            int suffixIndex = 0;
-            while (goldMoney >= 1000 && suffixIndex < suffixes.Length - 1)
-            {
-                goldMoney /= 1000;
-                suffixIndex++;
-            }
-            string formattedMoney = goldMoney.ToString("F2");
-
-            return formattedMoney + suffixes[suffixIndex];
+            Gold = saveDataGold;
         }
     }
 }

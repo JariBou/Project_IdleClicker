@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using ProjectClicker.Core;
 using ProjectClicker.Enemies;
 using UnityEngine;
@@ -12,9 +13,11 @@ namespace ProjectClicker.Heroes
         [SerializeField] private UpgradeInfo _upgradeInfo; 
         [SerializeField] private int _heroLevel; 
         public int HeroLevel => _heroLevel;
+        [SerializeField] private int _prestigeLevel = 0; 
+        public int PrestigeLevel => _prestigeLevel;
         private LevelsManager _levelsManager;
 
-        public HeroUpgradeDisplay LinkedDisplay { get; set; }
+        public List<HeroUpgradeDisplay> LinkedDisplays { get; set; }
         
         [Header("Team Manager")]
         [SerializeField]
@@ -49,14 +52,15 @@ namespace ProjectClicker.Heroes
  
 
 
-        public float MaxHealth => BaseMaxHealth + _heroLevel * _upgradeInfo.HealthPerLevel;
-        public float Damage => _baseDamage + _heroLevel * _upgradeInfo.DmgPerLevel;
-        public float AttackSpeed => _baseAttackSpeed + _heroLevel * _upgradeInfo.AtkSpeedPerLevel;
-        public float PowerHeal => _baseHealStrength + _heroLevel * _upgradeInfo.HealStrengthPerLevel;
-        public float Armor => BaseArmor + _heroLevel * _upgradeInfo.ArmorPerLevel;
+        public float MaxHealth => BaseMaxHealth + (_heroLevel + _prestigeLevel) * _upgradeInfo.HealthPerLevel;
+        public float Damage => _baseDamage + (_heroLevel + _prestigeLevel) * _upgradeInfo.DmgPerLevel;
+        public float AttackSpeed => _baseAttackSpeed + (_heroLevel + _prestigeLevel) * _upgradeInfo.AtkSpeedPerLevel;
+        public float PowerHeal => _baseHealStrength + (_heroLevel + _prestigeLevel) * _upgradeInfo.HealStrengthPerLevel;
+        public float Armor => BaseArmor + (_heroLevel + _prestigeLevel) * _upgradeInfo.ArmorPerLevel;
 
         public float BaseMaxHealth => _baseMaxHealth;
         public float BaseArmor => _baseArmor;
+
 
         private Animator _animator;
         private Rigidbody2D _rb;
@@ -67,6 +71,7 @@ namespace ProjectClicker.Heroes
         {
             _animator = GetComponent<Animator>();
             _rb = GetComponent<Rigidbody2D>();
+            LinkedDisplays = new List<HeroUpgradeDisplay>();
             /*Debug.Log(gameObject.name);*/
             _levelsManager = GameObject.FindWithTag("Managers").GetComponent<LevelsManager>();  
             LevelsManager.OnChangeLevel += OnChangingLevel;
@@ -360,6 +365,16 @@ namespace ProjectClicker.Heroes
         public void ResetLevel()
         {
             _heroLevel = 0;
+        }
+
+        public void SetLevel(int championLevel)
+        {
+            _heroLevel = championLevel;
+        }
+
+        public void PrestigeUpgrade()
+        {
+            _prestigeLevel++;
         }
     }
 }

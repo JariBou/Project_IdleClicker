@@ -18,7 +18,9 @@ namespace ProjectClicker.Core
 
         [Header("Champions Team")]
         [SerializeField] private GameObject _championTeam;
-        [SerializeField] private List<Vector3> _championTeamSpawn = new List<Vector3>();
+        [SerializeField] private List<Vector3> _championTeamSpawn = new();
+        
+        public static LevelsManager Instance { get; private set; }
 
 
         public event Action ResetTeamHealth;
@@ -32,7 +34,7 @@ namespace ProjectClicker.Core
                 if (_championTeam.transform.GetChild(i).gameObject.activeSelf) _championTeamSpawn.Add(_championTeam.transform.GetChild(i).transform.position);
             }
 
-
+            Instance = this;
         }
 
         [Button]
@@ -104,5 +106,11 @@ namespace ProjectClicker.Core
         }*/
 
 
+        public void SetLevel(int currLevel)
+        {
+            _currentLevel = currLevel;
+            ResetTeamHealth?.Invoke();
+            OnChangeLevel?.Invoke();
+        }
     }
 }

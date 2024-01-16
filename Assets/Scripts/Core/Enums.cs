@@ -9,7 +9,6 @@ namespace ProjectClicker.Core
 
     }
     
-    
     public enum ArrowType
     {
         Normal = 0,
@@ -17,5 +16,11 @@ namespace ProjectClicker.Core
         Poison = 2,
         Shower = 3,
         Beam = 4
+    }
+
+    public enum UpgradeResource
+    {
+        GoldUpgrade = 0,
+        PrestigeUpgrade = 1
     }
 }

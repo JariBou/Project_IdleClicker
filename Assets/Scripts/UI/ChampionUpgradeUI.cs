@@ -1,3 +1,4 @@
+using ProjectClicker.Core;
 using UnityEngine;
 
 namespace ProjectClicker.UI
@@ -8,6 +9,7 @@ namespace ProjectClicker.UI
         [SerializeField] private GameObject _upgradePanelPrefab;
         [SerializeField] private GameObject _upgradePanelPrefabHealer;
         [SerializeField] private GameObject _team;
+        [SerializeField] private UpgradeResource _upgradeResource;
 
         // Start is called before the first frame update
         private void Start()
@@ -32,7 +34,7 @@ namespace ProjectClicker.UI
             if (championRole == "Healer") panel = Instantiate(_upgradePanelPrefabHealer, Vector3.zero, Quaternion.identity);         
             else panel = Instantiate(_upgradePanelPrefab, Vector3.zero, Quaternion.identity);
             panel.transform.SetParent(transform);
-            panel.GetComponent<HeroUpgradeDisplay>().Initialize(index, championRole);
+            panel.GetComponent<HeroUpgradeDisplay>().Initialize(index, championRole, _upgradeResource);
         }
 
     }
