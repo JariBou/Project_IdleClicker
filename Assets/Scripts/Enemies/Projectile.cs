@@ -59,14 +59,14 @@ namespace ProjectClicker
         {
             if (_isEnemyProjectile)
             {
-                if (other.gameObject.transform.parent.gameObject.CompareTag("Team"))
+                if (other.gameObject.transform.parent.gameObject.CompareTag("Team") && other != null)
                 {
                     _teamStats = other.transform.parent.gameObject.GetComponent<TeamStats>();
                     _teamStats.TakeDamage(_enemiesBehavior.Damage);
                     _hasHit = true;
                     _rb.velocity = Vector2.zero;
                     _animator.SetTrigger("Hit");
-                    Destroy(gameObject, 1f);
+                    Destroy(gameObject, 0.5f);
                 }
             }
             else
@@ -78,7 +78,7 @@ namespace ProjectClicker
                     _hasHit = true;
                     _rb.velocity = Vector2.zero;
                     _animator.SetTrigger("Hit");
-                    Destroy(gameObject, 1f);
+                    Destroy(gameObject, 0.5f);
                 }
             }
         }

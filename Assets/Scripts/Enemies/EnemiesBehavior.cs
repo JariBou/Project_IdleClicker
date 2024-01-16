@@ -139,7 +139,6 @@ namespace ProjectClicker.Enemies
                 yield return new WaitForSeconds(1f);
                 _enemyBase.RemoveEnemy(gameObject);
                 Destroy(gameObject);
-
             }
 
         }
@@ -175,19 +174,20 @@ namespace ProjectClicker.Enemies
             _atkCount++;
             if (_atkCount > 2) _atkCount = 0;
         }
+        Coroutine _coroutine;
         public void Coroutine()
         {
-            StartCoroutine(AttackCooldown());
+            if (_canAttack || _coroutine != null) return;
+            _coroutine = StartCoroutine(AttackCooldown());
         }
 
         public IEnumerator AttackCooldown()
         {
-            if (_canAttack) yield break;
+/*            if (_canAttack) yield break;*/
             yield return new WaitForSeconds(_attackSpeed);
             _canAttack = true;
+            _coroutine = null;
         }
-
-
 
 
         private void SetStats(EnemyType state)

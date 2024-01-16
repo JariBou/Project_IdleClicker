@@ -49,7 +49,7 @@ namespace ProjectClicker.Heroes
         [SerializeField] private Transform _arrowSpawnPoint;
         [ShowIf("_role", ChampionRole.Archer)]
         [SerializeField] private GameObject _arrowPrefab;
-        private int _attckCount = 0;
+        [SerializeField] private int _attckCount = 0;
 
  
 
@@ -171,10 +171,14 @@ namespace ProjectClicker.Heroes
 
         private void Attack(Collider2D[] colliderAttack)
         {
+            Debug.Log("J'attaque");
             _canAttack = false;
             foreach (Collider2D collider in colliderAttack.Where(i => i != null))
             {
-/*                if (collider == null) continue;*/
+                /*                if (collider == null) continue;*/
+/*                _animator.ResetTrigger("Attack1");
+                _animator.ResetTrigger("Attack2");
+                _animator.ResetTrigger("Attack3");*/
                 if (_rb.velocity.x < 0.01f && !collider.CompareTag("EnemyBase"))
                 {
                     if (_attckCount == 0) _animator.SetTrigger("Attack1");
@@ -184,7 +188,9 @@ namespace ProjectClicker.Heroes
                 else
                 {
                     _animator.SetTrigger("Attack1");
+
                 }
+                break;
             }
         }
         public void AttackMelee()
@@ -207,7 +213,10 @@ namespace ProjectClicker.Heroes
                 }
             }
             /*if ((_attckCount == 0 && _heroLevel >= 12) || (_attckCount == 1 && _heroLevel >= 25))*/ _attckCount++;
-            if (_attckCount > 2  || (_attckCount > 1 && /*_heroLevel >= 12 &&*/ _heroLevel < 25)) _attckCount = 0;
+            if ((_attckCount > 0 && _heroLevel < 12) || (_attckCount > 1 && /*_heroLevel >= 12 &&*/ _heroLevel < 25) || _attckCount > 2) _attckCount = 0;
+/*            _animator.ResetTrigger("Attack1");
+            _animator.ResetTrigger("Attack2");
+            _animator.ResetTrigger("Attack3");*/
         }
 
         public void AttackRange() // je dois l'appeller dans l'animator
@@ -221,27 +230,34 @@ namespace ProjectClicker.Heroes
             }
             else if (_attckCount == 2)
             {
+                if (colliderAttack.Length == 0) return;
                 projectile = Instantiate(_arrowPrefab, new Vector2(colliderAttack[0].transform.position.x, colliderAttack[0].transform.position.y -1), Quaternion.identity).GetComponent<Arrow>();
                 projectile._arrowType = (ArrowType)3;
             }
             else if (_attckCount == 3)
             {
-                projectile = Instantiate(_arrowPrefab, new Vector2(_arrowSpawnPoint.transform.position.x + 5, _arrowPrefab.transform.position.y), Quaternion.identity).GetComponent<Arrow>();
+                projectile = Instantiate(_arrowPrefab, new Vector2(_arrowSpawnPoint.transform.position.x + 4.5f, _arrowPrefab.transform.position.y - 2.2f), Quaternion.identity).GetComponent<Arrow>();
                 projectile._arrowType = (ArrowType)4;
             }
             /*if ((_attckCount == 1 && _heroLevel >= 12 && _heroLevel < 18) || (_attckCount == 2 && _heroLevel >= 18  && _heroLevel > 25) || (_attckCount == 3 && _heroLevel >= 25))*/ _attckCount++;
-            if (_attckCount > 3 || (_attckCount > 1 && _heroLevel < 18) || (_attckCount > 2 && _heroLevel < 25)) _attckCount = 0;
+            if ((_attckCount > 0 && _heroLevel < 12) || (_attckCount > 1 && _heroLevel < 18) || (_attckCount > 2 && _heroLevel < 25) || _attckCount > 3 ) _attckCount = 0;
+/*            _animator.ResetTrigger("Attack1");
+            _animator.ResetTrigger("Attack2");
+            _animator.ResetTrigger("Attack3");*/
         }
-
+        Coroutine _coroutine;
         public void Coroutine()
         {
-            StartCoroutine(AttackCooldown());
+
+            if (_canAttack || _coroutine != null) return;
+            _coroutine = StartCoroutine(AttackCooldown());
         }
-        public IEnumerator AttackCooldown()
+        private IEnumerator AttackCooldown()
         {
 /*            if (_canAttack) yield break;*/
             yield return new WaitForSeconds(_baseAttackSpeed);
             _canAttack = true;
+            _coroutine = null;
         }
 
         private IEnumerator Heal()
