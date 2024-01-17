@@ -19,6 +19,11 @@ namespace ProjectClicker.Core
         [Header("Champions Team")]
         [SerializeField] private GameObject _championTeam;
         [SerializeField] private List<Vector3> _championTeamSpawn = new();
+
+        [Header("Changing Level Animation")]
+        [SerializeField] private Animator _animatorNextLevel;
+        [SerializeField] private Animator _animatorPreviousLevel;
+
         
         public static LevelsManager Instance { get; private set; }
 
@@ -41,6 +46,7 @@ namespace ProjectClicker.Core
         public void NextLevel()
         {
             _currentLevel++;
+            _animatorNextLevel.SetTrigger("ChangingLevel");
             if (_currentLevel >= _backgroundLevels.Length)
             {
                 _currentLevel = 0;
@@ -54,6 +60,7 @@ namespace ProjectClicker.Core
         [Button]
         public void PreviousLevel()
         {
+            if (_currentLevel > 0 ) _animatorPreviousLevel.SetTrigger("ChangingLevel");
             _currentLevel--;
             if (_currentLevel < 0)
             {

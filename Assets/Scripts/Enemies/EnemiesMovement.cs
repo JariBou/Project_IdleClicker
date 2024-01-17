@@ -19,7 +19,7 @@ namespace ProjectClicker.Enemies
         // Update is called once per frame
         private void Update()
         {
-            Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x - _offset, transform.position.y), new Vector2(2, 6), 0, LayerMask.GetMask("Champion"));
+            Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x - _offset, transform.position.y), new Vector2(2, 8), 0, LayerMask.GetMask("Champion"));
             if (colliderMovement.Length == 0)
             {
                 Move();
@@ -45,7 +45,7 @@ namespace ProjectClicker.Enemies
         private void OnDrawGizmos()
         {
             Gizmos.color = _canMove ? Color.green : Color.red;
-            Gizmos.DrawWireCube(new Vector2(transform.position.x - _offset, transform.position.y), new Vector2(2, 6));
+            Gizmos.DrawWireCube(new Vector2(transform.position.x - _offset, transform.position.y), new Vector2(2, 8));
         }
         
     }

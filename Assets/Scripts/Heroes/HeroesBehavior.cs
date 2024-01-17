@@ -103,7 +103,7 @@ namespace ProjectClicker.Heroes
             {
                 colliderAttack =
                     Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y),
-                        new Vector2(2, 6), 0, LayerMask.GetMask("Enemy"));
+                        new Vector2(2, 10), 0, LayerMask.GetMask("Enemy"));
             }
 
 
@@ -291,7 +291,7 @@ namespace ProjectClicker.Heroes
             }
             else
             {
-                Gizmos.DrawWireCube(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2, 6));
+                Gizmos.DrawWireCube(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2, 10));
             }
                 
         }

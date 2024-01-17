@@ -57,10 +57,10 @@ namespace ProjectClicker
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (other == null) return;
             if (_isEnemyProjectile)
             {
-                if (other.gameObject.transform.parent.gameObject.CompareTag("Team") && other != null)
-
+                if (other.gameObject.GetComponent<HeroesBehavior>() && other.gameObject.transform.parent.gameObject.CompareTag("Team"))
                 {
                     _teamStats = other.transform.parent.gameObject.GetComponent<TeamStats>();
                     _teamStats.TakeDamage(_enemiesBehavior.Damage);
@@ -70,9 +70,9 @@ namespace ProjectClicker
                     Destroy(gameObject, 0.5f);
                 }
             }
-            else
+            else if (!_isEnemyProjectile)
             {
-                if (other.CompareTag("Enemy"))
+                if (other.gameObject.GetComponent<EnemiesBehavior>() && other.CompareTag("Enemy"))
                 {
                     _enemiesBehavior = other.GetComponent<EnemiesBehavior>();
                     _enemiesBehavior.TakeDamage(_heroesBehavior.Damage);
