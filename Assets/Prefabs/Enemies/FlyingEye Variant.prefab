@@ -132,6 +132,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3943600688437565389, guid: 6771e5887aff6e647873c7dc04217859, type: 3}
     - target: {fileID: 3705128636563681852, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
+      propertyPath: _goldAnimationPrefab
+      value: 
+      objectReference: {fileID: 710354471480742334, guid: 8b724a009b0e50a4382615e1bd9c4273, type: 3}
+    - target: {fileID: 3705128636563681852, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
       propertyPath: _projectileSpawnPoint
       value: 
       objectReference: {fileID: 9194251159205536947}

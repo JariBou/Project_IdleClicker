@@ -60,6 +60,7 @@ namespace ProjectClicker
             if (_isEnemyProjectile)
             {
                 if (other.gameObject.transform.parent.gameObject.CompareTag("Team") && other != null)
+
                 {
                     _teamStats = other.transform.parent.gameObject.GetComponent<TeamStats>();
                     _teamStats.TakeDamage(_enemiesBehavior.Damage);

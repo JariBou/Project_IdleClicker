@@ -54,6 +54,9 @@ namespace ProjectClicker.Enemies
         [SerializeField] private GameObject _projectilePrefab;
         [SerializeField] private bool _isFlying;
 
+        [Header("Gold Animation")]
+        [SerializeField] private GameObject _goldAnimationPrefab;  
+
 
         // Start is called before the first frame update
         private void Start()
@@ -110,6 +113,7 @@ namespace ProjectClicker.Enemies
         private IEnumerator Die()
         {
             _healthBarGeeenBar.SetActive(false);
+            StartCoroutine(DieAnimation());
             if (_enemyType == EnemyType.Ranged && _isFlying)
             {
                 _animator.SetTrigger("Fall");
@@ -139,6 +143,17 @@ namespace ProjectClicker.Enemies
                 yield return new WaitForSeconds(1f);
                 _enemyBase.RemoveEnemy(gameObject);
                 Destroy(gameObject);
+            }
+
+        }
+
+        public IEnumerator DieAnimation()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                GameObject goldAnimation = Instantiate(_goldAnimationPrefab, new Vector2(transform.position.x, transform.position.y + 2), Quaternion.identity);
+                goldAnimation.GetComponent<GoldAnim>().Initialize((decimal)(_gold * _level)/5);
+                yield return new WaitForSeconds(0.1f);
             }
 
         }
