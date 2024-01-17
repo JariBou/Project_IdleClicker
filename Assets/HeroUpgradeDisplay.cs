@@ -59,20 +59,13 @@ namespace ProjectClicker
                 _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
             }
             
-            _damageAmount.text = Utils.NumberToString((decimal)_championStats.Damage);
-            _healthAmount.text = Utils.NumberToString((decimal)_championStats.MaxHealth);
-            
-            _armorOrHealAmount.text = championRole == "Healer" ? Utils.NumberToString((decimal)_championStats.PowerHeal) 
-                : Utils.NumberToString((decimal)_championStats.Armor);
-
+            UpdateUpgradePanel();
             switch (_upgradeResource)
             {
                 case UpgradeResource.GoldUpgrade:
-                    _heroLevel.text = "Lvl " + Utils.NumberToString(_championStats.HeroLevel); ;
                     _upgradeCostInt = 1240;
                     break;
                 case UpgradeResource.PrestigeUpgrade:
-                    _heroLevel.text = "Lvl " + Utils.NumberToString(_championStats.PrestigeLevel); ;
                     _upgradeCostInt = 4;
                     break;
                 default:
@@ -82,7 +75,6 @@ namespace ProjectClicker
             _upgradeCost.text = Utils.NumberToString(_upgradeCostInt);
 
             _championStats.LinkedDisplays.Add(this);
-
         }
 
         private void OnEnable()
@@ -97,14 +89,34 @@ namespace ProjectClicker
 
         public void UpdateUpgradePanel()
         {
-            _damageAmount.text = Utils.NumberToString((decimal)_championStats.Damage);
-            _healthAmount.text = Utils.NumberToString((decimal)_championStats.MaxHealth);
+            HeroesBehavior hero = _championStats;
+            switch (_upgradeResource)
+            {
+                case UpgradeResource.GoldUpgrade:
+                    _damageAmount.text = Utils.NumberToString((decimal)(hero.HeroLevel *
+                        hero.Info.DmgPerLevel + hero.BaseDamage));
+                    _healthAmount.text = Utils.NumberToString((decimal)(hero.HeroLevel *
+                        hero.Info.HealthPerLevel + hero.BaseMaxHealth));
 
-            _armorOrHealAmount.text = _championRole == "Healer"
-                ? Utils.NumberToString((decimal)_championStats.PowerHeal)
-                : Utils.NumberToString((decimal)_championStats.Armor);
+                    _armorOrHealAmount.text = _championRole == "Healer"
+                        ? Utils.NumberToString((decimal)(hero.HeroLevel * hero.Info.HealStrengthPerLevel + hero.BaseHealStrength))
+                        : Utils.NumberToString((decimal)(hero.HeroLevel * hero.Info.ArmorPerLevel + hero.BaseArmor));
+                    _heroLevel.text = "Lvl " + hero.HeroLevel;
+                    break;
+                case UpgradeResource.PrestigeUpgrade:
+                    _damageAmount.text = Utils.NumberToString((decimal)(hero.PrestigeLevel *
+                        hero.Info.DmgPerLevel + hero.BaseDamage));
+                    _healthAmount.text = Utils.NumberToString((decimal)(hero.PrestigeLevel *
+                        hero.Info.HealthPerLevel + hero.BaseMaxHealth));
 
-            _heroLevel.text = "Lvl " + _championStats.PrestigeLevel;
+                    _armorOrHealAmount.text = _championRole == "Healer"
+                        ? Utils.NumberToString((decimal)(hero.PrestigeLevel * hero.Info.HealStrengthPerLevel + hero.BaseHealStrength))
+                        : Utils.NumberToString((decimal)(hero.PrestigeLevel * hero.Info.ArmorPerLevel + hero.BaseArmor));
+                    _heroLevel.text = "Lvl " + hero.PrestigeLevel;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             _upgradeCost.text = Utils.NumberToString(_upgradeCostInt);
         }
 

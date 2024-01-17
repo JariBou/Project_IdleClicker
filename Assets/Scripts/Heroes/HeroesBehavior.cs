@@ -6,6 +6,7 @@ using ProjectClicker.Core;
 using ProjectClicker.Enemies;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ProjectClicker.Heroes
 {
@@ -52,19 +53,23 @@ namespace ProjectClicker.Heroes
         [SerializeField] private Transform _arrowSpawnPoint;
         [ShowIf("_role", ChampionRole.Archer)]
         [SerializeField] private GameObject _arrowPrefab;
-        [SerializeField] private int _attckCount = 0;
+        [FormerlySerializedAs("_attckCount")] [SerializeField] private int _attackCount = 0;
+        
 
- 
-
-
-        public float MaxHealth => BaseMaxHealth + (_heroLevel + _prestigeLevel) * _upgradeInfo.HealthPerLevel;
-        public float Damage => _baseDamage + (_heroLevel + _prestigeLevel) * _upgradeInfo.DmgPerLevel;
-        public float AttackSpeed => _baseAttackSpeed + (_heroLevel + _prestigeLevel) * _upgradeInfo.AtkSpeedPerLevel;
-        public float PowerHeal => _baseHealStrength + (_heroLevel + _prestigeLevel) * _upgradeInfo.HealStrengthPerLevel;
-        public float Armor => BaseArmor + (_heroLevel + _prestigeLevel) * _upgradeInfo.ArmorPerLevel;
+        public float MaxHealth => BaseMaxHealth + (_heroLevel + _prestigeLevel) * Info.HealthPerLevel;
+        public float Damage => BaseDamage + (_heroLevel + _prestigeLevel) * Info.DmgPerLevel;
+        public float AttackSpeed => _baseAttackSpeed + (_heroLevel + _prestigeLevel) * Info.AtkSpeedPerLevel;
+        public float PowerHeal => BaseHealStrength + (_heroLevel + _prestigeLevel) * Info.HealStrengthPerLevel;
+        public float Armor => BaseArmor + (_heroLevel + _prestigeLevel) * Info.ArmorPerLevel;
 
         public float BaseMaxHealth => _baseMaxHealth;
         public float BaseArmor => _baseArmor;
+
+        public UpgradeInfo Info => _upgradeInfo;
+
+        public float BaseDamage => _baseDamage;
+
+        public float BaseHealStrength => _baseHealStrength;
 
 
         private Animator _animator;
@@ -186,9 +191,9 @@ namespace ProjectClicker.Heroes
                 _animator.ResetTrigger("Attack3");*/
                 if (_rb.velocity.x < 0.01f && !collider.CompareTag("EnemyBase"))
                 {
-                    if (_attckCount == 0) _animator.SetTrigger("Attack1");
-                    else if (_attckCount == 1 || _attckCount == 3) _animator.SetTrigger("Attack2");
-                    else if (_attckCount == 2) _animator.SetTrigger("Attack3");
+                    if (_attackCount == 0) _animator.SetTrigger("Attack1");
+                    else if (_attackCount == 1 || _attackCount == 3) _animator.SetTrigger("Attack2");
+                    else if (_attackCount == 2) _animator.SetTrigger("Attack3");
                 }
                 else
                 {
@@ -206,9 +211,9 @@ namespace ProjectClicker.Heroes
                 Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
                 if (collider.CompareTag("EnemyBase"))
                 {
-                    if (_attckCount > 0) collider.GetComponent<EnemyBase>()?.TakeDamage(Damage * _attckCount);
+                    if (_attackCount > 0) collider.GetComponent<EnemyBase>()?.TakeDamage(Damage * _attackCount);
                     else collider.GetComponent<EnemyBase>()?.TakeDamage(Damage);
-                    _attckCount = 0;
+                    _attackCount = 0;
                     return;
                 }
                 else
@@ -217,8 +222,8 @@ namespace ProjectClicker.Heroes
                     break;
                 }
             }
-            /*if ((_attckCount == 0 && _heroLevel >= 12) || (_attckCount == 1 && _heroLevel >= 25))*/ _attckCount++;
-            if ((_attckCount > 0 && _heroLevel < 12) || (_attckCount > 1 && /*_heroLevel >= 12 &&*/ _heroLevel < 25) || _attckCount > 2) _attckCount = 0;
+            /*if ((_attckCount == 0 && _heroLevel >= 12) || (_attckCount == 1 && _heroLevel >= 25))*/ _attackCount++;
+            if ((_attackCount > 0 && _heroLevel < 12) || (_attackCount > 1 && /*_heroLevel >= 12 &&*/ _heroLevel < 25) || _attackCount > 2) _attackCount = 0;
 /*            _animator.ResetTrigger("Attack1");
             _animator.ResetTrigger("Attack2");
             _animator.ResetTrigger("Attack3");*/
@@ -228,24 +233,24 @@ namespace ProjectClicker.Heroes
         {
             _canAttack = false;
             Arrow projectile;
-            if (_attckCount == 1)
+            if (_attackCount == 1)
             {
                 projectile = Instantiate(_arrowPrefab, _arrowSpawnPoint.transform.position, Quaternion.identity).GetComponent<Arrow>();
                 projectile._arrowType = (ArrowType)Random.Range(0, 2);
             }
-            else if (_attckCount == 2)
+            else if (_attackCount == 2)
             {
                 if (colliderAttack.Length == 0) return;
                 projectile = Instantiate(_arrowPrefab, new Vector2(colliderAttack[0].transform.position.x, colliderAttack[0].transform.position.y -1), Quaternion.identity).GetComponent<Arrow>();
                 projectile._arrowType = (ArrowType)3;
             }
-            else if (_attckCount == 3)
+            else if (_attackCount == 3)
             {
                 projectile = Instantiate(_arrowPrefab, new Vector2(_arrowSpawnPoint.transform.position.x + 4.5f, _arrowPrefab.transform.position.y - 2.2f), Quaternion.identity).GetComponent<Arrow>();
                 projectile._arrowType = (ArrowType)4;
             }
-            /*if ((_attckCount == 1 && _heroLevel >= 12 && _heroLevel < 18) || (_attckCount == 2 && _heroLevel >= 18  && _heroLevel > 25) || (_attckCount == 3 && _heroLevel >= 25))*/ _attckCount++;
-            if ((_attckCount > 0 && _heroLevel < 12) || (_attckCount > 1 && _heroLevel < 18) || (_attckCount > 2 && _heroLevel < 25) || _attckCount > 3 ) _attckCount = 0;
+            /*if ((_attckCount == 1 && _heroLevel >= 12 && _heroLevel < 18) || (_attckCount == 2 && _heroLevel >= 18  && _heroLevel > 25) || (_attckCount == 3 && _heroLevel >= 25))*/ _attackCount++;
+            if ((_attackCount > 0 && _heroLevel < 12) || (_attackCount > 1 && _heroLevel < 18) || (_attackCount > 2 && _heroLevel < 25) || _attackCount > 3 ) _attackCount = 0;
 /*            _animator.ResetTrigger("Attack1");
             _animator.ResetTrigger("Attack2");
             _animator.ResetTrigger("Attack3");*/
@@ -267,7 +272,7 @@ namespace ProjectClicker.Heroes
 
         private IEnumerator Heal()
         {
-            _teamStats.AddHealth(_baseHealStrength);
+            _teamStats.AddHealth(BaseHealStrength);
             yield return new WaitForSeconds(_baseAttackSpeed);
             _canHeal = true;
         }
@@ -324,7 +329,7 @@ namespace ProjectClicker.Heroes
 
         public int GetUpgradeCost()
         {
-            return (int)(_upgradeInfo.BaseCost * UpgradeCostMultiplier());
+            return (int)(Info.BaseCost * UpgradeCostMultiplier());
         }
 
         private float UpgradeCostMultiplier()

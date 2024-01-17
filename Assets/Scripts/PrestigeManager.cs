@@ -47,8 +47,8 @@ namespace ProjectClicker
         public static void PrestigeReset(uint score)
         {
             int value = Mathf.RoundToInt(ScoreConversionFunction(score));
-            Instance._medals = (uint)value;
-            Instance._trophies = (uint)Mathf.RoundToInt(0.4f * value);
+            Instance._medals += (uint)value;
+            Instance._trophies += (uint)Mathf.RoundToInt(0.4f * value);
         }
 
         public static float ScoreConversionFunction(uint x)
