@@ -26,7 +26,7 @@ namespace ProjectClicker.Heroes
             _animator.SetFloat("Velocity", _rb.velocity.x);
             if (gameObject.CompareTag("Healer") || gameObject.CompareTag("Archer"))
             {
-                Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(4,10),0, LayerMask.GetMask("Champion"));
+                Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(4,6),0, LayerMask.GetMask("Champion"));
                 if (colliderMovement.Length == 0)
                 {
                     Move();
@@ -71,7 +71,7 @@ namespace ProjectClicker.Heroes
             else Gizmos.color = Color.red;
             if (gameObject.CompareTag("Healer") || gameObject.CompareTag("Archer"))
             {
-                Gizmos.DrawWireCube(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(4, 10));
+                Gizmos.DrawWireCube(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(4, 6));
             }
             else if (gameObject.CompareTag("Tank") || gameObject.CompareTag("Warrior"))
             {

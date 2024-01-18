@@ -55,9 +55,12 @@ namespace ProjectClicker.Enemies
         [SerializeField] private bool _isFlying;
 
         [Header("Gold Animation")]
-        [SerializeField] private GameObject _goldAnimationPrefab;  
+        [SerializeField] private GameObject _goldAnimationPrefab;
 
-
+        [Header("Click on Enemy")]
+        private TeamStats _teamStats;
+        private Camera _camera;
+        [SerializeField] private LayerMask _layerMask;
         // Start is called before the first frame update
         private void Start()
         {
@@ -70,6 +73,8 @@ namespace ProjectClicker.Enemies
             _offset = GetComponent<EnemiesMovement>().Offset;
             _animator = GetComponent<Animator>();
             _rb = GetComponent<Rigidbody2D>();
+            _teamStats = GameObject.FindWithTag("Team").GetComponent<TeamStats>();
+            _camera = GameObject.FindWithTag("CameraSlider").GetComponent<Camera>();
 
 /*            Debug.Log(gameObject.name);*/
         }
@@ -77,6 +82,12 @@ namespace ProjectClicker.Enemies
         // Update is called once per frame
         private void Update()
         {
+            if (Input.GetMouseButtonDown(0))
+            {
+                RaycastHit[] Raycast_hit = Physics.RaycastAll(_camera.WorldToScreenPoint(Input.mousePosition), Vector3.forward, Mathf.Infinity, _layerMask);
+                Debug.DrawRay(_camera.WorldToScreenPoint(Input.mousePosition), Vector3.forward);
+                Debug.Log(Raycast_hit.Length);
+            }
             _animator.SetFloat("Velocity", _rb.velocity.x);
             if (_canAttack)
             {
@@ -251,6 +262,11 @@ namespace ProjectClicker.Enemies
             }
         }
 
+        /*private void OnMouseDown()
+        {
+            Debug.Log(gameObject.name + " " + _health);
+            TakeDamage(_teamStats.Damage);
+        }*/
         private void OnDrawGizmos()
         {
             if (_isNearChampion)

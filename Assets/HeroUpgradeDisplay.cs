@@ -37,6 +37,7 @@ namespace ProjectClicker
         private PrestigeManager _prestigeManager;
         private String _championRole;
         [SerializeField] private UpgradeResource _upgradeResource;
+        [SerializeField] private TeamStats _teamStats;
 
 
         public void Initialize(int index, string championRole, UpgradeResource upgradeResource)
@@ -75,6 +76,7 @@ namespace ProjectClicker
             _upgradeCost.text = Utils.NumberToString(_upgradeCostInt);
 
             _championStats.LinkedDisplays.Add(this);
+            _teamStats = GameObject.FindWithTag("Team").GetComponent<TeamStats>();
         }
 
         private void OnEnable()
@@ -143,6 +145,7 @@ namespace ProjectClicker
                 _championStats.PrestigeUpgrade();
                 UpdateUpgradePanel();
             }
+            _teamStats.UpdateDamage();
             
         }
 
