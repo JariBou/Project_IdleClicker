@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using NaughtyAttributes;
 using ProjectClicker.Core;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -61,6 +62,9 @@ namespace ProjectClicker.Enemies
         private TeamStats _teamStats;
         private Camera _camera;
         [SerializeField] private LayerMask _layerMask;
+        private Collider2D _collider;
+        private GameObject _display;
+        
         // Start is called before the first frame update
         private void Start()
         {
@@ -75,8 +79,11 @@ namespace ProjectClicker.Enemies
             _rb = GetComponent<Rigidbody2D>();
             _teamStats = GameObject.FindWithTag("Team").GetComponent<TeamStats>();
             _camera = GameObject.FindWithTag("CameraSlider").GetComponent<Camera>();
+            if (GetComponent<CapsuleCollider2D>() != null) _collider = GetComponent<CapsuleCollider2D>();
+            else _collider = GetComponent<CircleCollider2D>();
+            _display = _enemyBase.Display;
 
-/*            Debug.Log(gameObject.name);*/
+            /*            Debug.Log(gameObject.name);*/
         }
 
         // Update is called once per frame
@@ -84,9 +91,54 @@ namespace ProjectClicker.Enemies
         {
             if (Input.GetMouseButtonDown(0))
             {
-                RaycastHit[] Raycast_hit = Physics.RaycastAll(_camera.WorldToScreenPoint(Input.mousePosition), Vector3.forward, Mathf.Infinity, _layerMask);
+/*                Vector2 difference = Camera.main.transform.position -_camera.transform.position;
+                if (Input.mousePosition.y <= transform.position.x + (2f * Camera.main.orthographicSize)/2) Debug.Log("Is in Range") ;
+                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - new Vector3(difference.x , difference.y, 0);*/
+/*                mousePosition = new Vector2(mousePosition.x, mousePosition.y);*/
+
+                Vector2 mainCameraMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 difference = mainCameraMousePosition - (Vector2)_display.transform.position;
+
+                float ratioX = (_camera.orthographicSize * 2f * _camera.aspect)/(Camera.main.orthographicSize * 2f * Camera.main.aspect);
+                float ratioY = (_camera.orthographicSize * 2f)/(Camera.main.orthographicSize * 2f) ;
+                difference = new Vector2(difference.x * ratioX, difference.y * ratioY);
+                Vector2 newMousePosition = new Vector2(_camera.transform.position.x, _camera.transform.position.y) + difference;
+
+
+                
+
+
+                newMousePosition = new Vector2(newMousePosition.x, newMousePosition.y);
+                Debug.DrawLine(Vector3.zero, newMousePosition, Color.red, 3f);
+                /*                Debug.Log(mousePosition);*/
+/*                float originWidth = transform.position.x - _collider.size.x / 2;
+                float width = transform.position.x + _collider..x / 2;
+                float originHeight = transform.position.y - _collider.size.y / 2;
+                float height = transform.position.y + _collider.size.y / 2;*/
+                Collider2D collider = Physics2D.OverlapPoint(newMousePosition, _layerMask);
+                if (collider != null)
+                {
+                    Debug.LogError(collider.gameObject.name);
+                    TakeDamage(_teamStats.Damage);
+                    
+                }
+/*                Debug.LogError(mousePosition);*/
+                /*                if (mousePosition.x >= originWidth && mousePosition.x <= width && mousePosition.y >= originHeight && mousePosition.y <= height)
+                                {
+                                    Debug.Log(gameObject.name + "hit by mouse");
+                                }
+                                else
+                                {
+                                    Debug.Log("Not hit");
+                                    Debug.Log(mousePosition);
+                                    Debug.Log(originWidth + " " + width + " " + originHeight + " " + height);
+                                }*/
+                /*RaycastHit2D[] hit = Physics2D.RaycastAll(mousePosition, Vector3.forward, Mathf.Infinity, _layerMask);
+                Debug.Log(hit.Length);
+                Debug.DrawRay(mousePosition, Vector3.forward);*/
+                /*RaycastHit[] Raycast_hit = Physics.RaycastAll(_camera.WorldToScreenPoint(Input.mousePosition), Vector3.forward, Mathf.Infinity, _layerMask);
                 Debug.DrawRay(_camera.WorldToScreenPoint(Input.mousePosition), Vector3.forward);
-                Debug.Log(Raycast_hit.Length);
+                Debug.Log(Raycast_hit.Length);*/
             }
             _animator.SetFloat("Velocity", _rb.velocity.x);
             if (_canAttack)

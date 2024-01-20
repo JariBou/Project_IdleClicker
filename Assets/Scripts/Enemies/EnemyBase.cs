@@ -38,6 +38,8 @@ namespace ProjectClicker.Enemies
         [Header("Enemie)")]
         [SerializeField] private List<GameObject> _enemies = new List<GameObject>();
 
+        public GameObject Display;
+
         // Start is called before the first frame update
         private void Start()
         {

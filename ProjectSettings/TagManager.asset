@@ -13,6 +13,7 @@ TagManager:
   - Monk
   - EnemyBase
   - Team
+  - CameraSlider
   layers:
   - Default
   - TransparentFX

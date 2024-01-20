@@ -143,6 +143,22 @@ PrefabInstance:
       propertyPath: _projectileSpawnPoint
       value: 
       objectReference: {fileID: 8351058539103999504}
+    - target: {fileID: 4393591583969618293, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
+      propertyPath: m_Size.x
+      value: 1.5395344
+      objectReference: {fileID: 0}
+    - target: {fileID: 4393591583969618293, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
+      propertyPath: m_Size.y
+      value: 2.547608
+      objectReference: {fileID: 0}
+    - target: {fileID: 4393591583969618293, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.0047878646
+      objectReference: {fileID: 0}
+    - target: {fileID: 4393591583969618293, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.03067002
+      objectReference: {fileID: 0}
     - target: {fileID: 6334689336460894864, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

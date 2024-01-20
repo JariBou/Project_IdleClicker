@@ -386,6 +386,9 @@ MonoBehaviour:
   _projectilePrefab: {fileID: 6718009578564408549, guid: f7b91f1b6dcec444d8fb2661dd75235b, type: 3}
   _isFlying: 0
   _goldAnimationPrefab: {fileID: 710354471480742334, guid: 8b724a009b0e50a4382615e1bd9c4273, type: 3}
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!50 &2085211668080353694
 Rigidbody2D:
   serializedVersion: 4
@@ -445,8 +448,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.05340829, y: 0.083044976}
-  m_Size: {x: 0.91684234, y: 3.239044}
+  m_Offset: {x: -0.31087402, y: -0.027548574}
+  m_Size: {x: 1.645407, y: 3.3797998}
   m_Direction: 0
 --- !u!95 &8002201989378667809
 Animator:
