@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using ProjectClicker.Core;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,7 +31,6 @@ namespace ProjectClicker.Enemies
 
         [Header("LevelsManager")]
         private LevelsManager _levelsManager;
-        [SerializeField] private TextMeshProUGUI _levelText;
 
 
         [Header("Enemie)")]
@@ -101,7 +99,6 @@ namespace ProjectClicker.Enemies
             _healthBarGeeenBar.SetActive(false);
             yield return new WaitForSeconds(1.5f);
             _levelsManager.NextLevel();
-            _levelText.text = "Level : " + _levelsManager.CurrentLevel;
             if (_levelsManager.CurrentLevel >= 1) _maxHealth += 1000 * _levelsManager.CurrentLevel * 2;
             else _maxHealth += 2500;
             _health = _maxHealth;

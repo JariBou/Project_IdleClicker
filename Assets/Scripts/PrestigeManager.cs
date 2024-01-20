@@ -37,10 +37,15 @@ namespace ProjectClicker
 
         private void OnPrestige()
         {
+            PrestigeReset(CalculateScore());
+        }
+
+        public uint CalculateScore()
+        {
             int currLevel = _levelsManager.CurrentLevel;
             int averageTeamLevel = (int) _teamStats.GetAverageTeamLevel();
-            
-            PrestigeReset((uint)(currLevel * currLevel + (averageTeamLevel * averageTeamLevel) / 5));
+
+            return (uint)(currLevel * currLevel + (averageTeamLevel * averageTeamLevel) / 5);
         }
 
 

@@ -81,12 +81,28 @@ namespace ProjectClicker
 
         private void OnEnable()
         {
-            LevelsManager.OnPrestige += UpdateUpgradePanel;
+            LevelsManager.OnPrestige += OnPrestige;
         }
-        
+
+        private void OnPrestige()
+        {
+            switch (_upgradeResource)
+            {
+                case UpgradeResource.GoldUpgrade:
+                    _upgradeCostInt = 1240;
+                    break;
+                case UpgradeResource.PrestigeUpgrade:
+                    _upgradeCostInt = 4;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            UpdateUpgradePanel();
+        }
+
         private void OnDisable()
         {
-            LevelsManager.OnPrestige -= UpdateUpgradePanel;
+            LevelsManager.OnPrestige -= OnPrestige;
         }
 
         public void UpdateUpgradePanel()

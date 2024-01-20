@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using TMPro;
 using UnityEngine;
 
-namespace ProjectClicker.Core
+namespace ProjectClicker
 {
     public class LevelsManager : MonoBehaviour
     {
@@ -13,6 +14,7 @@ namespace ProjectClicker.Core
         [SerializeField] private int _currentLevel;
         public int CurrentLevel => _currentLevel;
         [SerializeField] private Sprite[] _backgroundLevels;
+        [SerializeField] private TMP_Text _levelsText;
 
         // Start is called before the first frame update
 
@@ -53,8 +55,14 @@ namespace ProjectClicker.Core
             }
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
             ResetTeamHealth?.Invoke();
-            OnChangeLevel?.Invoke();
+            CallLevelChanged();
             ResetTeamPosition();
+        }
+
+        private void CallLevelChanged()
+        {
+            OnChangeLevel?.Invoke();
+            _levelsText.text = $"Level: {_currentLevel}";
         }
 
         [Button]
@@ -68,7 +76,7 @@ namespace ProjectClicker.Core
             }
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
             ResetTeamHealth?.Invoke();
-            OnChangeLevel?.Invoke();
+            CallLevelChanged();
             ResetTeamPosition();
         }
 
@@ -78,7 +86,7 @@ namespace ProjectClicker.Core
             _currentLevel = 0;
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
             OnPrestige?.Invoke();
-            OnChangeLevel?.Invoke();
+            CallLevelChanged();
             ResetTeamPosition();
         }
 
