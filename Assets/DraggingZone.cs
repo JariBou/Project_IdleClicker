@@ -64,7 +64,7 @@ namespace ProjectClicker
             {
                 Vector2 newMousePosition = Utils.ConvertPosCamToCam(Input.mousePosition, _display.transform.position, Camera.main, _cameraCamera);
 
-                Debug.DrawLine(Vector3.zero, newMousePosition, Color.red, 3f);
+                /*Debug.DrawLine(Vector3.zero, newMousePosition, Color.red, 3f);*/
 
                 Collider2D collider = Physics2D.OverlapPoint(newMousePosition, _layerMask);
                 if (collider != null)

@@ -198,6 +198,18 @@ namespace ProjectClicker.Heroes
                 break;
             }
         }
+
+        private bool AttackColliderDetectedEnemyBase()
+        {
+            foreach (Collider2D collider in colliderAttack.Where(i => i != null))
+            {
+                if (collider.CompareTag("EnemyBase"))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public void AttackMelee()
         {
             _canAttack = false;

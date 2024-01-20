@@ -42,7 +42,7 @@ namespace ProjectClicker.Enemies
         [Header("Stats & Gold")]
         private EnemyBase _enemyBase;
         [SerializeField] private float _level = 0;
-        [SerializeField] private float _gold = 500f;
+        [SerializeField] private float _gold = 250f;
         [SerializeField] private GoldManager _goldManager;
 
         [Header("Animator")]
@@ -138,7 +138,6 @@ namespace ProjectClicker.Enemies
             }
             else
             {
-                
                 _animator.SetTrigger("Die");
                 if (_level > 0) _goldManager.AddGold((ulong)(_gold * _level));
                 else _goldManager.AddGold((ulong)(_gold));
@@ -207,20 +206,20 @@ namespace ProjectClicker.Enemies
         }
 
 
-        private void SetStats(EnemyType state)
+        public void SetStats(EnemyType state)
         {
             if ( _level == 0) _level = 1;
             switch (state)
             {
                 case EnemyType.Melee:
                     _canAttack = true;
-                    _maxHealth = 450 * _level;
+                    _maxHealth = 250 * _level;
                     _health = _maxHealth;
                     _attackRange = 3;
                     _damage = 190 * _level;
                     _attackSpeed = 2.5f / (_level * 1.05f);
                     if (_attackSpeed < 1.2f) _attackSpeed = 1.2f;
-                    _gold = 500 * _level;
+                    _gold = 300 * _level;
                     break;
                 case EnemyType.Ranged:
                     _canAttack = true;
@@ -230,14 +229,14 @@ namespace ProjectClicker.Enemies
                     _damage = 150 * _level;
                     _attackSpeed = 1.5f / (_level * 1.05f);
                     if (_attackSpeed < 0.8f) _attackSpeed = 0.8f;
-                    _gold = 1000 * _level;
+                    _gold = 600 * _level;
                     break;
                 case EnemyType.Boss:
                     _canAttack = true;
-                    _maxHealth = 3000 * _level;
+                    _maxHealth = 30000 * _level;
                     _health = _maxHealth;
                     _attackRange = 5;
-                    _damage = 450 * _level;
+                    _damage = 800 * _level;
                     _attackSpeed = 3/(_level * 1.05f);
                     if (_attackSpeed <1.5f) _attackSpeed = 1.5f;
                     _gold = 10000 * _level;
