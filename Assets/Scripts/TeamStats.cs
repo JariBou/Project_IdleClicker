@@ -72,12 +72,8 @@ namespace ProjectClicker
 
         private void Prestige()
         {
-            float tempMaxHealth = 0;
-            float tempArmor = 0;
             foreach (HeroesBehavior hero in Heroes)
             {
-                tempMaxHealth += hero.BaseMaxHealth;
-                tempArmor += hero.BaseArmor;
                 hero.ResetLevel();
                 foreach (HeroUpgradeDisplay display in hero.LinkedDisplays)
                 {
@@ -85,10 +81,7 @@ namespace ProjectClicker
                 }
             }
 
-            _maxHealth = tempMaxHealth;
-            _armor = tempArmor;
-            
-            TeamHealthUpdate?.Invoke();
+            UpdateStats();
         }
 
         /*        public void UpgradeHeroAtIndex(int index)
@@ -119,6 +112,7 @@ namespace ProjectClicker
         {
             _maxHealth = GetMaxTeamHealth();
             _armor = GetTeamArmor();
+            _damage = GetTeamDamage();
             TeamHealthUpdate?.Invoke();
         }
 
