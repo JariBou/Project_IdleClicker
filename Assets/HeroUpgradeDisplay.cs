@@ -157,6 +157,7 @@ namespace ProjectClicker
                 if (_goldManager == null) _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
                 if (_goldManager.Gold < (ulong)_upgradeCostInt * (ulong)BuyMultiplicatorScript.GetMultiplicator()) return;
                 
+                // TODO: cheaper if bough in bundle lol fix that shit
                 _goldManager.RemoveGold((ulong)_upgradeCostInt * (ulong)BuyMultiplicatorScript.GetMultiplicator());
                 for (int i = 0; i < BuyMultiplicatorScript.GetMultiplicator(); i++)
                 {
@@ -175,7 +176,7 @@ namespace ProjectClicker
                 for (int i = 0; i < BuyMultiplicatorScript.GetMultiplicator(); i++)
                 {
                     _upgradeCostInt = 4 + (int)(2.5f * (_championStats.PrestigeLevel * (_championStats.PrestigeLevel + 1)) / 2);
-                    _championStats.Upgrade();
+                    _championStats.PrestigeUpgrade();
                 }
                 UpdateUpgradePanel();
             }
