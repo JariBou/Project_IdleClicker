@@ -42,7 +42,7 @@ namespace ProjectClicker.Heroes
             }
             else if (gameObject.CompareTag("Tank") || gameObject.CompareTag("Warrior"))
             {
-                Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2,6),0, LayerMask.GetMask("Enemy"));
+                Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2,10),0, LayerMask.GetMask("Enemy"));
                 if (colliderMovement.Length == 0)
                 {
                     Move();
@@ -75,7 +75,7 @@ namespace ProjectClicker.Heroes
             }
             else if (gameObject.CompareTag("Tank") || gameObject.CompareTag("Warrior"))
             {
-                Gizmos.DrawWireCube(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2, 6));
+                Gizmos.DrawWireCube(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2, 10));
             }
 
 

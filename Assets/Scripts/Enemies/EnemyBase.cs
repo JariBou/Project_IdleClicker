@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using ProjectClicker.Core;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,10 +18,11 @@ namespace ProjectClicker.Enemies
         private bool _isDead;
 
         [Header("Enemies")]
-        [SerializeField] private GameObject _skeleton;
+        [SerializeField] private GameObject[] _enemiesPrefab;
+/*        [SerializeField] private GameObject _skeleton;
         [SerializeField] private GameObject _goblin;
         [SerializeField] private GameObject _mushroom;
-        [SerializeField] private GameObject _flyingEye;
+        [SerializeField] private GameObject _flyingEye;*/
 
         [Header("Spawn")]
         [SerializeField] private Transform[] _spawnPoints;
@@ -31,11 +31,12 @@ namespace ProjectClicker.Enemies
 
         [Header("LevelsManager")]
         private LevelsManager _levelsManager;
-        [SerializeField] private TextMeshProUGUI _levelText;
 
 
         [Header("Enemie)")]
         [SerializeField] private List<GameObject> _enemies = new List<GameObject>();
+
+        public GameObject Display;
 
         // Start is called before the first frame update
         private void Start()
@@ -63,7 +64,7 @@ namespace ProjectClicker.Enemies
         {
             if (_canSpawn)
             {
-                StartCoroutine(SpawnSkeleton(_spawnRate));
+                StartCoroutine(SpawnEnemies(_spawnRate));
             }
         }
 
@@ -77,14 +78,14 @@ namespace ProjectClicker.Enemies
                 StartCoroutine(Die());
             }
         }
-        private IEnumerator SpawnSkeleton(float seconds)
+        private IEnumerator SpawnEnemies(float seconds)
         {
             _canSpawn = false;
             if (_enemies.Count < 8)
             {
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 5; i++)
                 {
-                    GameObject skeleton = Instantiate(_skeleton, _spawnPoints[Random.Range(0, _spawnPoints.Length - 1)].transform.position, Quaternion.identity);
+                    GameObject skeleton = Instantiate(_enemiesPrefab[Random.Range(0,_enemiesPrefab.Length - 1)], _spawnPoints[Random.Range(0, _spawnPoints.Length - 1)].transform.position, Quaternion.identity);
                     _enemies.Add(skeleton);
                     yield return new WaitForSeconds(2.2f);
                 }
@@ -98,7 +99,6 @@ namespace ProjectClicker.Enemies
             _healthBarGeeenBar.SetActive(false);
             yield return new WaitForSeconds(1.5f);
             _levelsManager.NextLevel();
-            _levelText.text = "Level : " + _levelsManager.CurrentLevel;
             if (_levelsManager.CurrentLevel >= 1) _maxHealth += 1000 * _levelsManager.CurrentLevel * 2;
             else _maxHealth += 2500;
             _health = _maxHealth;

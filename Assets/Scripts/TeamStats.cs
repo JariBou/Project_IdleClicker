@@ -15,6 +15,8 @@ namespace ProjectClicker
         [SerializeField] private float _maxHealth;
         [SerializeField] private float _currentHealth;
         [FormerlySerializedAs("_baseArmor")] [SerializeField] private float _armor;
+        [SerializeField] private  ulong _damage;
+        public ulong Damage => _damage;
         
 /*        [Foldout("Upgrades"), SerializeField] private Transform _upgradesParent;
         [Foldout("Upgrades"), SerializeField] private GameObject _upgradePrefab;*/
@@ -47,7 +49,9 @@ namespace ProjectClicker
             _currentHealth = _maxHealth;
             _armor = GetTeamArmor();
             _managers.ResetTeamHealth += ResetHealth;
+            TeamHealthUpdate?.Invoke();
             LevelsManager.OnPrestige += Prestige;
+            _damage = GetTeamDamage();
 
 /*          for (int i = 0; i < _heroes.Count; i++)
             {
@@ -57,7 +61,7 @@ namespace ProjectClicker
                 Instantiate(_upgradePrefab, _upgradesParent).GetComponent<HeroUpgradeDisplay>().Initialize(i, this);
             }*/
 
-            TeamHealthUpdate?.Invoke();
+           
         }
 
         private void OnDisable()
@@ -151,10 +155,29 @@ namespace ProjectClicker
                 Debug.Log("Dead");
                 _managers.PreviousLevel();
                 ResetHealth();
+                _isDead = false;
             }
         }
 
+        public ulong GetTeamDamage()
+        {
+            ulong tempDamage = 0;
+            foreach (HeroesBehavior hero in Heroes)
+            {
+                tempDamage += (ulong)hero.Damage;
+            }
+            return tempDamage;
+        }
 
+        public void UpdateDamage()
+        {
+            ulong tempDamage = 0;
+            foreach (HeroesBehavior hero in Heroes)
+            {
+                tempDamage += (ulong)hero.Damage;
+            }
+            _damage = tempDamage;
+        }
         public void AddHealth(float heal)
         {
             _currentHealth += heal;

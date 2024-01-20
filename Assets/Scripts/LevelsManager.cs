@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using TMPro;
 using UnityEngine;
 
-namespace ProjectClicker.Core
+namespace ProjectClicker
 {
     public class LevelsManager : MonoBehaviour
     {
@@ -13,12 +14,18 @@ namespace ProjectClicker.Core
         [SerializeField] private int _currentLevel;
         public int CurrentLevel => _currentLevel;
         [SerializeField] private Sprite[] _backgroundLevels;
+        [SerializeField] private TMP_Text _levelsText;
 
         // Start is called before the first frame update
 
         [Header("Champions Team")]
         [SerializeField] private GameObject _championTeam;
         [SerializeField] private List<Vector3> _championTeamSpawn = new();
+
+        [Header("Changing Level Animation")]
+        [SerializeField] private Animator _animatorNextLevel;
+        [SerializeField] private Animator _animatorPreviousLevel;
+
         
         public static LevelsManager Instance { get; private set; }
 
@@ -41,19 +48,27 @@ namespace ProjectClicker.Core
         public void NextLevel()
         {
             _currentLevel++;
+            _animatorNextLevel.SetTrigger("ChangingLevel");
             if (_currentLevel >= _backgroundLevels.Length)
             {
                 _currentLevel = 0;
             }
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
             ResetTeamHealth?.Invoke();
-            OnChangeLevel?.Invoke();
+            CallLevelChanged();
             ResetTeamPosition();
+        }
+
+        private void CallLevelChanged()
+        {
+            OnChangeLevel?.Invoke();
+            _levelsText.text = $"Level: {_currentLevel}";
         }
 
         [Button]
         public void PreviousLevel()
         {
+            if (_currentLevel > 0 ) _animatorPreviousLevel.SetTrigger("ChangingLevel");
             _currentLevel--;
             if (_currentLevel < 0)
             {
@@ -61,7 +76,7 @@ namespace ProjectClicker.Core
             }
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
             ResetTeamHealth?.Invoke();
-            OnChangeLevel?.Invoke();
+            CallLevelChanged();
             ResetTeamPosition();
         }
 
@@ -71,7 +86,7 @@ namespace ProjectClicker.Core
             _currentLevel = 0;
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
             OnPrestige?.Invoke();
-            OnChangeLevel?.Invoke();
+            CallLevelChanged();
             ResetTeamPosition();
         }
 

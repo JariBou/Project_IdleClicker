@@ -1,5 +1,9 @@
 using System.Collections;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using NaughtyAttributes;
 using ProjectClicker.Core;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -28,6 +32,7 @@ namespace ProjectClicker.Enemies
         [SerializeField]
         private float _attackRange;
         [FormerlySerializedAs("Damage")] [SerializeField] private float _damage;
+        public float Damage => _damage;
         [FormerlySerializedAs("AttackSpeed")] [SerializeField] private float _attackSpeed;
         [SerializeField] private float _offset = 2;
         [SerializeField] private bool _canAttack;
@@ -44,6 +49,22 @@ namespace ProjectClicker.Enemies
         private Animator _animator;
         private Rigidbody2D _rb;
         private int _atkCount;
+
+        [Header("Ranged")]
+        [SerializeField] private GameObject _projectileSpawnPoint;
+        [SerializeField] private GameObject _projectilePrefab;
+        [SerializeField] private bool _isFlying;
+
+        [Header("Gold Animation")]
+        [SerializeField] private GameObject _goldAnimationPrefab;
+
+        [Header("Click on Enemy")]
+        private TeamStats _teamStats;
+        private Camera _camera;
+        [SerializeField] private LayerMask _layerMask;
+        private Collider2D _collider;
+        private GameObject _display;
+        
         // Start is called before the first frame update
         private void Start()
         {
@@ -56,13 +77,49 @@ namespace ProjectClicker.Enemies
             _offset = GetComponent<EnemiesMovement>().Offset;
             _animator = GetComponent<Animator>();
             _rb = GetComponent<Rigidbody2D>();
+            _teamStats = GameObject.FindWithTag("Team").GetComponent<TeamStats>();
+            _camera = GameObject.FindWithTag("CameraSlider").GetComponent<Camera>();
+            if (GetComponent<CapsuleCollider2D>() != null) _collider = GetComponent<CapsuleCollider2D>();
+            else _collider = GetComponent<CircleCollider2D>();
+            _display = _enemyBase.Display;
 
-/*            Debug.Log(gameObject.name);*/
+            /*            Debug.Log(gameObject.name);*/
         }
 
         // Update is called once per frame
         private void Update()
         {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector2 newMousePosition = Utils.ConvertPosCamToCam(Input.mousePosition, _display.transform.position, Camera.main, _camera);
+
+                Debug.DrawLine(Vector3.zero, newMousePosition, Color.red, 3f);
+
+                Collider2D collider = Physics2D.OverlapPoint(newMousePosition, _layerMask);
+                if (collider != null)
+                {
+                    Debug.LogError(collider.gameObject.name);
+                    TakeDamage(_teamStats.Damage);
+                    
+                }
+/*                Debug.LogError(mousePosition);*/
+                /*                if (mousePosition.x >= originWidth && mousePosition.x <= width && mousePosition.y >= originHeight && mousePosition.y <= height)
+                                {
+                                    Debug.Log(gameObject.name + "hit by mouse");
+                                }
+                                else
+                                {
+                                    Debug.Log("Not hit");
+                                    Debug.Log(mousePosition);
+                                    Debug.Log(originWidth + " " + width + " " + originHeight + " " + height);
+                                }*/
+                /*RaycastHit2D[] hit = Physics2D.RaycastAll(mousePosition, Vector3.forward, Mathf.Infinity, _layerMask);
+                Debug.Log(hit.Length);
+                Debug.DrawRay(mousePosition, Vector3.forward);*/
+                /*RaycastHit[] Raycast_hit = Physics.RaycastAll(_camera.WorldToScreenPoint(Input.mousePosition), Vector3.forward, Mathf.Infinity, _layerMask);
+                Debug.DrawRay(_camera.WorldToScreenPoint(Input.mousePosition), Vector3.forward);
+                Debug.Log(Raycast_hit.Length);*/
+            }
             _animator.SetFloat("Velocity", _rb.velocity.x);
             if (_canAttack)
             {
@@ -70,7 +127,7 @@ namespace ProjectClicker.Enemies
                 if (colliderAttack.Length > 0)
                 {
                     _isNearChampion = true;
-                    StartCoroutine(Attack());
+                    Attack();
                 }
                 else if (colliderAttack.Length == 0)
                 {
@@ -99,64 +156,97 @@ namespace ProjectClicker.Enemies
         private IEnumerator Die()
         {
             _healthBarGeeenBar.SetActive(false);
-            _animator.SetTrigger("Die");
-            if (_level > 0) _goldManager.AddGold((ulong)(_gold * _level));
-            else _goldManager.AddGold((ulong)(_gold));
-            yield return new WaitForSeconds(1f);
-            _enemyBase.RemoveEnemy(gameObject);
-            Destroy(gameObject);
+            StartCoroutine(DieAnimation());
+            if (_enemyType == EnemyType.Ranged && _isFlying)
+            {
+                _animator.SetTrigger("Fall");
+                _rb.velocity = Vector2.zero;
+                Vector2 target = new Vector2(transform.position.x, transform.position.y - 1.5f);
+                while (transform.position.y != target.y)
+                {
+                    transform.position = Vector2.MoveTowards(transform.position, target, 20f * Time.deltaTime);
+                    yield return new WaitForEndOfFrame();
+                    if (transform.position.y == target.y)
+                    {
+                        _animator.SetTrigger("Die");
+                        if (_level > 0) _goldManager.AddGold((ulong)(_gold * _level));
+                        else _goldManager.AddGold((ulong)(_gold));
+                        yield return new WaitForSeconds(1f);
+                        _enemyBase.RemoveEnemy(gameObject);
+                        Destroy(gameObject);
+                    }
+                }
+            }
+            else
+            {
+                
+                _animator.SetTrigger("Die");
+                if (_level > 0) _goldManager.AddGold((ulong)(_gold * _level));
+                else _goldManager.AddGold((ulong)(_gold));
+                yield return new WaitForSeconds(1f);
+                _enemyBase.RemoveEnemy(gameObject);
+                Destroy(gameObject);
+            }
+
         }
 
-        private IEnumerator Attack()
+        public IEnumerator DieAnimation()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                GameObject goldAnimation = Instantiate(_goldAnimationPrefab, new Vector2(transform.position.x, transform.position.y + 2), Quaternion.identity);
+                goldAnimation.GetComponent<GoldAnim>().Initialize((decimal)(_gold * _level)/5);
+                yield return new WaitForSeconds(0.1f);
+            }
+
+        }
+
+        private void Attack()
+        {
+            _canAttack = false;
+            if (_rb.velocity.x > -0.01f)
+            {
+                if (_atkCount == 0) _animator.SetTrigger("Attack1");
+                else if (_atkCount == 1) _animator.SetTrigger("Attack2");
+                else if (_atkCount == 2) _animator.SetTrigger("Attack3");
+            }
+        }   
+
+        public void AttackMelee()
         {
             _canAttack = false;
             Collider2D[] colliderAttack = Physics2D.OverlapCircleAll(new Vector2(transform.position.x - _offset, transform.position.y), _attackRange, LayerMask.GetMask("Champion"));
-            if (_atkCount == 0)
+            foreach (Collider2D collider in colliderAttack.Where(i => i.gameObject != null))
             {
-                _animator.SetTrigger("Attack1");
-                yield return new WaitForSeconds(0.5f);
-                foreach (Collider2D collider in colliderAttack)
-                {
-
-                    collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(_damage);
-                    Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);
-
-                    break; //chaque ennemi attaque 1 seul champion
-                }
-                _atkCount++;
+                collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(_damage);
+                break; //chaque ennemi attaque 1 seul champion
             }
-            else if (_atkCount == 1)
-            {
-                _animator.SetTrigger("Attack2");
-                yield return new WaitForSeconds(0.5f);
-                foreach (Collider2D collider in colliderAttack)
-                {
+            _atkCount++;
+            if (_atkCount > 2) _atkCount = 0;
+        }
+        public void AttackRange() // je dois l'appeller dans l'animator
+        {
+            _canAttack = false;
+            Projectile projectile = Instantiate(_projectilePrefab, _projectileSpawnPoint.transform.position, Quaternion.identity).GetComponent<Projectile>();
+            projectile.Initialize(this);
+            _atkCount++;
+            if (_atkCount > 2) _atkCount = 0;
+        }
+        Coroutine _coroutine;
+        public void Coroutine()
+        {
+            if (_canAttack || _coroutine != null) return;
+            _coroutine = StartCoroutine(AttackCooldown());
+        }
 
-                    collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(Mathf.Round(_damage * 1.15f));
-                    Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);
-
-                    break; //chaque ennemi attaque 1 seul champion
-                }
-                _atkCount++;
-            }
-            else if (_atkCount == 2)
-            {
-                _animator.SetTrigger("Attack3");
-                yield return new WaitForSeconds(0.5f);
-                foreach (Collider2D collider in colliderAttack)
-                {
-
-                    collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(Mathf.Round(_damage * 1.35f));
-                    Debug.Log(gameObject.name + " attack " + colliderAttack[0].transform.parent.gameObject.name);
-
-                    break; //chaque ennemi attaque 1 seul champion
-                }
-                _atkCount = 0;
-            }
-
+        public IEnumerator AttackCooldown()
+        {
+/*            if (_canAttack) yield break;*/
             yield return new WaitForSeconds(_attackSpeed);
             _canAttack = true;
-        }   
+            _coroutine = null;
+        }
+
 
         private void SetStats(EnemyType state)
         {
@@ -165,29 +255,32 @@ namespace ProjectClicker.Enemies
             {
                 case EnemyType.Melee:
                     _canAttack = true;
-                    _maxHealth = 500 * _level;
+                    _maxHealth = 450 * _level;
                     _health = _maxHealth;
                     _attackRange = 3;
                     _damage = 190 * _level;
-                    _attackSpeed = 2.5f / (_level*1.05f);
+                    _attackSpeed = 2.5f / (_level * 1.05f);
+                    if (_attackSpeed < 1.2f) _attackSpeed = 1.2f;
                     _gold = 500 * _level;
                     break;
                 case EnemyType.Ranged:
                     _canAttack = true;
-                    _maxHealth = 500 * _level;
+                    _maxHealth = 250 * _level;
                     _health = _maxHealth;
                     _attackRange = 7.5f;
                     _damage = 150 * _level;
                     _attackSpeed = 1.5f / (_level * 1.05f);
+                    if (_attackSpeed < 0.8f) _attackSpeed = 0.8f;
                     _gold = 1000 * _level;
                     break;
                 case EnemyType.Boss:
                     _canAttack = true;
-                    _maxHealth = 5000 * _level;
+                    _maxHealth = 3000 * _level;
                     _health = _maxHealth;
                     _attackRange = 5;
                     _damage = 450 * _level;
-                    _attackSpeed = 1/(_level * 1.05f);
+                    _attackSpeed = 3/(_level * 1.05f);
+                    if (_attackSpeed <1.5f) _attackSpeed = 1.5f;
                     _gold = 10000 * _level;
                     break;
             }
@@ -201,6 +294,11 @@ namespace ProjectClicker.Enemies
             }
         }
 
+        /*private void OnMouseDown()
+        {
+            Debug.Log(gameObject.name + " " + _health);
+            TakeDamage(_teamStats.Damage);
+        }*/
         private void OnDrawGizmos()
         {
             if (_isNearChampion)
@@ -214,8 +312,6 @@ namespace ProjectClicker.Enemies
             Gizmos.DrawWireSphere(new Vector2(transform.position.x - _offset, transform.position.y), _attackRange);
         }
     }
-
-
 
     public enum EnemyType
     {

@@ -37,18 +37,23 @@ namespace ProjectClicker
 
         private void OnPrestige()
         {
+            PrestigeReset(CalculateScore());
+        }
+
+        public uint CalculateScore()
+        {
             int currLevel = _levelsManager.CurrentLevel;
             int averageTeamLevel = (int) _teamStats.GetAverageTeamLevel();
-            
-            PrestigeReset((uint)(currLevel * currLevel + (averageTeamLevel * averageTeamLevel) / 5));
+
+            return (uint)(currLevel * currLevel + (averageTeamLevel * averageTeamLevel) / 5);
         }
 
 
         public static void PrestigeReset(uint score)
         {
             int value = Mathf.RoundToInt(ScoreConversionFunction(score));
-            Instance._medals = (uint)value;
-            Instance._trophies = (uint)Mathf.RoundToInt(0.4f * value);
+            Instance._medals += (uint)value;
+            Instance._trophies += (uint)Mathf.RoundToInt(0.4f * value);
         }
 
         public static float ScoreConversionFunction(uint x)

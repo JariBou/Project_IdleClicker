@@ -65,7 +65,7 @@ namespace ProjectClicker.Heroes
                         _hasHit = true;
                         Debug.Log("Hit with " + _damage + " damage");
                         _rigidbody2D.velocity *= 0;
-                        _rigidbody2D.velocity = col.gameObject.GetComponent<Rigidbody2D>().velocity;
+                        if (col != null && col.gameObject.GetComponent<EnemiesBehavior>()) _rigidbody2D.velocity = col.gameObject.GetComponent<Rigidbody2D>().velocity;
                         if (_arrowType == ArrowType.Normal)
                         {
                             _animator.SetTrigger("NormalHit");
