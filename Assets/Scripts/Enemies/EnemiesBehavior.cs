@@ -58,6 +58,8 @@ namespace ProjectClicker.Enemies
         [Header("Gold Animation")]
         [SerializeField] private GameObject _goldAnimationPrefab;
 
+        private GameObject _hitParticles;
+
 
         
         // Start is called before the first frame update
