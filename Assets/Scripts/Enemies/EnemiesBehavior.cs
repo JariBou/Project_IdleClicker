@@ -93,32 +93,15 @@ namespace ProjectClicker.Enemies
             {
                 Vector2 newMousePosition = Utils.ConvertPosCamToCam(Input.mousePosition, _display.transform.position, Camera.main, _camera);
 
-                Debug.DrawLine(Vector3.zero, newMousePosition, Color.red, 3f);
+                /*Debug.DrawLine(Vector3.zero, newMousePosition, Color.red, 3f);*/
 
                 Collider2D collider = Physics2D.OverlapPoint(newMousePosition, _layerMask);
-                if (collider != null)
+                if (collider != null && Utils.IsMouseOverGameObject(newMousePosition, gameObject))
                 {
-                    Debug.LogError(collider.gameObject.name);
-                    TakeDamage(_teamStats.Damage);
+                    TakeDamage(_teamStats.Damage * 0.25f);// Sinon c'est trop facile
+                    collider = null;
                     
                 }
-/*                Debug.LogError(mousePosition);*/
-                /*                if (mousePosition.x >= originWidth && mousePosition.x <= width && mousePosition.y >= originHeight && mousePosition.y <= height)
-                                {
-                                    Debug.Log(gameObject.name + "hit by mouse");
-                                }
-                                else
-                                {
-                                    Debug.Log("Not hit");
-                                    Debug.Log(mousePosition);
-                                    Debug.Log(originWidth + " " + width + " " + originHeight + " " + height);
-                                }*/
-                /*RaycastHit2D[] hit = Physics2D.RaycastAll(mousePosition, Vector3.forward, Mathf.Infinity, _layerMask);
-                Debug.Log(hit.Length);
-                Debug.DrawRay(mousePosition, Vector3.forward);*/
-                /*RaycastHit[] Raycast_hit = Physics.RaycastAll(_camera.WorldToScreenPoint(Input.mousePosition), Vector3.forward, Mathf.Infinity, _layerMask);
-                Debug.DrawRay(_camera.WorldToScreenPoint(Input.mousePosition), Vector3.forward);
-                Debug.Log(Raycast_hit.Length);*/
             }
             _animator.SetFloat("Velocity", _rb.velocity.x);
             if (_canAttack)
@@ -157,10 +140,10 @@ namespace ProjectClicker.Enemies
         {
             _healthBarGeeenBar.SetActive(false);
             StartCoroutine(DieAnimation());
+            _rb.velocity = Vector2.zero;
             if (_enemyType == EnemyType.Ranged && _isFlying)
             {
                 _animator.SetTrigger("Fall");
-                _rb.velocity = Vector2.zero;
                 Vector2 target = new Vector2(transform.position.x, transform.position.y - 1.5f);
                 while (transform.position.y != target.y)
                 {

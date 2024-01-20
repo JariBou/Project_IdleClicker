@@ -32,5 +32,41 @@ namespace ProjectClicker.Core
             Vector2 newMousePosition = new Vector2(to.transform.position.x, to.transform.position.y) + difference;
             return newMousePosition;
         }
+
+        public static bool IsMouseOverGameObject(Vector2 MousePosition, GameObject Object)
+        {
+            if (Object.GetComponent<CapsuleCollider2D>() != null)
+            {
+                   if (MousePosition.x >= Object.transform.position.x - Object.GetComponent<CapsuleCollider2D>().bounds.size.x / 2 &&
+                                       MousePosition.x <= Object.transform.position.x + Object.GetComponent<CapsuleCollider2D>().bounds.size.x / 2 &&
+                                                          MousePosition.y >= Object.transform.position.y - Object.GetComponent<CapsuleCollider2D>().bounds.size.y / 2 &&
+                                                                             MousePosition.y <= Object.transform.position.y + Object.GetComponent<CapsuleCollider2D>().bounds.size.y / 2)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (Object.GetComponent<CircleCollider2D>() != null)
+            {
+                if (MousePosition.x >= Object.transform.position.x - Object.GetComponent<CircleCollider2D>().bounds.size.x / 2 &&
+                                       MousePosition.x <= Object.transform.position.x + Object.GetComponent<CircleCollider2D>().bounds.size.x / 2 &&
+                                                          MousePosition.y >= Object.transform.position.y - Object.GetComponent<CircleCollider2D>().bounds.size.y / 2 &&
+                                                                             MousePosition.y <= Object.transform.position.y + Object.GetComponent<CircleCollider2D>().bounds.size.y / 2)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
