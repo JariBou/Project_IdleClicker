@@ -18,7 +18,7 @@ namespace ProjectClicker.Saves
             string jsonData = JsonUtility.ToJson(data);
             string filepath = Application.persistentDataPath + "/" + filename + (filename.EndsWith(".json") ? ""
                 : ".json");
-            Debug.LogWarning(jsonData);
+            Debug.LogWarning(filepath);
             File.WriteAllText(filepath, jsonData);
         }
         

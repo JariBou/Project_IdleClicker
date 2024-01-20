@@ -39,13 +39,15 @@ namespace ProjectClicker.Saves
 
         private void OnApplicationQuit()
         {
-            SaveManager.SaveToJson(JsonSaveData.Initialise(), _saveName);
+            var f = JsonSaveData.Initialise();
+            SaveManager.SaveToJson(f, _saveName);
         }
 
         [Button]
         private void Save()
         {
-            SaveManager.SaveToJson(JsonSaveData.Initialise(), _saveName);
+            var f = JsonSaveData.Initialise();
+            SaveManager.SaveToJson(f, _saveName);
         }
     }
 }

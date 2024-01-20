@@ -350,6 +350,10 @@ namespace ProjectClicker.Heroes
         public void SetLevel(int championLevel)
         {
             _heroLevel = championLevel;
+            foreach (HeroUpgradeDisplay display in LinkedDisplays)
+            {
+                display.UpdateUpgradePanel();
+            }
         }
 
         public void PrestigeUpgrade()

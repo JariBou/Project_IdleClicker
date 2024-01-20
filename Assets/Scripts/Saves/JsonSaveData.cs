@@ -1,5 +1,6 @@
 ﻿using System;
 using ProjectClicker.Core;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace ProjectClicker.Saves
@@ -9,18 +10,18 @@ namespace ProjectClicker.Saves
     {
         
         //Levels
-        private int _currLevel;
+        [SerializeField] private int _currLevel;
         
         // Gold
-        private ulong _gold;
+        [SerializeField] private ulong _gold;
         
         // Prestige
-        private uint _trophies;
-        private uint _medals;
-        private int _numberOfPrestiges;
+        [SerializeField] private uint _trophies;
+        [SerializeField] private uint _medals;
+        [SerializeField] private int _numberOfPrestiges;
         
         // TeamStats
-        private ChampionLevelDictionary _championLevelDictionary;
+        [SerializeField] private ChampionLevelDictionary _championLevelDictionary = new();
 
         public int CurrLevel => _currLevel;
         public ulong Gold => _gold;
@@ -43,7 +44,7 @@ namespace ProjectClicker.Saves
                 
                 _currLevel = LevelsManager.Instance.CurrentLevel,
                 
-                LevelDictionary =
+                _championLevelDictionary = new ()
                 {
                     items = new ChampionLevelItem[teamStats.Heroes.Count]
                 }

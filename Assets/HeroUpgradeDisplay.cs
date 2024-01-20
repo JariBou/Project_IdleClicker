@@ -1,5 +1,6 @@
 using ProjectClicker.Core;
 using System;
+using System.Collections.Generic;
 using ProjectClicker.Heroes;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace ProjectClicker
         [SerializeField] private TextMeshProUGUI _damageAmount;
         [SerializeField] private TextMeshProUGUI _healthAmount;
         [SerializeField] private TextMeshProUGUI _armorOrHealAmount;
+        [SerializeField] private Image _resourceImage;
 
         [Header("Upgrade")]
         [SerializeField] private TextMeshProUGUI _upgradeCost;
@@ -38,6 +40,7 @@ namespace ProjectClicker
         private String _championRole;
         [SerializeField] private UpgradeResource _upgradeResource;
         [SerializeField] private TeamStats _teamStats;
+        [SerializeField, Tooltip("Put Gold sprite first")] private List<Sprite> _resourcesSprites;
 
 
         public void Initialize(int index, string championRole, UpgradeResource upgradeResource)
@@ -59,6 +62,8 @@ namespace ProjectClicker
             {
                 _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
             }
+
+            _resourceImage.sprite = _resourcesSprites[(int)_upgradeResource];
             
             UpdateUpgradePanel();
             switch (_upgradeResource)

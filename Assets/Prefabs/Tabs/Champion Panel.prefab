@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 1190174575750862737}
   - component: {fileID: 6538275141796795600}
   m_Layer: 5
-  m_Name: Gold Icon
+  m_Name: Resource Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -831,6 +831,7 @@ MonoBehaviour:
   _damageAmount: {fileID: 2270367294128314095}
   _healthAmount: {fileID: 4809339500283877149}
   _armorOrHealAmount: {fileID: 1376850768731867305}
+  _resourceImage: {fileID: 6538275141796795600}
   _upgradeCost: {fileID: 2135628448083118192}
   _heroLevel: {fileID: 5496354052032751535}
   _upgradeButton: {fileID: 4465360931891293901}
@@ -845,6 +846,11 @@ MonoBehaviour:
     _heroIcon: {fileID: 21300000, guid: bbc900b866ee6a040a57336adad074fa, type: 3}
   - _heroName: Healer
     _heroIcon: {fileID: 21300000, guid: 4523af0b350e65249bb28daf9b2fc487, type: 3}
+  _upgradeResource: 0
+  _teamStats: {fileID: 0}
+  _resourcesSprites:
+  - {fileID: 21300000, guid: 77f1682acb1fb2b42b3b4f9ee9d0d2e2, type: 3}
+  - {fileID: -1118658980, guid: f79a6900df1e0c140b7abff9da525582, type: 3}
 --- !u!1 &6433054639410110946
 GameObject:
   m_ObjectHideFlags: 0
