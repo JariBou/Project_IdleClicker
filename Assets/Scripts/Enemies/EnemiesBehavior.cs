@@ -91,30 +91,10 @@ namespace ProjectClicker.Enemies
         {
             if (Input.GetMouseButtonDown(0))
             {
-/*                Vector2 difference = Camera.main.transform.position -_camera.transform.position;
-                if (Input.mousePosition.y <= transform.position.x + (2f * Camera.main.orthographicSize)/2) Debug.Log("Is in Range") ;
-                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - new Vector3(difference.x , difference.y, 0);*/
-/*                mousePosition = new Vector2(mousePosition.x, mousePosition.y);*/
+                Vector2 newMousePosition = Utils.ConvertPosCamToCam(Input.mousePosition, _display.transform.position, Camera.main, _camera);
 
-                Vector2 mainCameraMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector2 difference = mainCameraMousePosition - (Vector2)_display.transform.position;
-
-                float ratioX = (_camera.orthographicSize * 2f * _camera.aspect)/(Camera.main.orthographicSize * 2f * Camera.main.aspect);
-                float ratioY = (_camera.orthographicSize * 2f)/(Camera.main.orthographicSize * 2f) ;
-                difference = new Vector2(difference.x * ratioX, difference.y * ratioY);
-                Vector2 newMousePosition = new Vector2(_camera.transform.position.x, _camera.transform.position.y) + difference;
-
-
-                
-
-
-                newMousePosition = new Vector2(newMousePosition.x, newMousePosition.y);
                 Debug.DrawLine(Vector3.zero, newMousePosition, Color.red, 3f);
-                /*                Debug.Log(mousePosition);*/
-/*                float originWidth = transform.position.x - _collider.size.x / 2;
-                float width = transform.position.x + _collider..x / 2;
-                float originHeight = transform.position.y - _collider.size.y / 2;
-                float height = transform.position.y + _collider.size.y / 2;*/
+
                 Collider2D collider = Physics2D.OverlapPoint(newMousePosition, _layerMask);
                 if (collider != null)
                 {
