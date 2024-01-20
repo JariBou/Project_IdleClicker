@@ -2574,7 +2574,6 @@ RectTransform:
   - {fileID: 637478615}
   - {fileID: 2005320721}
   - {fileID: 2122040218}
-  - {fileID: 1923877581}
   - {fileID: 1737356932}
   - {fileID: 644455932}
   - {fileID: 1390078193}
@@ -2582,6 +2581,7 @@ RectTransform:
   - {fileID: 2038548580}
   - {fileID: 131076106}
   - {fileID: 652669498}
+  - {fileID: 1923877581}
   - {fileID: 670621292}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2877,6 +2877,7 @@ MonoBehaviour:
   - {fileID: 1702486562, guid: 5dc120a65e1620e4080b27c0086b140d, type: 3}
   - {fileID: 912570686, guid: 5dc120a65e1620e4080b27c0086b140d, type: 3}
   - {fileID: 1790069506, guid: 5dc120a65e1620e4080b27c0086b140d, type: 3}
+  _levelsText: {fileID: 2038548578}
   _championTeam: {fileID: 1805394219}
   _championTeamSpawn: []
   _animatorNextLevel: {fileID: 131076107}
@@ -4363,7 +4364,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -284.76, y: 501}
+  m_AnchoredPosition: {x: 286.77, y: 553.09}
   m_SizeDelta: {x: 133.34381, y: 40.389008}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1923877582
