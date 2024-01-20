@@ -82,8 +82,6 @@ namespace ProjectClicker
             }
 
             UpdateStats();
-            
-            TeamHealthUpdate?.Invoke();
         }
 
         /*        public void UpgradeHeroAtIndex(int index)
