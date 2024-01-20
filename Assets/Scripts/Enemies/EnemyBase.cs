@@ -36,6 +36,8 @@ namespace ProjectClicker.Enemies
         [Header("Enemie)")]
         [SerializeField] private List<GameObject> _enemies = new List<GameObject>();
 
+        [SerializeField] private GameObject _particlesPrefab;
+
         public GameObject Display;
 
         // Start is called before the first frame update
@@ -72,6 +74,13 @@ namespace ProjectClicker.Enemies
         {
             _health -= damage;
             _enemyBaseHealthBar.value = _health;
+
+            for (int i = 0; i < Random.Range(3, 7); i++)
+            {
+                Vector3 offset = new(Random.Range(-1.7f, 1.7f), Random.Range(-1.7f, 1.7f), -1);
+                Instantiate(_particlesPrefab, transform.position + offset, Quaternion.identity);
+            }
+            
             if (_health <= 0 && !_isDead)
             {
                 _isDead = true;
@@ -86,6 +95,7 @@ namespace ProjectClicker.Enemies
                 for (int i = 0; i < 5; i++)
                 {
                     GameObject skeleton = Instantiate(_enemiesPrefab[Random.Range(0,_enemiesPrefab.Length - 1)], _spawnPoints[Random.Range(0, _spawnPoints.Length - 1)].transform.position, Quaternion.identity);
+                    skeleton.GetComponent<EnemiesBehavior>().Config(_particlesPrefab);
                     _enemies.Add(skeleton);
                     yield return new WaitForSeconds(2.2f);
                 }
