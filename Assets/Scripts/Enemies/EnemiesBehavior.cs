@@ -42,7 +42,7 @@ namespace ProjectClicker.Enemies
         [Header("Stats & Gold")]
         private EnemyBase _enemyBase;
         [SerializeField] private float _level = 0;
-        [SerializeField] private float _gold = 500f;
+        [SerializeField] private float _gold = 250f;
         [SerializeField] private GoldManager _goldManager;
 
         [Header("Animator")]
@@ -58,13 +58,7 @@ namespace ProjectClicker.Enemies
         [Header("Gold Animation")]
         [SerializeField] private GameObject _goldAnimationPrefab;
 
-        [Header("Click on Enemy")]
-        private TeamStats _teamStats;
-        private Camera _camera;
-        [SerializeField] private LayerMask _layerMask;
-        private Collider2D _collider;
-        private GameObject _display;
-        private GameObject _hitParticles;
+
         
         // Start is called before the first frame update
         private void Start()
@@ -78,11 +72,6 @@ namespace ProjectClicker.Enemies
             _offset = GetComponent<EnemiesMovement>().Offset;
             _animator = GetComponent<Animator>();
             _rb = GetComponent<Rigidbody2D>();
-            _teamStats = GameObject.FindWithTag("Team").GetComponent<TeamStats>();
-            _camera = GameObject.FindWithTag("CameraSlider").GetComponent<Camera>();
-            if (GetComponent<CapsuleCollider2D>() != null) _collider = GetComponent<CapsuleCollider2D>();
-            else _collider = GetComponent<CircleCollider2D>();
-            _display = _enemyBase.Display;
 
             /*            Debug.Log(gameObject.name);*/
         }
@@ -90,37 +79,6 @@ namespace ProjectClicker.Enemies
         // Update is called once per frame
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Vector2 newMousePosition = Utils.ConvertPosCamToCam(Input.mousePosition, _display.transform.position, Camera.main, _camera);
-
-                Debug.DrawLine(Vector3.zero, newMousePosition, Color.red, 3f);
-
-                Collider2D collider = Physics2D.OverlapPoint(newMousePosition, _layerMask);
-                if (collider != null)
-                {
-                    Debug.LogError(collider.gameObject.name);
-                    TakeDamage(_teamStats.Damage);
-                    
-                }
-/*                Debug.LogError(mousePosition);*/
-                /*                if (mousePosition.x >= originWidth && mousePosition.x <= width && mousePosition.y >= originHeight && mousePosition.y <= height)
-                                {
-                                    Debug.Log(gameObject.name + "hit by mouse");
-                                }
-                                else
-                                {
-                                    Debug.Log("Not hit");
-                                    Debug.Log(mousePosition);
-                                    Debug.Log(originWidth + " " + width + " " + originHeight + " " + height);
-                                }*/
-                /*RaycastHit2D[] hit = Physics2D.RaycastAll(mousePosition, Vector3.forward, Mathf.Infinity, _layerMask);
-                Debug.Log(hit.Length);
-                Debug.DrawRay(mousePosition, Vector3.forward);*/
-                /*RaycastHit[] Raycast_hit = Physics.RaycastAll(_camera.WorldToScreenPoint(Input.mousePosition), Vector3.forward, Mathf.Infinity, _layerMask);
-                Debug.DrawRay(_camera.WorldToScreenPoint(Input.mousePosition), Vector3.forward);
-                Debug.Log(Raycast_hit.Length);*/
-            }
             _animator.SetFloat("Velocity", _rb.velocity.x);
             if (_canAttack)
             {
@@ -159,10 +117,10 @@ namespace ProjectClicker.Enemies
         {
             _healthBarGeeenBar.SetActive(false);
             StartCoroutine(DieAnimation());
+            _rb.velocity = Vector2.zero;
             if (_enemyType == EnemyType.Ranged && _isFlying)
             {
                 _animator.SetTrigger("Fall");
-                _rb.velocity = Vector2.zero;
                 Vector2 target = new Vector2(transform.position.x, transform.position.y - 1.5f);
                 while (transform.position.y != target.y)
                 {
@@ -181,7 +139,6 @@ namespace ProjectClicker.Enemies
             }
             else
             {
-                
                 _animator.SetTrigger("Die");
                 if (_level > 0) _goldManager.AddGold((ulong)(_gold * _level));
                 else _goldManager.AddGold((ulong)(_gold));
@@ -250,20 +207,20 @@ namespace ProjectClicker.Enemies
         }
 
 
-        private void SetStats(EnemyType state)
+        public void SetStats(EnemyType state)
         {
             if ( _level == 0) _level = 1;
             switch (state)
             {
                 case EnemyType.Melee:
                     _canAttack = true;
-                    _maxHealth = 450 * _level;
+                    _maxHealth = 250 * _level;
                     _health = _maxHealth;
                     _attackRange = 3;
                     _damage = 190 * _level;
                     _attackSpeed = 2.5f / (_level * 1.05f);
                     if (_attackSpeed < 1.2f) _attackSpeed = 1.2f;
-                    _gold = 500 * _level;
+                    _gold = 300 * _level;
                     break;
                 case EnemyType.Ranged:
                     _canAttack = true;
@@ -273,14 +230,14 @@ namespace ProjectClicker.Enemies
                     _damage = 150 * _level;
                     _attackSpeed = 1.5f / (_level * 1.05f);
                     if (_attackSpeed < 0.8f) _attackSpeed = 0.8f;
-                    _gold = 1000 * _level;
+                    _gold = 600 * _level;
                     break;
                 case EnemyType.Boss:
                     _canAttack = true;
-                    _maxHealth = 3000 * _level;
+                    _maxHealth = 30000 * _level;
                     _health = _maxHealth;
                     _attackRange = 5;
-                    _damage = 450 * _level;
+                    _damage = 800 * _level;
                     _attackSpeed = 3/(_level * 1.05f);
                     if (_attackSpeed <1.5f) _attackSpeed = 1.5f;
                     _gold = 10000 * _level;

@@ -64,10 +64,22 @@ namespace ProjectClicker.Enemies
         // Update is called once per frame
         private void Update()
         {
-            if (_canSpawn)
+            if (_canSpawn && (_levelsManager.CurrentLevel % 10 != 0 || _levelsManager.CurrentLevel == 0))
             {
                 StartCoroutine(SpawnEnemies(_spawnRate));
             }
+            else if (_canSpawn && _levelsManager.CurrentLevel % 10 == 0)
+            {
+                SpawnBoss();
+            }
+        }
+
+        private void SpawnBoss()
+        {
+           _canSpawn = false;
+            GameObject boss = Instantiate(_enemiesPrefab[Random.Range(0, _enemiesPrefab.Length - 1)], _spawnPoints[2].transform.position, Quaternion.identity);
+            boss.GetComponent<EnemiesBehavior>().SetStats(EnemyType.Boss);
+            boss.transform.localScale *= 2;
         }
 
         public void TakeDamage(float damage)
@@ -89,19 +101,19 @@ namespace ProjectClicker.Enemies
         }
         private IEnumerator SpawnEnemies(float seconds)
         {
-            _canSpawn = false;
             if (_enemies.Count < 8)
             {
+                _canSpawn = false;
                 for (int i = 0; i < 5; i++)
                 {
                     GameObject skeleton = Instantiate(_enemiesPrefab[Random.Range(0,_enemiesPrefab.Length - 1)], _spawnPoints[Random.Range(0, _spawnPoints.Length - 1)].transform.position, Quaternion.identity);
                     skeleton.GetComponent<EnemiesBehavior>().Config(_particlesPrefab);
                     _enemies.Add(skeleton);
-                    yield return new WaitForSeconds(2.2f);
+                    yield return new WaitForSeconds(1f);
                 }
                 yield return new WaitForSeconds(seconds);
-            }
-            _canSpawn = true;
+                _canSpawn = true;
+            } 
         }
 
         private IEnumerator Die()
@@ -112,6 +124,7 @@ namespace ProjectClicker.Enemies
             if (_levelsManager.CurrentLevel >= 1) _maxHealth += 1000 * _levelsManager.CurrentLevel * 2;
             else _maxHealth += 2500;
             _health = _maxHealth;
+            _enemyBaseHealthBar.maxValue = _maxHealth;
             _enemyBaseHealthBar.value = _health;
             if (_spawnRate > 3f) _spawnRate -= 0.1f;
             _canSpawn = true;
