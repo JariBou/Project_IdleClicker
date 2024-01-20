@@ -103,29 +103,11 @@ namespace ProjectClicker
             }
         }
 
-
-
-/*        public void TakeDamage(float damage)
-        {
-            _health -= damage;
-            _enemyBaseHealthBar.value = _health;
-            if (_health <= 0)
-            {
-                Debug.Log("You Win");
-                _health = _maxHealth;
-                _enemyBaseHealthBar.value = _health;
-                NextLevel();
-                ResetTeamHealth?.Invoke();
-                _championTeam.transform.position = _championTeamSpawn.position;
-            }
-        }*/
-
-
         public void SetLevel(int currLevel)
         {
             _currentLevel = currLevel;
             ResetTeamHealth?.Invoke();
-            OnChangeLevel?.Invoke();
+            CallLevelChanged();
         }
     }
 }

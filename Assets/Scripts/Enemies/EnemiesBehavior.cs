@@ -58,6 +58,8 @@ namespace ProjectClicker.Enemies
         [Header("Gold Animation")]
         [SerializeField] private GameObject _goldAnimationPrefab;
 
+        private GameObject _hitParticles;
+
 
         
         // Start is called before the first frame update
@@ -100,6 +102,7 @@ namespace ProjectClicker.Enemies
         {
             _health -= damage;
             _healthBar.value = _health;
+            Instantiate(_hitParticles, transform.position + Vector3.back, Quaternion.identity);
             if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("TakeDamage") && !_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1"))
             {
                 _animator.SetTrigger("TakeDamage");
@@ -268,6 +271,11 @@ namespace ProjectClicker.Enemies
                 Gizmos.color = Color.red;
             }
             Gizmos.DrawWireSphere(new Vector2(transform.position.x - _offset, transform.position.y), _attackRange);
+        }
+
+        public void Config(GameObject particlesPrefab)
+        {
+            _hitParticles = particlesPrefab;
         }
     }
 

@@ -3613,60 +3613,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 720
-        y: 400
-        width: 16
-        height: 16
+        y: 368
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 11, y: 10, z: 11, w: 10}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 7edc598870f3f2b4085da7267a1608de
       internalID: 258912443
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UI books & more_175
-      rect:
-        serializedVersion: 2
-        x: 736
-        y: 400
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a30cdea1289bed4448f6f5e58adbe690
-      internalID: -1985005812
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UI books & more_176
-      rect:
-        serializedVersion: 2
-        x: 752
-        y: 400
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a00c19ffc70627e468f2cce87f5e99c9
-      internalID: -845210089
       vertices: []
       indices: 
       edges: []
@@ -4407,69 +4365,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI books & more_212
-      rect:
-        serializedVersion: 2
-        x: 720
-        y: 384
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7eead3bfe87006040bc250b145d0177b
-      internalID: 861801945
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UI books & more_213
-      rect:
-        serializedVersion: 2
-        x: 736
-        y: 384
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 91cf7fde18c54c04aa3c9692f925481d
-      internalID: -1170049319
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UI books & more_214
-      rect:
-        serializedVersion: 2
-        x: 752
-        y: 384
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 67849e4b80b5b964b96de64924caba4a
-      internalID: -71465117
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: UI books & more_215
       rect:
         serializedVersion: 2
@@ -5074,69 +4969,6 @@ TextureImporter:
       bones: []
       spriteID: a6bff05bda7f3714ebc39422bea9c960
       internalID: -2004463374
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UI books & more_244
-      rect:
-        serializedVersion: 2
-        x: 720
-        y: 368
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a1c843b7692d19e498be81e0a34e1bfa
-      internalID: -718976029
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UI books & more_245
-      rect:
-        serializedVersion: 2
-        x: 736
-        y: 368
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d39ca9be81359384cb349a4f3f510849
-      internalID: 1755280526
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UI books & more_246
-      rect:
-        serializedVersion: 2
-        x: 752
-        y: 368
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0ece6006a2a1ad041a688645d2c5795b
-      internalID: 531992234
       vertices: []
       indices: 
       edges: []

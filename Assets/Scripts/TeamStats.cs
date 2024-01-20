@@ -118,6 +118,7 @@ namespace ProjectClicker
 
         public void ResetHealth()  // fonction appel� uniquement par le LevelManager au changement de niveau
         { 
+            UpdateStats();
             _currentHealth = MaxHealth;
             TeamHealthUpdate?.Invoke();
         }

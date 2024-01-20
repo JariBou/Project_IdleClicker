@@ -1,5 +1,6 @@
 using ProjectClicker.Core;
 using System;
+using System.Collections.Generic;
 using ProjectClicker.Heroes;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace ProjectClicker
         [SerializeField] private TextMeshProUGUI _damageAmount;
         [SerializeField] private TextMeshProUGUI _healthAmount;
         [SerializeField] private TextMeshProUGUI _armorOrHealAmount;
+        [SerializeField] private Image _resourceImage;
 
         [Header("Upgrade")]
         [SerializeField] private TextMeshProUGUI _upgradeCost;
@@ -38,6 +40,7 @@ namespace ProjectClicker
         private String _championRole;
         [SerializeField] private UpgradeResource _upgradeResource;
         [SerializeField] private TeamStats _teamStats;
+        [SerializeField, Tooltip("Put Gold sprite first")] private List<Sprite> _resourcesSprites;
 
 
         public void Initialize(int index, string championRole, UpgradeResource upgradeResource)
@@ -59,6 +62,8 @@ namespace ProjectClicker
             {
                 _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
             }
+
+            _resourceImage.sprite = _resourcesSprites[(int)_upgradeResource];
             
             UpdateUpgradePanel();
             switch (_upgradeResource)
@@ -82,6 +87,12 @@ namespace ProjectClicker
         private void OnEnable()
         {
             LevelsManager.OnPrestige += OnPrestige;
+            BuyMultiplicatorScript.UpdatePrice += OnPriceMultUpdate;
+        }
+
+        private void OnPriceMultUpdate(int mult)
+        {
+            _upgradeCost.text = Utils.NumberToString(_upgradeCostInt * mult);
         }
 
         private void OnPrestige()
@@ -103,6 +114,7 @@ namespace ProjectClicker
         private void OnDisable()
         {
             LevelsManager.OnPrestige -= OnPrestige;
+            BuyMultiplicatorScript.UpdatePrice -= OnPriceMultUpdate;
         }
 
         public void UpdateUpgradePanel()
@@ -135,7 +147,7 @@ namespace ProjectClicker
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            _upgradeCost.text = Utils.NumberToString(_upgradeCostInt);
+            _upgradeCost.text = Utils.NumberToString(_upgradeCostInt * BuyMultiplicatorScript.GetMultiplicator());
         }
 
         public void BuyUpgrade()
@@ -143,22 +155,28 @@ namespace ProjectClicker
             if (_upgradeResource == UpgradeResource.GoldUpgrade)
             {
                 if (_goldManager == null) _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
-                if (_goldManager.Gold < (ulong)_upgradeCostInt) return;
+                if (_goldManager.Gold < (ulong)_upgradeCostInt * (ulong)BuyMultiplicatorScript.GetMultiplicator()) return;
                 
-                _goldManager.RemoveGold((ulong)_upgradeCostInt);
-                if (_championStats.HeroLevel >= 1) _upgradeCostInt += 1240 * _championStats.HeroLevel * 2;
-                else _upgradeCostInt += 1240;
-                _championStats.Upgrade();
+                _goldManager.RemoveGold((ulong)_upgradeCostInt * (ulong)BuyMultiplicatorScript.GetMultiplicator());
+                for (int i = 0; i < BuyMultiplicatorScript.GetMultiplicator(); i++)
+                {
+                    if (_championStats.HeroLevel >= 1) _upgradeCostInt += 1240 * _championStats.HeroLevel * 2;
+                    else _upgradeCostInt += 1240;
+                    _championStats.Upgrade();
+                }
                 UpdateUpgradePanel();
             }
             else
             {
                 if (_prestigeManager == null) _prestigeManager = GameObject.FindWithTag("Managers").GetComponent<PrestigeManager>();
-                if (_prestigeManager.Medals < (uint)_upgradeCostInt) return;
+                if (_prestigeManager.Medals < (uint)_upgradeCostInt * BuyMultiplicatorScript.GetMultiplicator()) return;
                 
-                _prestigeManager.RemoveMedals(_upgradeCostInt);
-                _upgradeCostInt = 4 + (int)(2.5f * (_championStats.PrestigeLevel * (_championStats.PrestigeLevel + 1)) / 2);
-                _championStats.PrestigeUpgrade();
+                _prestigeManager.RemoveMedals(_upgradeCostInt * BuyMultiplicatorScript.GetMultiplicator());
+                for (int i = 0; i < BuyMultiplicatorScript.GetMultiplicator(); i++)
+                {
+                    _upgradeCostInt = 4 + (int)(2.5f * (_championStats.PrestigeLevel * (_championStats.PrestigeLevel + 1)) / 2);
+                    _championStats.Upgrade();
+                }
                 UpdateUpgradePanel();
             }
             _teamStats.UpdateDamage();

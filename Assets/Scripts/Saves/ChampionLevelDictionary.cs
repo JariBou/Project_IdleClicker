@@ -15,7 +15,7 @@ namespace ProjectClicker.Saves
     [Serializable]
     public class ChampionLevelDictionary : IEnumerable
     {
-        public ChampionLevelItem[] items;
+        public ChampionLevelItem[] items = {};
         public IEnumerator GetEnumerator()
         {
             return items.GetEnumerator();
