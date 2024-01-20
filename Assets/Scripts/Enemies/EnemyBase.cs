@@ -103,6 +103,7 @@ namespace ProjectClicker.Enemies
             else _maxHealth += 2500;
             _health = _maxHealth;
             _enemyBaseHealthBar.value = _health;
+            _enemyBaseHealthBar.maxValue = _maxHealth;
             if (_spawnRate > 3f) _spawnRate -= 0.1f;
             _canSpawn = true;
             _isDead = false;

@@ -58,12 +58,7 @@ namespace ProjectClicker.Enemies
         [Header("Gold Animation")]
         [SerializeField] private GameObject _goldAnimationPrefab;
 
-        [Header("Click on Enemy")]
-        private TeamStats _teamStats;
-        private Camera _camera;
-        [SerializeField] private LayerMask _layerMask;
-        private Collider2D _collider;
-        private GameObject _display;
+
         
         // Start is called before the first frame update
         private void Start()
@@ -77,11 +72,6 @@ namespace ProjectClicker.Enemies
             _offset = GetComponent<EnemiesMovement>().Offset;
             _animator = GetComponent<Animator>();
             _rb = GetComponent<Rigidbody2D>();
-            _teamStats = GameObject.FindWithTag("Team").GetComponent<TeamStats>();
-            _camera = GameObject.FindWithTag("CameraSlider").GetComponent<Camera>();
-            if (GetComponent<CapsuleCollider2D>() != null) _collider = GetComponent<CapsuleCollider2D>();
-            else _collider = GetComponent<CircleCollider2D>();
-            _display = _enemyBase.Display;
 
             /*            Debug.Log(gameObject.name);*/
         }
@@ -89,20 +79,6 @@ namespace ProjectClicker.Enemies
         // Update is called once per frame
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Vector2 newMousePosition = Utils.ConvertPosCamToCam(Input.mousePosition, _display.transform.position, Camera.main, _camera);
-
-                /*Debug.DrawLine(Vector3.zero, newMousePosition, Color.red, 3f);*/
-
-                Collider2D collider = Physics2D.OverlapPoint(newMousePosition, _layerMask);
-                if (collider != null && Utils.IsMouseOverGameObject(newMousePosition, gameObject))
-                {
-                    TakeDamage(_teamStats.Damage * 0.25f);// Sinon c'est trop facile
-                    collider = null;
-                    
-                }
-            }
             _animator.SetFloat("Velocity", _rb.velocity.x);
             if (_canAttack)
             {

@@ -1860,6 +1860,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1774685636}
     - target: {fileID: 7126115555666545083, guid: 52f9c32464a209348a5bbce4603691c4, type: 3}
+      propertyPath: _display
+      value: 
+      objectReference: {fileID: 1717554701}
+    - target: {fileID: 7126115555666545083, guid: 52f9c32464a209348a5bbce4603691c4, type: 3}
       propertyPath: _dragSpeed
       value: 0.1
       objectReference: {fileID: 0}
@@ -1894,6 +1898,10 @@ PrefabInstance:
     - target: {fileID: 7126115555666545083, guid: 52f9c32464a209348a5bbce4603691c4, type: 3}
       propertyPath: _teamFollower.y
       value: 887.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126115555666545083, guid: 52f9c32464a209348a5bbce4603691c4, type: 3}
+      propertyPath: _layerMask.m_Bits
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 8828312779477480873, guid: 52f9c32464a209348a5bbce4603691c4, type: 3}
       propertyPath: m_Color.a

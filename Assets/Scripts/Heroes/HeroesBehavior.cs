@@ -181,24 +181,19 @@ namespace ProjectClicker.Heroes
 
         private void Attack(Collider2D[] colliderAttack)
         {
-            Debug.Log("J'attaque");
+            /*Debug.Log("J'attaque");*/
             _canAttack = false;
             foreach (Collider2D collider in colliderAttack.Where(i => i != null))
             {
-                /*                if (collider == null) continue;*/
-/*                _animator.ResetTrigger("Attack1");
-                _animator.ResetTrigger("Attack2");
-                _animator.ResetTrigger("Attack3");*/
                 if (_rb.velocity.x < 0.01f && !collider.CompareTag("EnemyBase"))
                 {
                     if (_attackCount == 0) _animator.SetTrigger("Attack1");
                     else if (_attackCount == 1 || _attackCount == 3) _animator.SetTrigger("Attack2");
                     else if (_attackCount == 2) _animator.SetTrigger("Attack3");
                 }
-                else
+                else if (_rb.velocity.x < 0.01f && collider.CompareTag("EnemyBase"))
                 {
                     _animator.SetTrigger("Attack1");
-
                 }
                 break;
             }
@@ -208,7 +203,7 @@ namespace ProjectClicker.Heroes
             _canAttack = false;
             foreach (Collider2D collider in colliderAttack.Where(i => i != null))
             {
-                Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);
+                /*Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);*/
                 if (collider.CompareTag("EnemyBase"))
                 {
                     if (_attackCount > 0) collider.GetComponent<EnemyBase>()?.TakeDamage(Damage * _attackCount);

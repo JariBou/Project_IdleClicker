@@ -1,6 +1,8 @@
+using ProjectClicker.Enemies;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+using ProjectClicker.Core;
 
 namespace ProjectClicker
 {
@@ -29,6 +31,14 @@ namespace ProjectClicker
         [SerializeField] private GameObject _leaderTeam1;
         [SerializeField] private GameObject _leaderTeam2;
         [FormerlySerializedAs("moveSpeed")] [SerializeField] private float _moveSpeed = 0.5f;
+
+
+        [Header("Clicking on Enemies")]
+        private TeamStats _teamStats;
+        private Camera _cameraCamera;
+        [SerializeField] private LayerMask _layerMask;
+        private Collider2D _collider;
+        [SerializeField] private GameObject _display;
         // Start is called before the first frame update
         private void Start()
         {
@@ -36,6 +46,8 @@ namespace ProjectClicker
             yStartPos = _camera.transform.position.y;
             zStartPos = _camera.transform.position.z;*/
             _startCamPos = _camera.transform.position;
+            _teamStats = GameObject.FindWithTag("Team").GetComponent<TeamStats>();
+            _cameraCamera = GameObject.FindWithTag("CameraSlider").GetComponent<Camera>();
         }
 
         // Update is called once per frame
@@ -46,6 +58,20 @@ namespace ProjectClicker
             {
                 float xClamped = Mathf.Clamp(_teamFollower.x, _startCamPos.x - _maxWidthDrag, _startCamPos.x + _maxWidthDrag);
                 _camera.position = Vector3.Lerp(_camera.position, new Vector3(xClamped, _startCamPos.y, _camera.position.z), 2.5f * Time.deltaTime);
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector2 newMousePosition = Utils.ConvertPosCamToCam(Input.mousePosition, _display.transform.position, Camera.main, _cameraCamera);
+
+                Debug.DrawLine(Vector3.zero, newMousePosition, Color.red, 3f);
+
+                Collider2D collider = Physics2D.OverlapPoint(newMousePosition, _layerMask);
+                if (collider != null)
+                {
+                    collider.GetComponent<EnemiesBehavior>().TakeDamage(_teamStats.Damage * 0.5f);// Sinon c'est trop facile
+
+                }
             }
         }
 
