@@ -78,7 +78,7 @@ namespace ProjectClicker
                     throw new ArgumentOutOfRangeException();
             }
             
-            _upgradeCost.text = Utils.NumberToString(_upgradeCostInt);
+            _upgradeCost.text = Utils.NumberToString(CalculateNewCost(BuyMultiplicatorScript.GetMultiplicator()));
 
             _championStats.LinkedDisplays.Add(this);
             _teamStats = GameObject.FindWithTag("Team").GetComponent<TeamStats>();
@@ -92,7 +92,7 @@ namespace ProjectClicker
 
         private void OnPriceMultUpdate(int mult)
         {
-            _upgradeCost.text = Utils.NumberToString(_upgradeCostInt * mult);
+            _upgradeCost.text = Utils.NumberToString(CalculateNewCost(mult));
         }
 
         private void OnPrestige()
@@ -147,7 +147,7 @@ namespace ProjectClicker
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            _upgradeCost.text = Utils.NumberToString(_upgradeCostInt * BuyMultiplicatorScript.GetMultiplicator());
+            _upgradeCost.text = Utils.NumberToString(CalculateNewCost(BuyMultiplicatorScript.GetMultiplicator()));
         }
 
         public void BuyUpgrade()
@@ -155,33 +155,60 @@ namespace ProjectClicker
             if (_upgradeResource == UpgradeResource.GoldUpgrade)
             {
                 if (_goldManager == null) _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
-                if (_goldManager.Gold < (ulong)_upgradeCostInt * (ulong)BuyMultiplicatorScript.GetMultiplicator()) return;
+                if (_goldManager.Gold < (ulong)CalculateNewCost(BuyMultiplicatorScript.GetMultiplicator())) return;
                 
-                // TODO: cheaper if bough in bundle lol fix that shit
-                _goldManager.RemoveGold((ulong)_upgradeCostInt * (ulong)BuyMultiplicatorScript.GetMultiplicator());
+                _goldManager.RemoveGold((ulong)CalculateNewCost(BuyMultiplicatorScript.GetMultiplicator()));
                 for (int i = 0; i < BuyMultiplicatorScript.GetMultiplicator(); i++)
                 {
                     if (_championStats.HeroLevel >= 1) _upgradeCostInt += 1240 * _championStats.HeroLevel * 2;
                     else _upgradeCostInt += 1240;
                     _championStats.Upgrade();
                 }
-                UpdateUpgradePanel();
             }
             else
             {
                 if (_prestigeManager == null) _prestigeManager = GameObject.FindWithTag("Managers").GetComponent<PrestigeManager>();
-                if (_prestigeManager.Medals < (uint)_upgradeCostInt * BuyMultiplicatorScript.GetMultiplicator()) return;
+                if (_prestigeManager.Medals < (uint)CalculateNewCost(BuyMultiplicatorScript.GetMultiplicator())) return;
                 
-                _prestigeManager.RemoveMedals(_upgradeCostInt * BuyMultiplicatorScript.GetMultiplicator());
+                _prestigeManager.RemoveMedals((int)CalculateNewCost(BuyMultiplicatorScript.GetMultiplicator()));
                 for (int i = 0; i < BuyMultiplicatorScript.GetMultiplicator(); i++)
                 {
                     _upgradeCostInt = 4 + (int)(2.5f * (_championStats.PrestigeLevel * (_championStats.PrestigeLevel + 1)) / 2);
                     _championStats.PrestigeUpgrade();
                 }
-                UpdateUpgradePanel();
             }
+            UpdateUpgradePanel();
             _teamStats.UpdateDamage();
             
+        }
+
+        public ulong CalculateNewCost(int levelsIncrease)
+        {
+            ulong totalCost;
+            switch (_upgradeResource)
+            {
+                case UpgradeResource.GoldUpgrade:
+                    totalCost = (ulong)_upgradeCostInt;
+                    int currLevel = _championStats.HeroLevel;
+                    for (int i = 0; i < levelsIncrease-1; i++)
+                    {
+                        totalCost += (ulong)(1240 * currLevel * 2);
+                        currLevel++;
+                    }
+                    break;
+                case UpgradeResource.PrestigeUpgrade:
+                    totalCost = 0;
+                    for (int i = 0; i < levelsIncrease; i++)
+                    {
+                        int newLevel = _championStats.PrestigeLevel + i;
+                        totalCost += 4 + (uint)(2.5f * (newLevel * (newLevel + 1)) / 2);
+
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            return totalCost;
         }
 
         private int GetHeroIndex(string championRole)
@@ -194,6 +221,25 @@ namespace ProjectClicker
                 }
             }
             return -1;
+        }
+
+        /// <summary>
+        /// Only if gold resource, sets the base price
+        /// </summary>
+        public void InitCosts()
+        {
+            if (_upgradeResource == UpgradeResource.GoldUpgrade)
+            {
+                int totalCost = _upgradeCostInt;
+                int currLevel = 1;
+                for (int i = 0; i < _championStats.HeroLevel-1; i++)
+                {
+                    totalCost += 1240 * currLevel * 2;
+                    currLevel++;
+                }
+
+                _upgradeCostInt = totalCost;
+            }
         }
     }
 

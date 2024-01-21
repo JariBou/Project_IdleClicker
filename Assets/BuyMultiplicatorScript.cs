@@ -42,5 +42,10 @@ namespace ProjectClicker
             _text.text = $"x{_multiplicators[_multIndex]}";
             UpdatePrice?.Invoke(_multiplicators[_multIndex]);
         }
+
+        public static void TabChanged()
+        {
+            UpdatePrice?.Invoke(GetMultiplicator());
+        }
     }
 }

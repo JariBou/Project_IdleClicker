@@ -22,6 +22,7 @@ namespace ProjectClicker.Saves
         
         // TeamStats
         [SerializeField] private ChampionLevelDictionary _championLevelDictionary = new();
+        [SerializeField] private ChampionLevelDictionary _championPrestigeDictionary = new();
 
         public int CurrLevel => _currLevel;
         public ulong Gold => _gold;
@@ -30,6 +31,7 @@ namespace ProjectClicker.Saves
         public int NumberOfPrestiges => _numberOfPrestiges;
 
         public ChampionLevelDictionary LevelDictionary => _championLevelDictionary;
+        public ChampionLevelDictionary ChampionPrestigeDictionary => _championPrestigeDictionary;
 
         public static JsonSaveData Initialise()
         {
@@ -47,6 +49,10 @@ namespace ProjectClicker.Saves
                 _championLevelDictionary = new ()
                 {
                     items = new ChampionLevelItem[teamStats.Heroes.Count]
+                },
+                _championPrestigeDictionary = new ()
+                {
+                    items = new ChampionLevelItem[teamStats.Heroes.Count]
                 }
             };
 
@@ -56,6 +62,11 @@ namespace ProjectClicker.Saves
                 {
                     championRole = teamStats.Heroes[i].GetRole(),
                     championLevel = teamStats.Heroes[i].HeroLevel
+                };
+                data.ChampionPrestigeDictionary.items[i] = new ChampionLevelItem
+                {
+                    championRole = teamStats.Heroes[i].GetRole(),
+                    championLevel = teamStats.Heroes[i].PrestigeLevel
                 };
             }
             

@@ -27,9 +27,15 @@ namespace ProjectClicker.Saves
 
             PrestigeManager.Instance.PassData(saveData);
 
+            for (int i = 0; i < saveData.LevelDictionary.items.Length; i++)
+            {
+                var levelPair = saveData.LevelDictionary.items[i];
+                var prestigePair = saveData.ChampionPrestigeDictionary.items[i];
+                _teamStats.GetHeroByRole(levelPair.championRole).SetLevels(levelPair.championLevel, prestigePair.championLevel);
+
+            }
             foreach (ChampionLevelItem item in saveData.LevelDictionary)
             {
-                _teamStats.GetHeroByRole(item.championRole).SetLevel(item.championLevel);
             }
             
             

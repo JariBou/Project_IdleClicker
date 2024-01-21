@@ -33,6 +33,17 @@ namespace ProjectClicker.Core
             return newMousePosition;
         }
 
+        public static ulong Power(decimal n, decimal p)
+        {
+            ulong total = (ulong)n;
+            for (int i = 0; i < p; i++)
+            {
+                total *= (ulong)n;
+            }
+
+            return total;
+        }
+
         public static bool IsMouseOverGameObject(Vector2 MousePosition, GameObject Object)
         {
             if (Object.GetComponent<CapsuleCollider2D>() != null)
