@@ -1,6 +1,8 @@
 ﻿using System;
 using NaughtyAttributes;
 using ProjectClicker.Core;
+using ProjectClicker.Enemies;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ProjectClicker.Saves
@@ -21,8 +23,7 @@ namespace ProjectClicker.Saves
                 Console.WriteLine(e);
                 return;
             }
-
-
+            
             GoldManager.Instance.SetGold(saveData.Gold);
 
             PrestigeManager.Instance.PassData(saveData);
@@ -32,28 +33,28 @@ namespace ProjectClicker.Saves
                 var levelPair = saveData.LevelDictionary.items[i];
                 var prestigePair = saveData.ChampionPrestigeDictionary.items[i];
                 _teamStats.GetHeroByRole(levelPair.championRole).SetLevels(levelPair.championLevel, prestigePair.championLevel);
+            }
+            
+            DateTime lastOpened = DateTime.Parse(saveData.LastOpened);
 
-            }
-            foreach (ChampionLevelItem item in saveData.LevelDictionary)
-            {
-            }
-            
-            
+            TimeSpan timeSpan = DateTime.Now.Subtract(lastOpened);
+            long goldValue = (long)(timeSpan.TotalMinutes * saveData.CurrLevel * 2);
+
+            TimePassedGUI.Instance.Config(goldValue, timeSpan.TotalMinutes);
+
             LevelsManager.Instance.SetLevel(saveData.CurrLevel);
-
+            EnemyBase.Instance.LoadSave();
         }
 
         private void OnApplicationQuit()
         {
-            var f = JsonSaveData.Initialise();
-            SaveManager.SaveToJson(f, _saveName);
+            SaveManager.SaveToJson(JsonSaveData.Initialise(), _saveName);
         }
 
         [Button]
         private void Save()
         {
-            var f = JsonSaveData.Initialise();
-            SaveManager.SaveToJson(f, _saveName);
+            SaveManager.SaveToJson(JsonSaveData.Initialise(), _saveName);
         }
     }
 }

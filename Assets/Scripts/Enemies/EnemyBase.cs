@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ProjectClicker.Core;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace ProjectClicker.Enemies
 {
@@ -39,6 +41,13 @@ namespace ProjectClicker.Enemies
         [SerializeField] private GameObject _particlesPrefab;
 
         public GameObject Display;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
+        public static EnemyBase Instance { get; private set; }
 
         // Start is called before the first frame update
         private void Start()
@@ -123,15 +132,25 @@ namespace ProjectClicker.Enemies
             _healthBarGeeenBar.SetActive(false);
             yield return new WaitForSeconds(1.5f);
             _levelsManager.NextLevel();
-            if (_levelsManager.CurrentLevel >= 1) _maxHealth += 1000 * _levelsManager.CurrentLevel * 2;
-            else _maxHealth += 2500;
-            _health = _maxHealth;
-            _enemyBaseHealthBar.maxValue = _maxHealth;
-            _enemyBaseHealthBar.value = _health;
-            if (_spawnRate > 3f) _spawnRate -= 0.1f;
+            CalculateHealth();
+            _spawnRate = 3 * (1 - _levelsManager.CurrentLevel / (float)(100 + _levelsManager.CurrentLevel));
             _canSpawn = true;
             _isDead = false;
             _healthBarGeeenBar.SetActive(true);
+        }
+
+        public void CalculateHealth()
+        {
+            _maxHealth = (float)(Math.Pow(500, _levelsManager.CurrentLevel) + 2500);
+            _health = _maxHealth;
+            _enemyBaseHealthBar.maxValue = _maxHealth;
+            _enemyBaseHealthBar.value = _health;
+        }
+
+        public void LoadSave()
+        {
+            CalculateHealth();
+            _spawnRate = 3 * (1 - _levelsManager.CurrentLevel / (float)(100 + _levelsManager.CurrentLevel));
         }
 
         public void ResetBase()

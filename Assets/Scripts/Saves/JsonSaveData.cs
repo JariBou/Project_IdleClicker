@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using ProjectClicker.Core;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -24,6 +25,9 @@ namespace ProjectClicker.Saves
         [SerializeField] private ChampionLevelDictionary _championLevelDictionary = new();
         [SerializeField] private ChampionLevelDictionary _championPrestigeDictionary = new();
 
+
+        [SerializeField] private string _lastOpened;
+
         public int CurrLevel => _currLevel;
         public ulong Gold => _gold;
         public uint Trophies => _trophies;
@@ -32,6 +36,7 @@ namespace ProjectClicker.Saves
 
         public ChampionLevelDictionary LevelDictionary => _championLevelDictionary;
         public ChampionLevelDictionary ChampionPrestigeDictionary => _championPrestigeDictionary;
+        public string LastOpened => _lastOpened;
 
         public static JsonSaveData Initialise()
         {
@@ -53,7 +58,8 @@ namespace ProjectClicker.Saves
                 _championPrestigeDictionary = new ()
                 {
                     items = new ChampionLevelItem[teamStats.Heroes.Count]
-                }
+                },
+                _lastOpened = DateTime.Now.ToLongTimeString()
             };
 
             for (int i = 0; i < teamStats.Heroes.Count; i++)
