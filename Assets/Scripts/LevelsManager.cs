@@ -106,6 +106,7 @@ namespace ProjectClicker
         public void SetLevel(int currLevel)
         {
             _currentLevel = currLevel;
+            _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
             ResetTeamHealth?.Invoke();
             CallLevelChanged();
         }

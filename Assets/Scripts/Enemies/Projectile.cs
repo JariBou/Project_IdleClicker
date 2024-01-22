@@ -63,7 +63,7 @@ namespace ProjectClicker
                 if (other.gameObject.GetComponent<HeroesBehavior>() && other.gameObject.transform.parent.gameObject.CompareTag("Team"))
                 {
                     _teamStats = other.transform.parent.gameObject.GetComponent<TeamStats>();
-                    _teamStats.TakeDamage(_enemiesBehavior.Damage);
+                    _teamStats.TakeDamage(_enemiesBehavior.Damage, other.transform.position);
                     _hasHit = true;
                     _rb.velocity = Vector2.zero;
                     _animator.SetTrigger("Hit");

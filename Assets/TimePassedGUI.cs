@@ -32,8 +32,8 @@ namespace ProjectClicker
 
         public void Config(long goldValue, double timeSpanTotalMinutes)
         {
-            _goldAmount.text = $"+{Utils.NumberToString(goldValue)}";
-            _timeAway.text = $"{Utils.NumberToString((decimal)Math.Round(timeSpanTotalMinutes, 2))}minutes";
+            _goldAmount.text = $"+ {Utils.NumberToString(goldValue)}";
+            _timeAway.text = $"{Utils.NumberToString((decimal)Math.Round(timeSpanTotalMinutes, 2))} minutes";
         }
     }
 }
