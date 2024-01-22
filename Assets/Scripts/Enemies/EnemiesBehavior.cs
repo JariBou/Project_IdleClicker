@@ -68,8 +68,6 @@ namespace ProjectClicker.Enemies
             _enemyBase = GameObject.FindWithTag("EnemyBase").GetComponent<EnemyBase>();
             _level = GameObject.FindGameObjectWithTag("Managers").GetComponent<LevelsManager>().CurrentLevel;
             SetStats(_enemyType);
-            _healthBar.maxValue = _maxHealth;
-            _healthBar.value = _health; 
             _goldManager = GameObject.FindWithTag("Managers").GetComponent<GoldManager>();
             _offset = GetComponent<EnemiesMovement>().Offset;
             _animator = GetComponent<Animator>();
@@ -218,6 +216,8 @@ namespace ProjectClicker.Enemies
                     _canAttack = true;
                     _maxHealth = 250 * _level;
                     _health = _maxHealth;
+                    _healthBar.maxValue = _maxHealth;
+                    _healthBar.value = _health;
                     _attackRange = 3;
                     _damage = 190 * _level;
                     _attackSpeed = 2.5f / (_level * 1.05f);
@@ -228,6 +228,8 @@ namespace ProjectClicker.Enemies
                     _canAttack = true;
                     _maxHealth = 250 * _level;
                     _health = _maxHealth;
+                    _healthBar.maxValue = _maxHealth;
+                    _healthBar.value = _health;
                     _attackRange = 7.5f;
                     _damage = 150 * _level;
                     _attackSpeed = 1.5f / (_level * 1.05f);
@@ -236,13 +238,15 @@ namespace ProjectClicker.Enemies
                     break;
                 case EnemyType.Boss:
                     _canAttack = true;
-                    _maxHealth = 30000 * _level;
+                    _maxHealth = 300000 * _level;
                     _health = _maxHealth;
+                    _healthBar.maxValue = _maxHealth;
+                    _healthBar.value = _health;
                     _attackRange = 5;
                     _damage = 800 * _level;
                     _attackSpeed = 3/(_level * 1.05f);
                     if (_attackSpeed <1.5f) _attackSpeed = 1.5f;
-                    _gold = 10000 * _level;
+                    _gold = 150000 * _level;
                     break;
             }
         }

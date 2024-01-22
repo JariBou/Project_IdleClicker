@@ -64,11 +64,11 @@ namespace ProjectClicker.Enemies
         // Update is called once per frame
         private void Update()
         {
-            if (_canSpawn && (_levelsManager.CurrentLevel % 10 != 0 || _levelsManager.CurrentLevel == 0))
+            if (_canSpawn && (_levelsManager.CurrentLevel % 5 != 0 || _levelsManager.CurrentLevel == 0))
             {
                 StartCoroutine(SpawnEnemies(_spawnRate));
             }
-            else if (_canSpawn && _levelsManager.CurrentLevel % 10 == 0)
+            else if (_canSpawn && _levelsManager.CurrentLevel % 5 == 0)
             {
                 SpawnBoss();
             }
@@ -78,8 +78,10 @@ namespace ProjectClicker.Enemies
         {
            _canSpawn = false;
             GameObject boss = Instantiate(_enemiesPrefab[Random.Range(0, _enemiesPrefab.Length - 1)], _spawnPoints[2].transform.position, Quaternion.identity);
-            boss.GetComponent<EnemiesBehavior>().SetStats(EnemyType.Boss);
             boss.transform.localScale *= 2;
+            boss.GetComponent<EnemiesBehavior>().SetStats(EnemyType.Boss);
+            boss.GetComponent<EnemiesBehavior>().Config(_particlesPrefab);
+            _enemies.Add(boss);
         }
 
         public void TakeDamage(float damage)

@@ -138,10 +138,18 @@ namespace ProjectClicker
         public void TakeDamage(float damage)
         {
             Debug.Log("Damage taken: " + damage + ", Base Armor: " + _armor);
-            float dmg = damage - _armor;
+            float dmg;
+            if (_armor >= 0)
+            {
+                dmg = damage * (100 / (100 + _armor));
+            }
+            else
+            {
+                dmg = damage * (2 - (100 / (100 - _armor)));
+            }
             if (dmg > 0)
             {
-                _currentHealth -= dmg;
+                _currentHealth -= Mathf.Round(dmg);
             }
             TeamHealthUpdate?.Invoke();
             if (_currentHealth < 0 && !_isDead)

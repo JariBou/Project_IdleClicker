@@ -151,7 +151,7 @@ namespace ProjectClicker.Heroes
                     _attackRange = 2f;
                     _baseAttackSpeed = 4;
                     _canAttack = true;
-                    _baseHealStrength = 0;
+                    _baseHealStrength = 150;
                     _baseArmor = 75;
                     gameObject.tag = "Tank";
                     break;
