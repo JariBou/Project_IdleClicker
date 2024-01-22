@@ -234,7 +234,7 @@ namespace ProjectClicker.Enemies
                     _damage = 150 * _level;
                     _attackSpeed = 1.5f / (_level * 1.05f);
                     if (_attackSpeed < 0.8f) _attackSpeed = 0.8f;
-                    _gold = 600 * _level;
+                    _gold = 4500 * _level;
                     break;
                 case EnemyType.Boss:
                     _canAttack = true;
