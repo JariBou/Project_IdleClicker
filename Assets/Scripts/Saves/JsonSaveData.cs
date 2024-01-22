@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using ProjectClicker.Core;
 using UnityEngine;
 using Object = UnityEngine.Object;

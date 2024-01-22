@@ -1,8 +1,10 @@
+using System;
 using ProjectClicker.Enemies;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using ProjectClicker.Core;
+using Random = UnityEngine.Random;
 
 namespace ProjectClicker
 {
@@ -40,6 +42,18 @@ namespace ProjectClicker
         private Collider2D _collider;
         [SerializeField] private GameObject _display;
         [SerializeField] private GameObject _particlePrefab;
+
+        private bool _doShake;
+        private float _shakeDuration;
+        private float _shakeAmount = 1f;
+        public static DraggingZone Instance { get; private set; }
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
+
         // Start is called before the first frame update
         private void Start()
         {
@@ -51,14 +65,33 @@ namespace ProjectClicker
             _cameraCamera = GameObject.FindWithTag("CameraSlider").GetComponent<Camera>();
         }
 
+        public static void DoShake(float duration, float strength)
+        {
+            Instance._shakeDuration = duration;
+            Instance._shakeAmount = strength;
+        }
+
         // Update is called once per frame
         private void Update()
         {
+            if (_shakeDuration > 0)
+            {
+                _camera.position += Random.insideUnitSphere * _shakeAmount;
+			
+                _shakeDuration -= Time.deltaTime;
+                _shakeAmount -= Time.deltaTime * _shakeAmount;
+            }
+            else
+            {
+                _shakeDuration = 0f;
+                _camera.position = new Vector3(_camera.position.x, _startCamPos.y, _camera.position.z);
+            }
+            
             _teamFollower.x = (_leaderTeam1.transform.position.x + _leaderTeam2.transform.position.x) / 2 + 1f;
             if (!_dragging && Mathf.Abs(_camera.position.x - _teamFollower.x) > 0.02f)
             {
                 float xClamped = Mathf.Clamp(_teamFollower.x, _startCamPos.x - _maxWidthDrag, _startCamPos.x + _maxWidthDrag);
-                _camera.position = Vector3.Lerp(_camera.position, new Vector3(xClamped, _startCamPos.y, _camera.position.z), 2.5f * Time.deltaTime);
+                _camera.position = Vector3.Lerp(_camera.position, new Vector3(xClamped, _camera.position.y, _camera.position.z), 2.5f * Time.deltaTime);
             }
 
             if (Input.GetMouseButtonDown(0))
@@ -72,6 +105,7 @@ namespace ProjectClicker
                 {
                     collider.GetComponent<EnemiesBehavior>().TakeDamage(_teamStats.Damage * 0.5f);// Sinon c'est trop facile
                     Instantiate(_particlePrefab, newMousePosition, Quaternion.identity);
+                    DoShake(0.5f, 0.08f);
                 }
             }
         }
@@ -83,7 +117,7 @@ namespace ProjectClicker
             Vector2 displacement = eventData.delta*-1;
             float xClamped = Mathf.Clamp(_camera.position.x + displacement.x * _dragSpeed,
                 _startCamPos.x-_maxWidthDrag, _startCamPos.x+_maxWidthDrag);
-            Vector3 newPos = new Vector3(xClamped, _startCamPos.y, _startCamPos.z);
+            Vector3 newPos = new Vector3(xClamped, _camera.transform.position.y, _startCamPos.z);
             _camera.transform.position = newPos;
         }
 

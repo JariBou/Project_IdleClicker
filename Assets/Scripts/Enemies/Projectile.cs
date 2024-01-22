@@ -1,8 +1,6 @@
 using NaughtyAttributes;
 using ProjectClicker.Enemies;
 using ProjectClicker.Heroes;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProjectClicker

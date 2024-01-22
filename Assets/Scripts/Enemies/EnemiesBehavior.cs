@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using NaughtyAttributes;
 using ProjectClicker.Core;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;

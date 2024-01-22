@@ -2,7 +2,6 @@
 using NaughtyAttributes;
 using ProjectClicker.Core;
 using ProjectClicker.Enemies;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ProjectClicker.Saves
