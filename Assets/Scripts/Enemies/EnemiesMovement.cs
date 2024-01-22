@@ -7,6 +7,8 @@ namespace ProjectClicker.Enemies
         [SerializeField] private float Speed = 500;
         private Rigidbody2D _rb;
         [SerializeField] private float _offset;
+        [SerializeField] private float _width;
+        [SerializeField] private float _height;
         private bool _canMove;
         private EnemiesBehavior _enemiesBehavior;
 
@@ -26,7 +28,7 @@ namespace ProjectClicker.Enemies
                 StopMove();
                 return;
             }
-            Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x - _offset, transform.position.y), new Vector2(2, 8), 0, LayerMask.GetMask("Champion"));
+            Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x - _offset, transform.position.y), new Vector2(_width, _height), 0, LayerMask.GetMask("Champion"));
             if (colliderMovement.Length == 0)
             {
                 Move();
@@ -52,7 +54,7 @@ namespace ProjectClicker.Enemies
         private void OnDrawGizmos()
         {
             Gizmos.color = _canMove ? Color.green : Color.red;
-            Gizmos.DrawWireCube(new Vector2(transform.position.x - _offset, transform.position.y), new Vector2(2, 8));
+            Gizmos.DrawWireCube(new Vector2(transform.position.x - _offset, transform.position.y), new Vector2(_width, _height));
         }
         
     }

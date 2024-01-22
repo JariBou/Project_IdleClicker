@@ -93,7 +93,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3705128636563681852, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
       propertyPath: _gold
-      value: 1000
+      value: 4500
       objectReference: {fileID: 0}
     - target: {fileID: 3705128636563681852, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
       propertyPath: _damage
@@ -139,6 +139,30 @@ PrefabInstance:
       propertyPath: _projectileSpawnPoint
       value: 
       objectReference: {fileID: 9194251159205536947}
+    - target: {fileID: 4502749156596764408, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
+      propertyPath: _width
+      value: 4.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 4502749156596764408, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
+      propertyPath: _height
+      value: 13.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 4502749156596764408, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
+      propertyPath: _offset
+      value: 3.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202891243171271161, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
+      propertyPath: m_Value
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202891243171271161, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
+      propertyPath: m_MaxValue
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 6334689336460894864, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6334689336460894864, guid: ee2c20d4509633a498c8d979c195e644, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

@@ -3547,6 +3547,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _saveName: GameSave
   _teamStats: {fileID: 1805394220}
+  target: 30
 --- !u!114 &1098883784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7004,6 +7005,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Team
       objectReference: {fileID: 0}
+    - target: {fileID: 2701281740290012803, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _width
+      value: 3.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 2701281740290012803, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _height
+      value: 6.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 2701281740290012803, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _offset
+      value: 2.49
+      objectReference: {fileID: 0}
     - target: {fileID: 2825630291898934350, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
       propertyPath: m_LocalPosition.y
       value: 3.18
@@ -7040,6 +7053,14 @@ PrefabInstance:
       propertyPath: _baseAttackSpeed
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5556820705165059868, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _width
+      value: 2.84
+      objectReference: {fileID: 0}
+    - target: {fileID: 5556820705165059868, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _height
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5635703980381919775, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
       propertyPath: m_LocalPosition.y
       value: 5.23
@@ -7072,6 +7093,14 @@ PrefabInstance:
       propertyPath: _baseHealStrength
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6641663682394163414, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _width
+      value: 4.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 6641663682394163414, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _height
+      value: 7.02
+      objectReference: {fileID: 0}
     - target: {fileID: 7124429070495749569, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
       propertyPath: _upgradeInfo._dmgPerLevel
       value: 75
@@ -7103,6 +7132,14 @@ PrefabInstance:
     - target: {fileID: 7359378281995062903, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8367803890614514183, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _width
+      value: 2.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 8367803890614514183, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
+      propertyPath: _height
+      value: 7.27
       objectReference: {fileID: 0}
     - target: {fileID: 8878457912269626410, guid: 63d4e98837537a34ca2dab51a174340e, type: 3}
       propertyPath: m_Layer
@@ -7567,6 +7604,10 @@ PrefabInstance:
       propertyPath: _levelText
       value: 
       objectReference: {fileID: 2038548578}
+    - target: {fileID: 533501137151051955, guid: e7e80b38c35900140afe31ddf2515920, type: 3}
+      propertyPath: _spawnRate
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 533501137151051955, guid: e7e80b38c35900140afe31ddf2515920, type: 3}
       propertyPath: _particlesPrefab
       value: 

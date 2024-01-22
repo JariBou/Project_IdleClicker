@@ -356,7 +356,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 500
-  _offset: 2
+  _offset: 2.27
+  _width: 2.33
+  _height: 5.86
 --- !u!114 &3705128636563681852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,9 +388,6 @@ MonoBehaviour:
   _projectilePrefab: {fileID: 6718009578564408549, guid: f7b91f1b6dcec444d8fb2661dd75235b, type: 3}
   _isFlying: 0
   _goldAnimationPrefab: {fileID: 710354471480742334, guid: 8b724a009b0e50a4382615e1bd9c4273, type: 3}
-  _layerMask:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!50 &2085211668080353694
 Rigidbody2D:
   serializedVersion: 4

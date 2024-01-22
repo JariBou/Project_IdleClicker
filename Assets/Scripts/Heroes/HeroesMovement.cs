@@ -9,6 +9,8 @@ namespace ProjectClicker.Heroes
         [FormerlySerializedAs("Speed")] [SerializeField] private float _speed;
         private Rigidbody2D _rb;
         [FormerlySerializedAs("offset")] [SerializeField] private float _offset;
+        [SerializeField] private float _width;
+        [SerializeField] private float _height;
         public bool _canMove;
         [FormerlySerializedAs("animator")] [SerializeField] private Animator _animator;
 
@@ -26,7 +28,7 @@ namespace ProjectClicker.Heroes
             _animator.SetFloat("Velocity", _rb.velocity.x);
             if (gameObject.CompareTag("Healer") || gameObject.CompareTag("Archer"))
             {
-                Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(4,6),0, LayerMask.GetMask("Champion"));
+                Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(_width, _height),0, LayerMask.GetMask("Champion"));
                 if (colliderMovement.Length == 0)
                 {
                     Move();
@@ -42,7 +44,7 @@ namespace ProjectClicker.Heroes
             }
             else if (gameObject.CompareTag("Tank") || gameObject.CompareTag("Warrior"))
             {
-                Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2,10),0, LayerMask.GetMask("Enemy"));
+                Collider2D[] colliderMovement = Physics2D.OverlapBoxAll(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(_width, _height),0, LayerMask.GetMask("Enemy"));
                 if (colliderMovement.Length == 0)
                 {
                     Move();
@@ -71,11 +73,11 @@ namespace ProjectClicker.Heroes
             else Gizmos.color = Color.red;
             if (gameObject.CompareTag("Healer") || gameObject.CompareTag("Archer"))
             {
-                Gizmos.DrawWireCube(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(4, 6));
+                Gizmos.DrawWireCube(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(_width, _height));
             }
             else if (gameObject.CompareTag("Tank") || gameObject.CompareTag("Warrior"))
             {
-                Gizmos.DrawWireCube(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(2, 10));
+                Gizmos.DrawWireCube(new Vector2(transform.position.x + _offset, transform.position.y), new Vector2(_width, _height));
             }
 
 

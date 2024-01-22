@@ -10,6 +10,13 @@ namespace ProjectClicker.Saves
     {
         [SerializeField] private string _saveName = "GameSave";
         [SerializeField] private TeamStats _teamStats;
+        [SerializeField] private int target = 30;
+
+        private void Awake()
+        {
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = target;
+        }
         private void Start()
         {
             JsonSaveData saveData;
