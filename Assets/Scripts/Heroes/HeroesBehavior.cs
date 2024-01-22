@@ -151,7 +151,7 @@ namespace ProjectClicker.Heroes
                     _attackRange = 2f;
                     _baseAttackSpeed = 4;
                     _canAttack = true;
-                    _baseHealStrength = 0;
+                    _baseHealStrength = 150;
                     _baseArmor = 75;
                     gameObject.tag = "Tank";
                     break;
@@ -354,11 +354,13 @@ namespace ProjectClicker.Heroes
             _heroLevel = 0;
         }
 
-        public void SetLevel(int championLevel)
+        public void SetLevels(int championLevel, int prestigeLevel)
         {
             _heroLevel = championLevel;
+            _prestigeLevel = prestigeLevel;
             foreach (HeroUpgradeDisplay display in LinkedDisplays)
             {
+                display.InitCosts();
                 display.UpdateUpgradePanel();
             }
         }
