@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using ProjectClicker.Core;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;

@@ -82,7 +82,6 @@ namespace ProjectClicker
                 }
             }
 
-            UpdateStats();
             ResetHealth();
         }
 
