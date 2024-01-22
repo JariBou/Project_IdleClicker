@@ -177,7 +177,7 @@ namespace ProjectClicker.Enemies
             Collider2D[] colliderAttack = Physics2D.OverlapCircleAll(new Vector2(transform.position.x - _offset, transform.position.y), _attackRange, LayerMask.GetMask("Champion"));
             foreach (Collider2D collider in colliderAttack.Where(i => i.gameObject != null))
             {
-                collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(_damage);
+                collider.transform.parent.gameObject.GetComponent<TeamStats>().TakeDamage(_damage, collider.transform.position);
                 break; //chaque ennemi attaque 1 seul champion
             }
             _atkCount++;

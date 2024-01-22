@@ -39,6 +39,7 @@ namespace ProjectClicker
         [SerializeField] private LayerMask _layerMask;
         private Collider2D _collider;
         [SerializeField] private GameObject _display;
+        [SerializeField] private GameObject _particlePrefab;
         // Start is called before the first frame update
         private void Start()
         {
@@ -69,8 +70,8 @@ namespace ProjectClicker
                 Collider2D collider = Physics2D.OverlapPoint(newMousePosition, _layerMask);
                 if (collider != null && !collider.GetComponent<EnemiesBehavior>().IsDead)
                 {
-                    collider.GetComponent<EnemiesBehavior>().TakeDamage(_teamStats.Damage * 0.25f);// Sinon c'est trop facile
-
+                    collider.GetComponent<EnemiesBehavior>().TakeDamage(_teamStats.Damage * 0.5f);// Sinon c'est trop facile
+                    Instantiate(_particlePrefab, newMousePosition, Quaternion.identity);
                 }
             }
         }

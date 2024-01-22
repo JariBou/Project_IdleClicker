@@ -16,6 +16,7 @@ namespace ProjectClicker
         [SerializeField] private float _currentHealth;
         [FormerlySerializedAs("_baseArmor")] [SerializeField] private float _armor;
         [SerializeField] private  ulong _damage;
+        [SerializeField, Header("FX")] private GameObject _hitParticlesPrefab;
         public ulong Damage => _damage;
         
 /*        [Foldout("Upgrades"), SerializeField] private Transform _upgradesParent;
@@ -82,6 +83,7 @@ namespace ProjectClicker
             }
 
             UpdateStats();
+            ResetHealth();
         }
 
         /*        public void UpgradeHeroAtIndex(int index)
@@ -135,7 +137,7 @@ namespace ProjectClicker
             return tempArmor;
         }
         
-        public void TakeDamage(float damage)
+        public void TakeDamage(float damage, Vector3 position)
         {
             Debug.Log("Damage taken: " + damage + ", Base Armor: " + _armor);
             float dmg;
@@ -151,6 +153,8 @@ namespace ProjectClicker
             {
                 _currentHealth -= Mathf.Round(dmg);
             }
+
+            Instantiate(_hitParticlesPrefab, position, Quaternion.identity);
             TeamHealthUpdate?.Invoke();
             if (_currentHealth < 0 && !_isDead)
             {
