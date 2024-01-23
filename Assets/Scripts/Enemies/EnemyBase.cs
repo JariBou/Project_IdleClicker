@@ -140,7 +140,7 @@ namespace ProjectClicker.Enemies
 
         public void CalculateHealth()
         {
-            _maxHealth = (float)(Math.Pow(500, _levelsManager.CurrentLevel) + 2500);
+            _maxHealth = 500* _levelsManager.CurrentLevel + _baseMaxHealth;
             _health = _maxHealth;
             _enemyBaseHealthBar.maxValue = _maxHealth;
             _enemyBaseHealthBar.value = _health;
