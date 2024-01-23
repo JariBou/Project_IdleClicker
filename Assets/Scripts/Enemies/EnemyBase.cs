@@ -27,9 +27,10 @@ namespace ProjectClicker.Enemies
 
         [Header("Spawn")]
         [SerializeField] private Transform[] _spawnPoints;
+        [SerializeField] private float _baseSpawnRate; 
         [SerializeField] private float _spawnRate; 
         private bool _canSpawn;
-        public float SpawnRate => _spawnRate;
+        public float SpawnRate => _baseSpawnRate * (1 - _levelsManager.CurrentLevel / (float)(100 + _levelsManager.CurrentLevel));
         [Header("LevelsManager")]
         private LevelsManager _levelsManager;
 
@@ -149,7 +150,7 @@ namespace ProjectClicker.Enemies
         public void LoadSave()
         {
             CalculateHealth();
-            _spawnRate = 3 * (1 - _levelsManager.CurrentLevel / (float)(100 + _levelsManager.CurrentLevel));
+            _spawnRate = SpawnRate;
         }
 
         public void ResetBase()
