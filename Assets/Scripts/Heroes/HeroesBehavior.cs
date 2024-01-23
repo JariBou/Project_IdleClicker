@@ -228,6 +228,18 @@ namespace ProjectClicker.Heroes
                     break;
                 }
             }
+            
+            foreach (Collider2D collider in colliderAttack.Where(i => i != null))
+            {
+                /*Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);*/
+                if (collider.CompareTag("EnemyBase"))
+                {
+                    if (_attackCount > 0) collider.GetComponent<EnemyBase>()?.TakeDamage(Damage * _attackCount);
+                    else collider.GetComponent<EnemyBase>()?.TakeDamage(Damage);
+                    _attackCount = 0;
+                    return;
+                }
+            }
             /*if ((_attckCount == 0 && _heroLevel >= 12) || (_attckCount == 1 && _heroLevel >= 25))*/ _attackCount++;
             if ((_attackCount > 0 && _heroLevel < 12) || (_attackCount > 1 && /*_heroLevel >= 12 &&*/ _heroLevel < 25) || _attackCount > 2) _attackCount = 0;
 /*            _animator.ResetTrigger("Attack1");

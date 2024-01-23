@@ -7,7 +7,6 @@ namespace ProjectClicker
 {
     public class BuyMultiplicatorScript : MonoBehaviour
     {
-        
         public static BuyMultiplicatorScript Instance { get; private set; }
         [SerializeField] private TMP_Text _text;
         private List<int> _multiplicators = new(){ 1, 2, 5, 10 };
@@ -18,18 +17,6 @@ namespace ProjectClicker
         private void Awake()
         {
             Instance = this;
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
         }
 
         public static int GetMultiplicator() => Instance._multiplicators[Instance._multIndex];

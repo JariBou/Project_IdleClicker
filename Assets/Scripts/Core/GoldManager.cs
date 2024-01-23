@@ -69,7 +69,6 @@ namespace ProjectClicker.Core
                 suffixIndex++;
             }
             return goldMoney.ToString("F2") + suffixes[suffixIndex];
-
         }
        
 
