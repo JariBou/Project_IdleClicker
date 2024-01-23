@@ -234,8 +234,8 @@ namespace ProjectClicker.Heroes
                 /*Debug.Log(gameObject.tag + " attack " + collider.gameObject.tag);*/
                 if (collider.CompareTag("EnemyBase"))
                 {
-                    if (_attackCount > 0) collider.GetComponent<EnemyBase>()?.TakeDamage(Damage * _attackCount);
-                    else collider.GetComponent<EnemyBase>()?.TakeDamage(Damage);
+                    if (_attackCount > 0) collider.GetComponent<EnemyBase>()?.TakeDamage(Damage/2 * _attackCount);
+                    else collider.GetComponent<EnemyBase>()?.TakeDamage(Damage/2);
                     _attackCount = 0;
                     return;
                 }
