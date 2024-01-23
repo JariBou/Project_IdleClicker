@@ -26,6 +26,7 @@ namespace ProjectClicker.Saves
             }
             catch (Exception e)
             {
+                TimePassedGUI.Instance.ButtonClick();
                 Console.WriteLine(e);
                 return;
             }
