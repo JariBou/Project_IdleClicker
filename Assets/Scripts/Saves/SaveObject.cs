@@ -11,6 +11,8 @@ namespace ProjectClicker.Saves
         [SerializeField] private string _saveName = "GameSave";
         [SerializeField] private TeamStats _teamStats;
         [SerializeField] private int target = 30;
+        private LevelsManager _levelsManager;
+        private EnemyBase _enemyBase;
 
         private void Awake()
         {
@@ -19,6 +21,8 @@ namespace ProjectClicker.Saves
         }
         private void Start()
         {
+            _levelsManager = LevelsManager.Instance;
+            _enemyBase = EnemyBase.Instance;
             JsonSaveData saveData;
             try
             {
@@ -45,7 +49,17 @@ namespace ProjectClicker.Saves
             DateTime lastOpened = DateTime.Parse(saveData.LastOpened);
 
             TimeSpan timeSpan = DateTime.Now.Subtract(lastOpened);
-            long goldValue = (long)(timeSpan.TotalMinutes * saveData.CurrLevel * 2);
+            long goldValue;
+            if (_levelsManager.CurrentLevel == 0)
+            {
+                goldValue = (long)375 / 2 * (long)timeSpan.TotalMinutes * (long)(timeSpan.TotalMinutes / _enemyBase.SpawnRate * 5);
+            }
+            else
+            {
+                goldValue = (long)((((300 * _levelsManager.CurrentLevel) + (450 * _levelsManager.CurrentLevel)) / 2 + ((int)Mathf.Floor(_levelsManager.CurrentLevel - 1) / 5) * 150000) * (long)(timeSpan.TotalMinutes / _enemyBase.SpawnRate * 5)) ;
+
+            }
+
 
             TimePassedGUI.Instance.Config(goldValue, timeSpan.TotalMinutes);
 

@@ -29,7 +29,7 @@ namespace ProjectClicker.Enemies
         [SerializeField] private Transform[] _spawnPoints;
         [SerializeField] private float _spawnRate; 
         private bool _canSpawn;
-
+        public float SpawnRate => _spawnRate;
         [Header("LevelsManager")]
         private LevelsManager _levelsManager;
 

@@ -105,7 +105,7 @@ namespace ProjectClicker
                 {
                     collider.GetComponent<EnemiesBehavior>().TakeDamage(_teamStats.Damage * 0.25f);// Sinon c'est trop facile
                     Instantiate(_particlePrefab, newMousePosition, Quaternion.identity);
-                    DoShake(0.5f, 0.08f);
+                    DoShake(0.3f, 0.04f);
                 }
             }
         }
