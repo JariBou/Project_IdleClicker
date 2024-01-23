@@ -133,7 +133,7 @@ namespace ProjectClicker.Enemies
             yield return new WaitForSeconds(1.5f);
             _levelsManager.NextLevel();
             CalculateHealth();
-            _spawnRate = 3 * (1 - _levelsManager.CurrentLevel / (float)(100 + _levelsManager.CurrentLevel));
+            _spawnRate = SpawnRate;
             _canSpawn = true;
             _isDead = false;
             _healthBarGeeenBar.SetActive(true);
