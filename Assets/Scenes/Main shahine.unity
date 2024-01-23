@@ -7645,6 +7645,14 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 533501137151051955, guid: e7e80b38c35900140afe31ddf2515920, type: 3}
+      propertyPath: _baseMaxHealth
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 533501137151051955, guid: e7e80b38c35900140afe31ddf2515920, type: 3}
+      propertyPath: _baseSpawnRate
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 533501137151051955, guid: e7e80b38c35900140afe31ddf2515920, type: 3}
       propertyPath: _particlesPrefab
       value: 
       objectReference: {fileID: 6942092043307362064, guid: 6aa8365b95056e9498abfb1d99322157, type: 3}

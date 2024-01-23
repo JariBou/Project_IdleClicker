@@ -138,7 +138,7 @@ namespace ProjectClicker.Heroes
                     _baseMaxHealth = 150f;
                     _baseDamage = 10f;
                     _attackRange = 8f;
-                    _baseAttackSpeed = 3;
+                    _baseAttackSpeed = 2;
                     _canAttack = true;
                     _baseHealStrength = 100;
                     _baseArmor = 5;
@@ -148,7 +148,7 @@ namespace ProjectClicker.Heroes
                     _baseMaxHealth = 500;
                     _baseDamage = 30f;
                     _attackRange = 2f;
-                    _baseAttackSpeed = 4;
+                    _baseAttackSpeed = 2.5f;
                     _canAttack = true;
                     _baseHealStrength = 150;
                     _baseArmor = 75;
@@ -158,7 +158,7 @@ namespace ProjectClicker.Heroes
                     _baseMaxHealth = 100;
                     _baseDamage = 75f;
                     _attackRange = 8f;
-                    _baseAttackSpeed = 2;
+                    _baseAttackSpeed = 1.3f;
                     _canAttack = true;
                     _baseHealStrength = 0;
                     _baseArmor = 10;
@@ -168,7 +168,7 @@ namespace ProjectClicker.Heroes
                     _baseMaxHealth = 250;
                     _baseDamage = 75f;
                     _attackRange = 2f;
-                    _baseAttackSpeed = 3;
+                    _baseAttackSpeed = 2;
                     _canAttack = true;
                     _baseHealStrength = 0;
                     _baseArmor = 25;
@@ -225,6 +225,7 @@ namespace ProjectClicker.Heroes
                 else
                 {
                     collider.GetComponent<EnemiesBehavior>()?.TakeDamage(Damage);
+                    if (_attackCount == 2 ) DraggingZone.DoShake(0.3f, 0.04f);
                     break;
                 }
             }
@@ -267,7 +268,8 @@ namespace ProjectClicker.Heroes
                 projectile = Instantiate(_arrowPrefab, new Vector2(_arrowSpawnPoint.transform.position.x + 4.5f, _arrowPrefab.transform.position.y - 2.2f), Quaternion.identity).GetComponent<Arrow>();
                 projectile._arrowType = (ArrowType)4;
             }
-            /*if ((_attckCount == 1 && _heroLevel >= 12 && _heroLevel < 18) || (_attckCount == 2 && _heroLevel >= 18  && _heroLevel > 25) || (_attckCount == 3 && _heroLevel >= 25))*/ _attackCount++;
+            /*if ((_attckCount == 1 && _heroLevel >= 12 && _heroLevel < 18) || (_attckCount == 2 && _heroLevel >= 18  && _heroLevel > 25) || (_attckCount == 3 && _heroLevel >= 25))*/
+            _attackCount++;
             if ((_attackCount > 0 && _heroLevel < 12) || (_attackCount > 1 && _heroLevel < 18) || (_attackCount > 2 && _heroLevel < 25) || _attackCount > 3 ) _attackCount = 0;
 /*            _animator.ResetTrigger("Attack1");
             _animator.ResetTrigger("Attack2");

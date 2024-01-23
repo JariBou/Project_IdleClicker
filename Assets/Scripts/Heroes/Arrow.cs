@@ -78,6 +78,7 @@ namespace ProjectClicker.Heroes
                         {
                             _animator.SetTrigger("PoisonHit");
                         }
+                        DraggingZone.DoShake(0.25f, 0.04f);
                         Destroy(gameObject, 2f);
                         break;
                     }
@@ -95,6 +96,7 @@ namespace ProjectClicker.Heroes
                         
                     }
                     _hasHit = true;
+                    DraggingZone.DoShake(0.4f, 0.05f);
                     Destroy(gameObject, 2.5f);
 
                 }
@@ -109,6 +111,7 @@ namespace ProjectClicker.Heroes
                         col.gameObject.GetComponent<EnemyBase>()?.TakeDamage(_damage * 3f); 
                     }
                     _hasHit = true;
+                    DraggingZone.DoShake(0.1f, 0.04f);
                     Destroy(gameObject, 2f);
                 }
             }

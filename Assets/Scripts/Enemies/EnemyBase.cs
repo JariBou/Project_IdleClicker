@@ -79,6 +79,8 @@ namespace ProjectClicker.Enemies
             }
             else if (_canSpawn && _levelsManager.CurrentLevel % 5 == 0)
             {
+                _canSpawn = false;
+                ClearEnemies();
                 SpawnBoss();
             }
         }
@@ -88,11 +90,16 @@ namespace ProjectClicker.Enemies
            _canSpawn = false;
             GameObject boss = Instantiate(_enemiesPrefab[Random.Range(0, _enemiesPrefab.Length - 1)], _spawnPoints[2].transform.position, Quaternion.identity);
             boss.transform.localScale *= 2;
-            boss.GetComponent<EnemiesBehavior>().SetStats(EnemyType.Boss);
             boss.GetComponent<EnemiesBehavior>().Config(_particlesPrefab);
             _enemies.Add(boss);
+            StartCoroutine(SetStatsBoss(boss));
         }
 
+        IEnumerator SetStatsBoss(GameObject boss)
+        {
+            yield return new WaitForEndOfFrame();
+            boss.GetComponent<EnemiesBehavior>().SetStats(EnemyType.Boss);
+        }
         public void TakeDamage(float damage)
         {
             _health -= damage;

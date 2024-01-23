@@ -207,11 +207,12 @@ namespace ProjectClicker.Enemies
         public void SetStats(EnemyType state)
         {
             if ( _level == 0) _level = 1;
+            _enemyType = state;
             switch (state)
             {
                 case EnemyType.Melee:
                     _canAttack = true;
-                    _maxHealth = 150 * _level;
+                    _maxHealth = 300 * _level;
                     _health = _maxHealth;
                     _healthBar.maxValue = _maxHealth;
                     _healthBar.value = _health;
@@ -223,7 +224,7 @@ namespace ProjectClicker.Enemies
                     break;
                 case EnemyType.Ranged:
                     _canAttack = true;
-                    _maxHealth = 120 * _level;
+                    _maxHealth = 200 * _level;
                     _health = _maxHealth;
                     _healthBar.maxValue = _maxHealth;
                     _healthBar.value = _health;
@@ -235,7 +236,7 @@ namespace ProjectClicker.Enemies
                     break;
                 case EnemyType.Boss:
                     _canAttack = true;
-                    _maxHealth = 300000 * _level;
+                    _maxHealth = 1500 * _level;
                     _health = _maxHealth;
                     _healthBar.maxValue = _maxHealth;
                     _healthBar.value = _health;
