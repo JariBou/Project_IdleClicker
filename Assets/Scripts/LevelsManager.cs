@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using ProjectClicker.Core;
 using TMPro;
 using UnityEngine;
 
@@ -85,6 +86,7 @@ namespace ProjectClicker
         {
             _currentLevel = 0;
             _level.GetComponent<SpriteRenderer>().sprite = _backgroundLevels[_currentLevel % _backgroundLevels.Length];
+            GoldManager.Instance.SetGold(0);
             OnPrestige?.Invoke();
             CallLevelChanged();
             ResetTeamPosition();
