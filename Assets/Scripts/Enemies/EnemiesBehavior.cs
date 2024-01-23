@@ -211,7 +211,7 @@ namespace ProjectClicker.Enemies
             {
                 case EnemyType.Melee:
                     _canAttack = true;
-                    _maxHealth = 250 * _level;
+                    _maxHealth = 150 * _level;
                     _health = _maxHealth;
                     _healthBar.maxValue = _maxHealth;
                     _healthBar.value = _health;
@@ -223,7 +223,7 @@ namespace ProjectClicker.Enemies
                     break;
                 case EnemyType.Ranged:
                     _canAttack = true;
-                    _maxHealth = 250 * _level;
+                    _maxHealth = 120 * _level;
                     _health = _maxHealth;
                     _healthBar.maxValue = _maxHealth;
                     _healthBar.value = _health;
